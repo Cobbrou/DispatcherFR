@@ -36,7 +36,7 @@ Transverses : `audio/` (écoute les événements du store, joue les sons), `lib/
 | :--- | :--- |
 | `tick` | Fait avancer l'horloge simulée (`dt × timeScale`), appelle les autres modules dans un ordre fixe |
 | `movement` | Pas de module séparé au MVP : `lib/geo` (Haversine, `moveToward`) et `tick` (vitesse unique 50 km/h, ligne droite). Coefficient route et vitesse par type = évolution |
-| `dispatch` | `assignUnit` (unité disponible, fiche ouverte et géolocalisée), `unassignUnit` (unité en route), `closeIncident` (fiche en attente). Le statut d'une fiche ouverte est déduit des unités rattachées (`sync`) |
+| `dispatch` | `assignUnit` (unité disponible, fiche ouverte et géolocalisée), `unassignUnit` (unité en route), `closeIncident` (fiche de gravité 1 en attente), `releaseUnit` (l'unité libérée rentre à sa brigade en ligne droite à 50 km/h, puis `DISPO_POSTE`). Le statut d'une fiche ouverte est déduit des unités rattachées (`sync`) |
 | `statusMachine` | Tables des transitions autorisées (`canUnit`, `canIncident`) ; `dispatch` refuse les transitions illégales |
 | `events` | Aléas sur les fiches où une unité est sur place : renfort, concours SAMU / pompiers / service des routes ; tirage de l'issue ; expiration des demandes sans réponse et des fiches laissées trop longtemps sans unité (`FAILED`). RNG injectable (tests reproductibles) |
 | `scenarioGenerator` | Tire un appel aléatoire (`CallTruth` : faits, adresse, identité, personnalité) pour une zone donnée ; RNG injectable |

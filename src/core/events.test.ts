@@ -73,11 +73,22 @@ describe('aléas', () => {
   });
 
   it('délai dépassé sans unité sur place : échec', () => {
-    const w = world(incident({ status: 'PENDING', assignedUnits: [] }));
+    const w = world(incident({ status: 'PENDING', assignedUnits: [], firstArrivalAt: null }));
     expect(expire({ ...w, now: 14 * MIN }).incidents.F1.status).toBe('PENDING');
     expect(expire({ ...w, now: 15 * MIN }).incidents.F1).toMatchObject({ status: 'FAILED', outcome: 'FUITE' });
     // gravité 1 : pas de délai d'échec
-    expect(expire({ ...world(incident({ status: 'PENDING', gravity: 1 })), now: 1e9 }).incidents.F1.status).toBe('PENDING');
+    expect(expire({ ...world(incident({ status: 'PENDING', gravity: 1, firstArrivalAt: null })), now: 1e9 }).incidents.F1.status).toBe('PENDING');
+  });
+
+  it("pas d'échec par délai une fois qu'une unité est déjà arrivée (renfort encore en route)", () => {
+    const w = world(incident({ status: 'DISPATCHED', firstArrivalAt: 2 * MIN }));
+    expect(expire({ ...w, now: 60 * MIN }).incidents.F1.status).toBe('DISPATCHED');
+  });
+
+  it('un seul tirage par fiche et par tick', () => {
+    let draws = 0;
+    rollEvents(world(), MIN, () => (draws++, 0.99));
+    expect(draws).toBe(1);
   });
 
   it('issues tirées selon les poids', () => {
@@ -102,7 +113,7 @@ describe('bilan', () => {
       incident({ id: 'C', status: 'FAILED', outcome: 'FUITE', firstArrivalAt: null }),
       incident({ id: 'D' }),
     ]);
-    expect(r).toMatchObject({ total: 4, open: 1, resolved: 2, failed: 1, onTimePct: (100 * 2) / 3 });
+    expect(r).toMatchObject({ total: 4, open: 1, resolved: 2, failed: 1, onTimePct: 50 }); // A et D dans le délai, B en retard, C échouée sans arrivée
     expect(r.avgResponseMin).toBeCloseTo((4 + 10 + 2) / 3);
     expect(r.outcomes).toMatchObject({ PACIFIE: 1, INTERPELLE: 1, FUITE: 1 });
     expect(r.satisfaction).toBeCloseTo((100 + 60 + 0) / 3);

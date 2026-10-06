@@ -80,7 +80,9 @@ Toute autre transition est rejetée par `core/statusMachine`.
 
 \* Valeurs de départ pour le prototype, à équilibrer au playtest. Temps simulé, pas temps réel.
 
-Niveau `1` : une fiche peut se clôturer sans engager d'unité ; pas de délai d'échec.
+Niveau `1` : une fiche peut se clôturer sans engager d'unité ; pas de délai d'échec. Au-delà, la clôture sans intervention est refusée (`closeIncident`).
+
+Le délai d'échec ne s'applique que tant qu'aucune unité n'est arrivée sur les lieux. Une unité libérée rentre à sa brigade (`DISPO_ON_ZONE` en route, puis `DISPO_POSTE` à l'arrivée) ; elle reste engageable pendant ce trajet.
 
 ## 4. Vocabulaire
 

@@ -26,6 +26,8 @@ export type UnitStatus =
 export interface Route {
   points: Coordinates[];
   cumMs: number[];
+  /** Repli en ligne droite : le service de cartographie était injoignable. */
+  estimated?: boolean;
 }
 
 export interface Unit {

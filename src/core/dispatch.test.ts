@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { distanceM, moveToward } from '../lib/geo';
-import { buildRoute, positionAt, remainingPath, straightRoute } from '../lib/route';
+import { brigadeById } from '../data/brigades';
+import { buildRoute, positionAt, remainingPath, routeDurationMs, straightRoute } from '../lib/route';
 import type { Incident, Unit } from '../types';
-import { assignUnit, closeIncident, unassignUnit, type World } from './dispatch';
+import { assignUnit, closeIncident, releaseUnit, unassignUnit, type World } from './dispatch';
 import { canIncident, canUnit } from './statusMachine';
 import { tick } from './tick';
 
@@ -86,10 +87,20 @@ describe('engagement', () => {
     expect(w.incidents.F1).toMatchObject({ status: 'PENDING', assignedUnits: [] });
   });
 
-  it('clôture sans intervention seulement si aucune unité rattachée', () => {
-    const engaged = assignUnit(world(), 'u1', 'F1');
+  it('clôture sans intervention : gravité 1 seulement, et aucune unité rattachée', () => {
+    const info = world(incident({ gravity: 1 }));
+    const engaged = assignUnit(info, 'u1', 'F1');
     expect(closeIncident(engaged, 'F1', 'FAUSSE_ALERTE')).toBe(engaged);
-    expect(closeIncident(world(), 'F1', 'FAUSSE_ALERTE').incidents.F1).toMatchObject({ status: 'RESOLVED', outcome: 'FAUSSE_ALERTE' });
+    expect(closeIncident(info, 'F1', 'FAUSSE_ALERTE').incidents.F1).toMatchObject({ status: 'RESOLVED', outcome: 'FAUSSE_ALERTE' });
+    for (const gravity of [2, 3, 4, 5] as const) {
+      const w = world(incident({ gravity }));
+      expect(closeIncident(w, 'F1', 'FAUSSE_ALERTE')).toBe(w);
+    }
+  });
+
+  it("refuse une unité d'un autre service que la zone de la fiche", () => {
+    const w = world(incident({ zone: 'GENDARMERIE' }));
+    expect(assignUnit(w, 'u1', 'F1')).toBe(w);
   });
 });
 
@@ -105,9 +116,11 @@ describe('tick', () => {
     w = step(w, 2 * MIN); // ≈ 1 057 m à 13,9 m/s : arrivée
     expect(w.units.u1).toMatchObject({ status: 'SUR_LES_LIEUX', position: SCENE });
     expect(w.incidents.F1.status).toBe('ON_SCENE');
-    expect(w.units.u1.onSceneUntil).toBe(w.now + 10 * MIN); // gravité 2 → 10 min
+    // Arrivée à l'instant exact (pas à la fin du tick) ; gravité 2 → 10 min sur place.
+    expect(w.units.u1.onSceneUntil).toBeCloseTo(routeDurationMs(straightRoute(BASE, SCENE)) + 10 * MIN, 0);
+    expect(w.incidents.F1.firstArrivalAt).toBeCloseTo(routeDurationMs(straightRoute(BASE, SCENE)), 0);
 
-    w = step(w, 9 * MIN);
+    w = step(w, 8 * MIN);
     expect(w.units.u1.status).toBe('SUR_LES_LIEUX');
 
     w = step(w, 2 * MIN);
@@ -143,5 +156,34 @@ describe('tick', () => {
     const w = { ...dispatched(world(), 'u1') };
     w.incidents = { F1: { ...w.incidents.F1, coordinates: null } };
     expect(step(w, 10 * MIN).units.u1.position).toEqual(BASE);
+  });
+});
+
+describe('retour à la brigade', () => {
+  const home = brigadeById.get('bta-95351')!; // LOUVRES
+  const far = { lat: home.lat + 0.02, lng: home.lng };
+
+  it('une unité libérée rentre à sa brigade puis devient disponible au poste', () => {
+    const u = releaseUnit({ ...unit('u1', 'SUR_LES_LIEUX'), sectorId: home.id, position: far });
+    expect(u).toMatchObject({ status: 'DISPO_ON_ZONE', assignedIncidentId: null });
+    expect(u.route).not.toBeNull();
+
+    let w: World = { now: 0, units: { u1: u }, incidents: {}, radio: [] };
+    w = step(w, 1000);
+    expect(w.units.u1.status).toBe('DISPO_ON_ZONE');
+    expect(distanceM(w.units.u1.position, home)).toBeLessThan(distanceM(far, home));
+    w = step(w, 30 * MIN);
+    expect(w.units.u1).toMatchObject({ status: 'DISPO_POSTE', route: null, position: { lat: home.lat, lng: home.lng } });
+  });
+
+  it('déjà à la brigade : disponible au poste tout de suite ; brigade inconnue : sur secteur', () => {
+    expect(releaseUnit({ ...unit('u1', 'SUR_LES_LIEUX'), sectorId: home.id, position: { lat: home.lat, lng: home.lng } }).status).toBe('DISPO_POSTE');
+    expect(releaseUnit(unit('u1', 'SUR_LES_LIEUX')).status).toBe('DISPO_ON_ZONE');
+  });
+
+  it('une unité qui rentre peut être réengagée immédiatement', () => {
+    const u = releaseUnit({ ...unit('u1', 'SUR_LES_LIEUX'), sectorId: home.id, position: far, service: 'GENDARMERIE' });
+    const w = assignUnit({ now: 0, units: { u1: u }, incidents: { F1: incident({ zone: 'GENDARMERIE' }) }, radio: [] }, 'u1', 'F1');
+    expect(w.units.u1).toMatchObject({ status: 'EN_ROUTE', route: null });
   });
 });

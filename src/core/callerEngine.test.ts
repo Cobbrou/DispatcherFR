@@ -16,6 +16,18 @@ async function ask(caller: ReturnType<typeof createProceduralCaller>, a: ActiveC
   return applyReply(asked, await caller.reply(asked, text));
 }
 
+describe('detectTopics : faux positifs', () => {
+  it('« respirez » et « j\'envoie les pompiers » rassurent, ils ne questionnent pas sur les blessés', () => {
+    expect(detectTopics('Respirez calmement')).toEqual(['REASSURE']);
+    expect(detectTopics("J'envoie les pompiers")).not.toContain('VICTIMS');
+    expect(detectTopics('Est-ce qu\'il respire ?')).toContain('VICTIMS');
+  });
+
+  it('« dépêchez-vous » n\'est pas une insulte', () => {
+    expect(detectTopics('Dépêchez-vous de me donner votre adresse')).not.toContain('RUDE');
+  });
+});
+
 describe('detectTopics', () => {
   it.each([
     ['Quelle est votre adresse ?', 'ADDRESS'],

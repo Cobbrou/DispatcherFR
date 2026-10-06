@@ -10,12 +10,13 @@ import {
   startCall,
 } from '../core/callEngine';
 import { callerEngine } from '../core/callerEngine';
-import { assignUnit, closeIncident, unassignUnit } from '../core/dispatch';
+import { assignUnit, closeIncident, radio, unassignUnit } from '../core/dispatch';
 import { alertRescue } from '../core/events';
 import { tick } from '../core/tick';
 import { geocodeBan } from '../lib/ban';
 import { fetchRoute } from '../lib/route';
 import { generateCall } from '../core/scenarioGenerator';
+import { salleOf } from '../data/radio';
 import { initialGameState } from '../data/mock';
 import type { Coordinates, GameState, IncidentDraft } from '../types';
 
@@ -69,29 +70,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const message = text.trim();
     if (!active || active.pending || active.endReason || !message) return;
     set({ activeCall: operatorSays(active, message) });
-    const reply = await callerEngine.reply(active, message);
-    // L'appel a pu être raccroché ou jeté pendant l'attente.
-    set((s) => (s.activeCall?.call.id === active.call.id && s.activeCall.pending
-      ? { activeCall: applyReply(s.activeCall, reply) }
-      : s));
+    const reply = await callerEngine.reply(active, message).catch(() => null);
+    // L'appel a pu être raccroché ou jeté pendant l'attente ; sans réponse (moteur en panne), la saisie est rendue.
+    set((s) => {
+      const cur = s.activeCall;
+      if (cur?.call.id !== active.call.id || !cur.pending) return s;
+      return { activeCall: reply ? applyReply(cur, reply) : { ...cur, pending: false } };
+    });
   },
 
   hangUp: () => set((s) => (s.activeCall ? { activeCall: hangUp(s.activeCall) } : s)),
 
   updateDraft: (patch) => set((s) => (s.activeCall ? { activeCall: patchDraft(s.activeCall, patch) } : s)),
 
-  validateCall: () =>
-    set((s) => {
-      if (!s.activeCall || !isDraftValid(s.activeCall.draft)) return s;
-      const id = nextIncidentId(Object.keys(s.incidents), s.now);
-      // Position approchée du gazetteer tout de suite, puis adresse exacte (rue + numéro) via la BAN.
-      void geocodeBan(s.activeCall.draft.address).then((c) => c && get().placeIncident(id, c));
-      return {
-        incidents: { ...s.incidents, [id]: buildIncident(s.activeCall.draft, id, s.now, s.service) },
-        selectedIncidentId: id,
-        activeCall: null,
-      };
-    }),
+  validateCall: () => {
+    const s = get();
+    if (!s.activeCall || !isDraftValid(s.activeCall.draft)) return;
+    const id = nextIncidentId(Object.keys(s.incidents), s.now);
+    // Position approchée du gazetteer tout de suite, puis adresse exacte (rue + numéro) via la BAN.
+    const incident = buildIncident(s.activeCall.draft, id, s.now, s.service);
+    set({ incidents: { ...s.incidents, [id]: incident }, selectedIncidentId: id, activeCall: null });
+    void geocodeBan(incident.address).then((exact) => {
+      if (!exact) return;
+      // Pas d'écrasement d'un placement manuel ni d'une position déjà utilisée par un trajet.
+      set((cur) => {
+        const i = cur.incidents[id];
+        const untouched = i && i.assignedUnits.length === 0 && i.coordinates?.lat === incident.coordinates?.lat && i.coordinates?.lng === incident.coordinates?.lng;
+        return untouched ? { incidents: { ...cur.incidents, [id]: { ...i, coordinates: exact } } } : cur;
+      });
+    });
+  },
 
   discardCall: () => set({ activeCall: null }),
 
@@ -109,9 +117,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     void fetchRoute(u.position, target).then((route) =>
       set((s) => {
         const cur = s.units[unitId];
-        return cur?.status === 'EN_ROUTE' && cur.assignedIncidentId === incidentId && !cur.route
-          ? { units: { ...s.units, [unitId]: { ...cur, route, routeElapsedMs: 0 } } }
-          : s;
+        if (cur?.status !== 'EN_ROUTE' || cur.assignedIncidentId !== incidentId || cur.route) return s;
+        const next = { ...s, units: { ...s.units, [unitId]: { ...cur, route, routeElapsedMs: 0 } } };
+        // Repli en ligne droite : on le dit au joueur plutôt que de laisser l'unité sembler lente.
+        return route.estimated
+          ? radio(next, 'SYSTEME', salleOf(s.incidents[incidentId].zone), `${cur.callsign} : itinéraire estimé en ligne droite (cartographie injoignable).`)
+          : next;
       }),
     );
   },

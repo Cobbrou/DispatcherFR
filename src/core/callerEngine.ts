@@ -30,12 +30,12 @@ const norm = (s: string) =>
 // Évalués dans l'ordre sur le texte normalisé (sans accents ni ponctuation).
 const PATTERNS: [Topic, RegExp][] = [
   ['CLOSE', /(au revoir|bonne soiree|bonne journee|bonne nuit|je vous laisse|je clos|fin de l appel|je raccroche)/],
-  ['RUDE', /\b(idiot|imbecile|nul|abruti|ferme la|taisez vous|depechez vous|vous mentez|n importe quoi|pas mon probleme|rappelez demain)\b/],
+  ['RUDE', /\b(idiot|imbecile|nul|abruti|ferme la|taisez vous|vous mentez|n importe quoi|pas mon probleme|rappelez demain)\b/],
   ['ADDRESS', /(adresse|\bou\b.{0,25}(etes|trouv|situ|habit|passe|ca se|exact)|quelle rue|quel endroit|quelle ville|quelle commune|localis|lieu exact|numero de la rue)/],
   ['NAME', /(votre nom|vos noms|nom et prenom|nom prenom|prenom|comment vous appelez|vous vous appelez|qui etes vous|identite|epelez)/],
   ['PHONE', /(telephone|portable|votre numero|joindre|rappeler|vous recontacter|numero pour)/],
   ['WHAT', /(que se passe|qu est ce qui|qu est ce qu il|que s est il|racontez|expliquez|decrivez (moi )?(les faits|ce qui)|quel est le probleme|quel probleme|motif|de quoi s agit|quoi exactement|dites moi tout|que voyez vous|ce qui se passe)/],
-  ['VICTIMS', /(blesse|victime|saigne|sang|conscient|respire|inconscient|besoin des secours|pompiers|samu|ambulance|mal quelque part)/],
+  ['VICTIMS', /(blesse|victime|saigne|\bsang\b|conscient|\brespire\b|inconscient|besoin (des secours|des pompiers|du samu|d une ambulance)|mal quelque part)/],
   ['SUSPECT_COUNT', /(combien (sont|etaient|d individus|de personnes|d agresseurs)|nombre de personnes|ils sont|sont ils|plusieurs|seul ou|auteurs|individus|agresseurs)/],
   ['SUSPECT_DESC', /(description|signalement|vetu|habille|vetement|cheveux|ressemble|corpulence|decrivez.{0,30}(agresseur|individu|suspect|homme|femme|auteur|personne|voleur))/],
   ['WEAPON', /\b(armes?|couteau|fusil|pistolet|arme a feu|objet dangereux)\b/],
@@ -115,7 +115,9 @@ export function createProceduralCaller(rng: Rng = Math.random): CallerEngine {
       const answered: Topic[] = [];
       let stressDelta = 0;
 
-      for (const topic of topics.slice(0, 3)) {
+      // Trois sujets au plus ; rassurer l'appelant compte toujours, même en fin de phrase.
+      const handled = [...topics.filter((x) => x !== 'REASSURE').slice(0, 3), ...topics.filter((x) => x === 'REASSURE')];
+      for (const topic of handled) {
         const times = active.topics[topic] ?? 0;
         if (topic === 'UNKNOWN') {
           parts.push(pick(rng, ["Pardon ? Je n'ai pas compris.", 'Je ne sais pas quoi vous répondre...', 'Vous pouvez répéter ?']));

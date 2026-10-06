@@ -63,9 +63,9 @@ export function IncidentDetail() {
             </div>
           )}
 
-          {incident.status === 'PENDING' && (
+          {incident.status === 'PENDING' && incident.gravity === 1 && (
             <button onClick={() => close(incident.id)} className="rounded bg-slate-700 px-2 py-1 text-xs hover:bg-slate-600">
-              Clôturer sans intervention
+              Clôturer (simple renseignement)
             </button>
           )}
 

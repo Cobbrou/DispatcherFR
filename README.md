@@ -135,22 +135,22 @@ Les scripts sont déclarés dans `package.json`.
 
 Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` pointent le code au moment de la revue.
 
-7. **Correctifs du moteur (priorité haute).**
-   - Une fiche `PENDING` de n'importe quelle gravité peut être clôturée sans intervention avec l'issue `FAUSSE_ALERTE` en dur (`core/dispatch.ts`, `store/gameStore.ts`) : satisfaction 100, aucune pénalité. Limiter à la gravité 1 (comme prévu dans `docs/statuses.md`), sinon issue distincte « Classée sans suite » comptée au bilan, avec confirmation en gravité 4-5.
-   - `FM 1` (`EN_TRANSPORT`) et `CYNO 1` (`INDISPONIBLE`) restent figées toute la partie (`data/mock.ts`) : aucun code ne les remet en service. Ajouter un délai de retour (`busyUntil`) et un enchaînement `INTERPELLE → EN_TRANSPORT → DISPO_POSTE`, ou les remettre en dispo.
-   - Délai d'échec calculé depuis la création (`core/events.ts`) : si la dernière unité sur place repart alors qu'un renfort est en route, la fiche passe aussitôt en `FAILED`. Ne l'appliquer que tant que `firstArrivalAt === null`.
-   - `onTimePct` (`core/scoring.ts`) ignore les fiches sans arrivée (échec ou retard) : pourcentage gonflé. Compter ces fiches comme délai manqué (gravité ≥ 2) et adapter le test.
-   - Résultat BAN appliqué sans condition (`store/gameStore.ts`) : il écrase un placement manuel, fait « sauter » une unité déjà engagée et ne recalcule pas la zone. N'appliquer que si les coordonnées n'ont pas changé ; sortir `geocodeBan` du callback de `set`.
+7. ~~**Correctifs du moteur (priorité haute).**~~ Fait, sauf les points restants ci-dessous.
+   - ~~Clôture sans intervention de n'importe quelle gravité.~~ Réservée à la gravité 1 (`closeIncident`, bouton masqué au-delà).
+   - ~~`FM 1` et `CYNO 1` figées.~~ Plus d'objet depuis l'étape 5 (unités de police retirées). Les statuts `EN_TRANSPORT` / `INDISPONIBLE` restent à produire (étape 12).
+   - ~~Délai d'échec appliqué avec un renfort en route.~~ Il ne joue plus dès qu'une unité est arrivée (`firstArrivalAt`).
+   - ~~`onTimePct` gonflé.~~ Une fiche échouée sans arrivée compte comme délai manqué.
+   - ~~Résultat BAN appliqué sans condition.~~ Ignoré si la fiche a été placée à la main ou si une unité est déjà engagée ; appel sorti du callback de `set`.
    - BAN (`lib/ban.ts`) : ~~homonymes hors département, `res.ok`~~ corrigés à l'étape 5 (résultat retenu seulement si son code INSEE commence par 95). Reste : biais de position selon la zone du poste (centre du 95 en dur).
    - ~~`lib/geocode.ts` : un code postal est pris pour le numéro de rue.~~ Corrigé à l'étape 5 (numéro en tête, 3 chiffres au plus).
-   - Fiche saisie hors zone du poste (sans objet tant que tout le 95 est en zone gendarmerie) : la fiche disparaît de la liste et de la carte sans message, puis échoue. Afficher un avertissement de transfert ou une pastille « hors zone ». Ajouter aussi la garde `service` / `zone` dans `assignUnit` (le moteur doit refuser, pas seulement l'interface).
-   - OSRM (`lib/route.ts`) : `res.ok` non vérifié, durée absente → `NaN` (l'unité arrive instantanément), repli en ligne droite silencieux. Vérifier `Number.isFinite`, timeout plus court (2 s), message de journal « itinéraire estimé », cache des routes déjà calculées, URL configurable (`VITE_OSRM_URL`), espacer les requêtes (le serveur de démo limite à ~1 req/s).
-   - Après l'intervention, l'unité reste à l'adresse de la fiche en `DISPO_ON_ZONE` (`core/tick.ts`) : prévoir un trajet de retour vers son secteur ou le poste, et un délai de départ du poste.
-   - Instant d'arrivée imprécis à vitesse élevée : `firstArrivalAt` et `onSceneUntil` utilisent la fin du tick (`core/tick.ts`) ; calculer l'instant réel d'arrivée.
-   - `say` (`store/gameStore.ts`) : si `callerEngine.reply` rejette, `pending` reste à `true` et l'appel est bloqué ; ajouter un `try/catch` avec réplique de repli (nécessaire avant un `CallerEngine` LLM).
-   - `callerEngine` : regex non ancrées (« respirez » ou « j'envoie les pompiers » déclenchent `VICTIMS`, « dépêchez vous » est classé grossier) ; `REASSURE` perdu quand une phrase a trois sujets (`slice(0, 3)`). Ancrer avec `\b`, traiter `REASSURE` hors plafond.
-   - Reproductibilité : le nombre de tirages RNG dépend de la cadence des ticks (`core/events.ts`) ; un tirage par fiche et par tick, ou un RNG par fiche.
-   - `RadioLog` : le défilement dépend de `radio.length`, plafonné à 200 messages ; il s'arrête une fois le plafond atteint. Dépendre du dernier `id` et défiler le conteneur.
+   - ~~Garde `service` / `zone` dans `assignUnit`.~~ Ajoutée (l'affichage « hors zone » est sans objet tant que tout le 95 est en zone gendarmerie).
+   - OSRM (`lib/route.ts`) : ~~`res.ok`, durée `NaN`, repli silencieux, cache, URL `VITE_OSRM_URL`~~ faits (timeout 4 s, message au journal « itinéraire estimé »). Reste : file d'attente / espacement des requêtes (serveur de démo limité à ~1 req/s), délai de départ du poste.
+   - ~~Après l'intervention, l'unité reste à l'adresse.~~ Elle rentre à sa brigade (`releaseUnit`, ligne droite à 50 km/h) puis passe `DISPO_POSTE` ; réengageable en route. Reste : trajet de retour par OSRM.
+   - ~~Instant d'arrivée imprécis à vitesse élevée.~~ `firstArrivalAt` et `onSceneUntil` utilisent l'instant exact.
+   - ~~`say` bloqué si `callerEngine.reply` rejette.~~ La saisie est rendue (`pending: false`).
+   - ~~`callerEngine` : regex non ancrées, `REASSURE` perdu.~~ Corrigé (« respirez », « j'envoie les pompiers », « dépêchez-vous »).
+   - ~~Reproductibilité.~~ Un seul tirage par fiche et par tick (`rollEvents`).
+   - ~~`RadioLog` : défilement figé au plafond de 200 messages.~~ Dépend du dernier `id`.
 8. **Flux d'appels et bilan.**
    - Génération automatique des appels dans le moteur (`nextCallAt`, cadence selon la charge et `timeScale`, RNG injectable) : aujourd'hui seul le bouton « + Appel entrant (test) » en ajoute. Masquer ce bouton hors `import.meta.env.DEV`, afficher l'attente de chaque appel, abandon d'un appel resté trop longtemps en file avec pénalité au bilan.
    - Utiliser `CallTruth.requiredUnits` (lu nulle part) : sous-engagement / sur-engagement au bilan.
@@ -171,7 +171,7 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
     - `IncidentList` : lire `Math.floor(now / 60_000)` ; `IncidentDetail` : ne s'abonner qu'aux indicatifs, pas à tout `units`.
     - Bundle de 691 kB : `react-dom/server` embarqué pour 4 glyphes (pré-rendre en constantes SVG), `React.lazy` sur `MapView`.
 11. **Tests, CI et hygiène.**
-    - Tests manquants : `core/tick.ts`, `core/scoring.ts`, `core/statusMachine.ts`, `lib/route.ts` (`positionAt`, `buildRoute`, repli hors-ligne), `lib/ban.ts`, `store/gameStore.ts` (course `assignUnit` / `fetchRoute`, `placeIncident` après engagement, pause). Cas du moteur à fixer : clôture en gravité ≥ 4, renfort en route quand l'unité sur place repart, arrivée et échec dans le même tick, adresse avec code postal.
+    - Tests manquants : `core/tick.ts` (hors arrivée / retour déjà couverts), `core/scoring.ts`, `core/statusMachine.ts`, `lib/ban.ts`. Faits à l'étape 7 : `lib/route.ts` (`fetchRoute`), `store/gameStore.ts` (BAN, repli d'itinéraire, appelant en panne, pause), clôture, retour à la brigade.
     - CI : script `check` (typecheck + lint + test) et workflow GitHub Actions (`npm ci`, `check`, `build`) ; retirer `--passWithNoTests`.
     - `LICENSE` (ou `UNLICENSED` explicite), provenance du glossaire PDF et de `categories.json`, `.gitattributes` (`* text=auto eol=lf`).
     - Dépendances : `howler` / `@types/howler` et `@types/node` inutilisés (supprimer, ou livrer l'audio) ; `src/audio/` et `public/audio/` vides.

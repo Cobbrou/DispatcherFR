@@ -39,25 +39,42 @@ export function remainingPath(r: Route, elapsedMs: number): Coordinates[] {
   return [positionAt(r, elapsedMs), ...r.points.slice(nextIndex(r, elapsedMs))];
 }
 
+const OSRM_URL: string = import.meta.env.VITE_OSRM_URL ?? 'https://router.project-osrm.org';
+const TIMEOUT_MS = 4000;
+
+const key = (p: Coordinates) => `${p.lat.toFixed(4)},${p.lng.toFixed(4)}`;
+const cache = new Map<string, Route>();
+
 /**
- * Itinéraire routier via OSRM (serveur de démonstration public, sans clé) : tracé sur les vraies routes,
- * durée de chaque tronçon selon le type de voie. Repli en ligne droite si le service est injoignable.
- * ponytail: serveur de démo, pas de SLA ; auto-héberger OSRM pour un usage soutenu.
+ * Itinéraire routier via OSRM (serveur de démonstration public, sans clé ; `VITE_OSRM_URL` pour le remplacer) :
+ * tracé sur les vraies routes, durée de chaque tronçon selon le type de voie. Repli en ligne droite
+ * (`estimated`) si le service est injoignable ou répond de travers. Les trajets réussis sont mémorisés.
+ * ponytail: serveur de démo (~1 requête/s, sans SLA) et pas de file d'attente ; auto-héberger OSRM pour un usage soutenu.
  */
 export async function fetchRoute(from: Coordinates, to: Coordinates): Promise<Route> {
+  const k = `${key(from)}>${key(to)}`;
+  const known = cache.get(k);
+  if (known) return known;
   try {
-    const url = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson&annotations=duration`;
-    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    const url = `${OSRM_URL}/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson&annotations=duration`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+    if (!res.ok) throw new Error(`OSRM ${res.status}`);
     const r = (await res.json()).routes?.[0];
     const points: Coordinates[] = r.geometry.coordinates.map(([lng, lat]: [number, number]) => ({ lat, lng }));
     if (points.length < 2) throw new Error('itinéraire vide');
     const ann: number[] | undefined = r.legs?.[0]?.annotation?.duration;
-    if (ann?.length === points.length - 1) return buildRoute(points, ann);
-    // Annotations absentes ou décalées : durée totale répartie au prorata des distances.
-    const lens = points.slice(1).map((p, i) => distanceM(points[i], p));
-    const total = lens.reduce((a, b) => a + b, 0) || 1;
-    return buildRoute(points, lens.map((l) => (l / total) * r.duration));
+    let route: Route;
+    if (ann?.length === points.length - 1) route = buildRoute(points, ann);
+    else {
+      // Annotations absentes ou décalées : durée totale répartie au prorata des distances.
+      const lens = points.slice(1).map((p, i) => distanceM(points[i], p));
+      const total = lens.reduce((a, b) => a + b, 0) || 1;
+      route = buildRoute(points, lens.map((l) => (l / total) * r.duration));
+    }
+    if (!(routeDurationMs(route) > 0) || !Number.isFinite(routeDurationMs(route))) throw new Error('durée invalide');
+    cache.set(k, route);
+    return route;
   } catch {
-    return straightRoute(from, to);
+    return { ...straightRoute(from, to), estimated: true };
   }
 }

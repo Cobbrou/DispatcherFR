@@ -1,8 +1,8 @@
 import { FAIL_AFTER_MIN } from '../data/statuses';
 import { CONCOURS, REINFORCEMENT_REASONS, salleOf } from '../data/radio';
-import { chance, pick, type Rng } from '../lib/rng';
+import { pick, type Rng } from '../lib/rng';
 import type { ConcoursService, GravityLevel, Incident, IncidentOutcome, PendingEvent } from '../types';
-import { patchIncident, radio, setUnit, type World } from './dispatch';
+import { patchIncident, radio, releaseUnit, setUnit, type World } from './dispatch';
 import { canIncident } from './statusMachine';
 
 /** Probabilité d'aléa par minute simulée, selon la gravité de la fiche. */
@@ -38,7 +38,10 @@ export function rollEvents<W extends World>(w: W, dtMs: number, rng: Rng): W {
     if (inc.status !== 'ON_SCENE' || inc.pending || inc.eventCount >= MAX_EVENTS) continue;
     const unit = onScene(next, inc.id)[0];
     if (!unit) continue;
-    const kind = (['RENFORT', 'SECOURS'] as const).find((k) => chance(rng, 1 - (1 - PER_MINUTE[k](inc.gravity)) ** minutes));
+    // Un seul tirage par fiche et par tick : la partie ne dépend pas de la cadence d'affichage.
+    const p = (k: PendingEvent['kind']) => 1 - (1 - PER_MINUTE[k](inc.gravity)) ** minutes;
+    const draw = rng();
+    const kind = draw < p('RENFORT') ? 'RENFORT' : draw < p('RENFORT') + p('SECOURS') ? 'SECOURS' : null;
     if (!kind) continue;
 
     const salle = salleOf(inc.zone);
@@ -59,7 +62,7 @@ export function rollEvents<W extends World>(w: W, dtMs: number, rng: Rng): W {
 function failIncident<W extends World>(w: W, inc: Incident, outcome: IncidentOutcome, message: string): W {
   let next = w;
   for (const u of Object.values(w.units).filter((x) => x.assignedIncidentId === inc.id))
-    next = setUnit(next, { ...u, status: 'DISPO_ON_ZONE', assignedIncidentId: null, onSceneUntil: null, route: null, routeElapsedMs: 0 });
+    next = setUnit(next, releaseUnit(u));
   return patchIncident(next, inc.id, { status: 'FAILED', outcome, pending: null }, ['SYSTEME', message]);
 }
 
@@ -84,7 +87,7 @@ export function expire<W extends World>(w: W): W {
     }
 
     const limit = FAIL_AFTER_MIN[inc.gravity];
-    if (limit !== null && inc.status !== 'ON_SCENE' && canIncident(inc.status, 'FAILED') && next.now - inc.createdTimestamp >= limit * 60_000)
+    if (limit !== null && inc.status !== 'ON_SCENE' && inc.firstArrivalAt === null && canIncident(inc.status, 'FAILED') && next.now - inc.createdTimestamp >= limit * 60_000)
       next = failIncident(next, inc, 'FUITE', "Délai d'intervention dépassé : plus personne sur les lieux");
   }
   return next;

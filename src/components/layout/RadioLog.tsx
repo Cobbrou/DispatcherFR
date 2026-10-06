@@ -6,10 +6,11 @@ import { Panel } from './Panel';
 /** Transcription du fil radio ; le plus récent en bas. */
 export function RadioLog() {
   const radio = useGameStore((s) => s.radio);
+  const lastId = radio.at(-1)?.id; // la longueur est plafonnée : seul le dernier id change en continu
   const end = useRef<HTMLLIElement>(null);
   useEffect(() => {
     end.current?.scrollIntoView({ block: 'nearest' });
-  }, [radio.length]);
+  }, [lastId]);
 
   return (
     <Panel title="Radio" right={<span>{radio.length} messages</span>} className="h-40 border-b-0 border-t">

@@ -34,14 +34,15 @@ export function buildReport(incidents: Incident[]): Report {
   const done = incidents.filter(closed);
   const outcomes: Record<IncidentOutcome, number> = { INTERPELLE: 0, PACIFIE: 0, FAUSSE_ALERTE: 0, FUITE: 0 };
   for (const i of done) if (i.outcome) outcomes[i.outcome]++;
-  const timed = incidents.filter((i) => RESPONSE_TARGET_MIN[i.gravity] && responseMin(i) !== null);
+  // Une fiche échouée sans qu'aucune unité soit arrivée compte comme délai manqué.
+  const timed = incidents.filter((i) => RESPONSE_TARGET_MIN[i.gravity] && (responseMin(i) !== null || i.status === 'FAILED'));
   return {
     total: incidents.length,
     open: incidents.length - done.length,
     resolved: done.filter((i) => i.status === 'RESOLVED').length,
     failed: done.filter((i) => i.status === 'FAILED').length,
     avgResponseMin: mean(incidents.map(responseMin).filter((r): r is number => r !== null)),
-    onTimePct: timed.length ? (100 * timed.filter((i) => responseMin(i)! <= RESPONSE_TARGET_MIN[i.gravity]!).length) / timed.length : null,
+    onTimePct: timed.length ? (100 * timed.filter((i) => responseMin(i) !== null && responseMin(i)! <= RESPONSE_TARGET_MIN[i.gravity]!).length) / timed.length : null,
     outcomes,
     neglected: incidents.filter((i) => i.neglected).length,
     satisfaction: mean(done.map(satisfaction)),
