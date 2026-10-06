@@ -165,6 +165,7 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
    - Accessibilité : `ReportModal` en `<dialog>` (rôle, Échap, focus, retour du focus), `role="log"` / `aria-live` sur le transcript d'appel et `RadioLog`, `aria-current` / `aria-pressed` sur la liste et les onglets, contraste des badges (blanc sur orange / sky / emerald < 4,5:1) et de `text-slate-500`, `color-scheme: dark`.
    - Mise en page : colonnes `clamp(...)` et colonne de droite repliable sous ~1100 px ; la carte est écrasée à 1024 px.
    - Constantes et libellés en dur à centraliser dans `src/data` (vitesses, salle CIC / CORG via `salleOf`, centre de carte, URL des tuiles, seuils de ton, couleurs de statut dupliquées entre `mapIcons` et `statuses`) ; apostrophes à unifier.
+   - Lorsqu'un appel est en attente, bloquer le temps en x1 pour ne pas que le timer aille trop vite.
 10. **Performance.**
     - `Cockpit` relit `now` 4 fois par seconde et re-rend tous ses enfants (la `datalist` de 313 options de la fiche est reconstruite à chaque tick) : composant `<Clock/>`, `memo` sur `FicheWindow`, `RadioLog`, `CallPanel`.
     - `MapView` : `useGameStore()` sans sélecteur (re-rendu à chaque frappe de la fiche), `renderToStaticMarkup` appelé à chaque tick avant le test du cache d'icônes (`mapIcons.tsx`), `pathOptions` recréés à chaque rendu.

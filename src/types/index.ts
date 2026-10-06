@@ -126,6 +126,23 @@ export type IncidentDraft = Omit<IncidentDetails, 'gravity'> & {
 
 export type CallerPersonality = 'CALME' | 'PANIQUE' | 'EVASIF';
 
+/** Détail que l'opérateur peut demander ; la vérité en est cachée, l'appelant ne la connaît pas forcément. */
+export type FactKey =
+  | 'WHEN' | 'HOW' | 'INJURY_DETAIL' | 'CONSCIOUS' | 'AGE'
+  | 'VEHICLE_TYPE' | 'VEHICLE_COLOR' | 'PLATE'
+  | 'STOLEN_ITEMS' | 'KNOWS_SUSPECT' | 'ENTRY' | 'INSIDE' | 'CHILDREN' | 'ALCOHOL' | 'HAZARD' | 'TRAPPED'
+  | 'SUSPECT_DESC' | 'DIRECTION' | 'WEAPON';
+
+/** Ce que l'appelant sait d'un détail : tout, une bribe (qui peut lui revenir si on insiste), rien. */
+export type Knowledge = 'FULL' | 'PARTIAL' | 'NONE';
+
+export interface Fact {
+  value: string;                      // réponse complète ; '' = laissée au moteur (armes, description des auteurs…)
+  knowledge: Knowledge;
+  partial?: string;                   // réponse si PARTIAL
+  unknown?: string;                   // réponse si NONE (sinon formule générique du sujet)
+}
+
 /** Vérité cachée d'un appel : générée au hasard, jamais montrée au joueur. */
 export interface CallTruth {
   callerFirstName: string;
@@ -146,6 +163,7 @@ export interface CallTruth {
   suspectDescription: string;         // '' = aucun auteur
   suspectDirection: string;           // '' = aucun auteur
   requiredUnits: number;              // moyens réellement nécessaires (pour le bilan)
+  facts: Partial<Record<FactKey, Fact>>; // détails demandables (quand, comment, plaque, blessures…)
 }
 
 export interface IncomingCall {
