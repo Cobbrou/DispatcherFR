@@ -120,3 +120,30 @@ describe('bilan', () => {
     expect(buildReport([]).satisfaction).toBeNull();
   });
 });
+
+describe('bilan : évaluation de l\'opérateur', () => {
+  const done = (over: Partial<Incident>) =>
+    incident({ status: 'RESOLVED', outcome: 'PACIFIE', firstArrivalAt: MIN, category: 'tapage', ...over });
+
+  it('pénalise sous-engagement, sur-engagement (aléas déduits) et gravité sous-évaluée', () => {
+    expect(satisfaction(done({ requiredUnits: 2, assignedUnits: ['u1'] }))).toBe(85);
+    expect(satisfaction(done({ requiredUnits: 1, assignedUnits: ['u1', 'u2', 'u3'] }))).toBe(90);
+    expect(satisfaction(done({ requiredUnits: 1, assignedUnits: ['u1', 'u2'], eventCount: 1 }))).toBe(100); // renfort demandé
+    expect(satisfaction(done({ trueCategory: 'vol avec violences', gravity: 1 }))).toBe(80);              // niveau 3 réel, 2 niveaux d'écart
+  });
+
+  it('un simple renseignement n\'exige aucune unité ; abandons comptés à 0', () => {
+    const info = done({ gravity: 1, requiredUnits: 1, assignedUnits: [], trueCategory: 'demande renseignement' });
+    expect(satisfaction(info)).toBe(100);
+    const r = buildReport([done({ requiredUnits: 2, assignedUnits: ['u1'] }), info], 2);
+    expect(r).toMatchObject({ abandoned: 2, underEngaged: 1, overEngaged: 0, underRated: 0 });
+    expect(r.satisfaction).toBeCloseTo((85 + 100) / 4);
+  });
+});
+
+describe('attente d\'itinéraire', () => {
+  it('crédite le temps d\'attente au roulage', () => {
+    const w: World = { ...world(incident({ status: 'DISPATCHED', firstArrivalAt: null })), units: { u1: unit('u1', 'EN_ROUTE', 'F1') } };
+    expect(tick(w, 3 * MIN, () => 0.99).units.u1.routeElapsedMs).toBe(3 * MIN);
+  });
+});

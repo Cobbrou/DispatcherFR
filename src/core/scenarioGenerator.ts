@@ -25,7 +25,7 @@ function describeFlight(rng: Rng, n: number): string {
 }
 
 /** Tire un appel entièrement aléatoire pour le poste `service`. */
-export function generateCall(rng: Rng, service: ServiceType): IncomingCall {
+export function generateCall(rng: Rng, service: ServiceType, now = 0): IncomingCall {
   const tpl = weighted(rng, templates);
   const person = weighted(rng, PERSONALITIES);
   const street = pick(rng, streets);
@@ -50,6 +50,7 @@ export function generateCall(rng: Rng, service: ServiceType): IncomingCall {
     id: `call-${Math.floor(rng() * 1e9).toString(36)}`,
     callerPhoneNumber: chance(rng, 0.15) ? 'Numéro masqué' : phone,
     callerStressLevel: int(rng, person.stress),
+    receivedAt: now,
     truth: {
       callerFirstName: pick(rng, firstNames),
       callerLastName: pick(rng, lastNames),

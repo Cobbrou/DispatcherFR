@@ -8,7 +8,8 @@ const pct = (n: number | null) => (n === null ? '—' : `${Math.round(n)} %`);
 /** Bilan de la journée, recalculé à chaque ouverture depuis les fiches. */
 export function ReportModal({ onClose }: { onClose: () => void }) {
   const incidents = useGameStore((s) => s.incidents);
-  const r = buildReport(Object.values(incidents));
+  const abandoned = useGameStore((s) => s.abandonedCalls);
+  const r = buildReport(Object.values(incidents), abandoned);
 
   const rows: [string, string][] = [
     ['Fiches closes', `${r.total - r.open} / ${r.total} (${r.open} en cours)`],
@@ -16,6 +17,9 @@ export function ReportModal({ onClose }: { onClose: () => void }) {
     ['Temps de réponse moyen', r.avgResponseMin === null ? '—' : `${r.avgResponseMin.toFixed(1)} min`],
     ['Délais cibles tenus', pct(r.onTimePct)],
     ['Secours oubliés par la salle', String(r.neglected)],
+    ['Appels abandonnés en attente', String(r.abandoned)],
+    ['Sous-engagements / sur-engagements', `${r.underEngaged} / ${r.overEngaged}`],
+    ['Gravité sous-évaluée', String(r.underRated)],
     ...(Object.entries(r.outcomes) as [IncidentOutcome, number][]).map(([k, n]): [string, string] => [OUTCOME_LABEL[k], String(n)]),
   ];
 

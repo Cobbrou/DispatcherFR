@@ -30,7 +30,11 @@ export function tick<W extends World>(w: W, dtMs: number, rng: Rng = Math.random
     if (!inc) continue;
 
     if (u.status === 'EN_ROUTE' && inc.coordinates) {
-      if (!u.route) continue; // itinéraire en cours de calcul
+      if (!u.route) {
+        // Itinéraire en cours de calcul : le temps écoulé est crédité au roulage dès que la route arrive.
+        next = setUnit(next, { ...u, routeElapsedMs: u.routeElapsedMs + dtMs });
+        continue;
+      }
       const elapsed = u.routeElapsedMs + dtMs;
       if (elapsed < routeDurationMs(u.route)) {
         next = setUnit(next, { ...u, routeElapsedMs: elapsed, position: positionAt(u.route, elapsed) });

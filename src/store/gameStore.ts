@@ -12,6 +12,7 @@ import {
 import { callerEngine } from '../core/callerEngine';
 import { assignUnit, closeIncident, radio, unassignUnit } from '../core/dispatch';
 import { alertRescue } from '../core/events';
+import { flowCalls } from '../core/flow';
 import { tick } from '../core/tick';
 import { geocodeBan } from '../lib/ban';
 import { fetchRoute } from '../lib/route';
@@ -23,7 +24,7 @@ import type { Coordinates, GameState, IncidentDraft } from '../types';
 interface GameStore extends GameState {
   selectedIncidentId: string | null;
   selectIncident: (id: string | null) => void;
-  /** Ajoute un appel aléatoire à la file (en attendant l'arrivée automatique des appels). */
+  /** Ajoute un appel aléatoire à la file (bouton de test, hors production). */
   addIncomingCall: () => void;
   answerCall: (callId: string) => void;
   /** Texte libre de l'opérateur ; l'appelant répond via `callerEngine`. */
@@ -53,7 +54,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   selectIncident: (id) => set({ selectedIncidentId: id }),
 
   addIncomingCall: () =>
-    set((s) => ({ callQueue: [...s.callQueue, generateCall(Math.random, s.service)] })),
+    set((s) => ({ callQueue: [...s.callQueue, generateCall(Math.random, s.service, s.now)] })),
 
   answerCall: (callId) =>
     set((s) => {
@@ -88,7 +89,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!s.activeCall || !isDraftValid(s.activeCall.draft)) return;
     const id = nextIncidentId(Object.keys(s.incidents), s.now);
     // Position approchée du gazetteer tout de suite, puis adresse exacte (rue + numéro) via la BAN.
-    const incident = buildIncident(s.activeCall.draft, id, s.now, s.service);
+    const incident = buildIncident(s.activeCall.draft, id, s.now, s.service, s.activeCall.call.truth);
     set({ incidents: { ...s.incidents, [id]: incident }, selectedIncidentId: id, activeCall: null });
     void geocodeBan(incident.address).then((exact) => {
       if (!exact) return;
@@ -103,7 +104,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   discardCall: () => set({ activeCall: null }),
 
-  tick: (realDtMs) => set((s) => (s.paused ? s : tick(s, realDtMs * s.timeScale))),
+  tick: (realDtMs) => set((s) => (s.paused ? s : flowCalls(tick(s, realDtMs * s.timeScale)))),
   togglePause: () => set((s) => ({ paused: !s.paused })),
   setTimeScale: (timeScale) => set({ timeScale }),
 
@@ -118,7 +119,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set((s) => {
         const cur = s.units[unitId];
         if (cur?.status !== 'EN_ROUTE' || cur.assignedIncidentId !== incidentId || cur.route) return s;
-        const next = { ...s, units: { ...s.units, [unitId]: { ...cur, route, routeElapsedMs: 0 } } };
+        // Le temps passé à attendre l'itinéraire compte comme roulage (cf. tick) : le joueur n'en pâtit pas.
+        const next = { ...s, units: { ...s.units, [unitId]: { ...cur, route } } };
         // Repli en ligne droite : on le dit au joueur plutôt que de laisser l'unité sembler lente.
         return route.estimated
           ? radio(next, 'SYSTEME', salleOf(s.incidents[incidentId].zone), `${cur.callsign} : itinéraire estimé en ligne droite (cartographie injoignable).`)

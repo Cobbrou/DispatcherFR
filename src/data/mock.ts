@@ -121,7 +121,9 @@ export const initialGameState: GameState = {
   service: 'GENDARMERIE',
   units: Object.fromEntries(units.map((u) => [u.id, routed(u)])),
   incidents: Object.fromEntries(incidents.map((i) => [i.id, i])),
-  callQueue: Array.from({ length: 3 }, () => generateCall(Math.random, 'GENDARMERIE')),
+  callQueue: Array.from({ length: 3 }, () => generateCall(Math.random, 'GENDARMERIE', NOW)),
+  nextCallAt: NOW + 2 * MIN,
+  abandonedCalls: 0,
   activeCall: null,
   radio: [],
 };

@@ -113,6 +113,8 @@ export interface Incident extends IncidentDetails {
   eventCount: number;                 // AJOUT : aléas déjà survenus sur cette fiche
   firstArrivalAt: number | null;      // AJOUT : arrivée de la première unité (temps de réponse)
   neglected: boolean;                 // AJOUT : secours non alertés à temps
+  requiredUnits?: number;             // AJOUT (étape 8) : moyens réellement nécessaires, tirés de l'appel (bilan)
+  trueCategory?: string;              // AJOUT (étape 8) : catégorie réelle des faits, à comparer à la saisie (bilan)
 }
 
 /** Fiche en cours de saisie pendant l'appel. */
@@ -150,6 +152,7 @@ export interface IncomingCall {
   id: string;
   callerPhoneNumber: string;          // affiché dans la file : numéro ou "Numéro masqué"
   callerStressLevel: number;          // 0 à 100, état initial
+  receivedAt: number;                 // ms simulées : arrivée dans la file (attente, abandon)
   truth: CallTruth;
 }
 
@@ -195,6 +198,8 @@ export interface GameState {
   units: Record<string, Unit>;
   incidents: Record<string, Incident>;
   callQueue: IncomingCall[];
+  nextCallAt: number;         // ms simulées : prochain appel entrant
+  abandonedCalls: number;     // appels raccrochés après une trop longue attente
   activeCall: ActiveCall | null;
   radio: RadioMessage[];
 }

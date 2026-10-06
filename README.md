@@ -151,11 +151,11 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
    - ~~`callerEngine` : regex non ancrées, `REASSURE` perdu.~~ Corrigé (« respirez », « j'envoie les pompiers », « dépêchez-vous »).
    - ~~Reproductibilité.~~ Un seul tirage par fiche et par tick (`rollEvents`).
    - ~~`RadioLog` : défilement figé au plafond de 200 messages.~~ Dépend du dernier `id`.
-8. **Flux d'appels et bilan.**
-   - Génération automatique des appels dans le moteur (`nextCallAt`, cadence selon la charge et `timeScale`, RNG injectable) : aujourd'hui seul le bouton « + Appel entrant (test) » en ajoute. Masquer ce bouton hors `import.meta.env.DEV`, afficher l'attente de chaque appel, abandon d'un appel resté trop longtemps en file avec pénalité au bilan.
-   - Utiliser `CallTruth.requiredUnits` (lu nulle part) : sous-engagement / sur-engagement au bilan.
-   - Comparer la catégorie saisie à `truth.category` : pénaliser la sous-évaluation de gravité.
-   - Compteurs de temps réaliste : unité en attente d'itinéraire (jusqu'à 5 s réelles) ne doit pas faire perdre du temps simulé au joueur.
+8. ~~**Flux d'appels et bilan.**~~ Fait.
+   - ~~Génération automatique des appels~~ `core/flow.ts` : `nextCallAt`, délai exponentiel selon les fiches ouvertes et `√timeScale`, RNG injectable ; bouton de test réservé à `import.meta.env.DEV` ; attente affichée par appel ; abandon après 10 min (message radio, compté 0 au bilan).
+   - ~~`CallTruth.requiredUnits`~~ copié sur la fiche : sous-engagement (−15 par unité manquante) / sur-engagement (−5, un aléa justifie une unité de plus) au bilan.
+   - ~~Catégorie saisie comparée à `truth.category`~~ : −10 par niveau de gravité sous-évalué.
+   - ~~Temps d'attente d'itinéraire~~ crédité au roulage (`routeElapsedMs` avance pendant le calcul).
 9. **Ergonomie de l'opérateur.**
    - Raccourcis clavier (Espace = pause, 1/2/3 = vitesses, F2 = fiche, Ctrl+Entrée = valider, Échap = fermer), `aria-pressed` sur les vitesses, bannière « PAUSE ».
    - Synchroniser sélection liste / carte / détail : `selectedUnitId` dans le store, `flyTo` sur la fiche sélectionnée, clic sur un marqueur d'unité, défilement de la ligne sélectionnée.

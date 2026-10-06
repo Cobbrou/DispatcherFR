@@ -2,6 +2,7 @@ import { categoryByLabel } from '../data/categories';
 import { geocode } from '../lib/geocode';
 import type {
   ActiveCall,
+  CallTruth,
   GravityLevel,
   Incident,
   IncidentDraft,
@@ -81,7 +82,7 @@ export function nextIncidentId(existingIds: string[], now: number): string {
 }
 
 /** Fiche validée → entrée de main courante (statut PENDING). Tout vient de la saisie de l'opérateur. */
-export function buildIncident(draft: IncidentDraft, id: string, now: number, service: ServiceType): Incident {
+export function buildIncident(draft: IncidentDraft, id: string, now: number, service: ServiceType, truth?: CallTruth): Incident {
   if (!isDraftValid(draft)) throw new Error('Fiche incomplète');
   const geo = geocode(draft.address);
   return {
@@ -105,5 +106,6 @@ export function buildIncident(draft: IncidentDraft, id: string, now: number, ser
     eventCount: 0,
     firstArrivalAt: null,
     neglected: false,
+    ...(truth && { requiredUnits: truth.requiredUnits, trueCategory: truth.category }),
   };
 }

@@ -6,6 +6,12 @@ export function formatClock(t: number | string): string {
   return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
 }
 
+/** « 2:05 » pour une durée en ms. */
+export function formatWait(ms: number): string {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  return `${Math.floor(s / 60)}:${pad(s % 60)}`;
+}
+
 /** « 12 min » entre deux instants ms. */
 export function formatElapsed(from: number, to: number): string {
   return `${Math.max(0, Math.round((to - from) / 60_000))} min`;
