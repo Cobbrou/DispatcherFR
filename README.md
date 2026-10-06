@@ -166,17 +166,18 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
    - ~~Accessibilité~~ : `ReportModal` en `<dialog>`, `role="log"` sur le transcript et la radio, `aria-current` / `aria-pressed`, contrastes des badges et du texte secondaire (slate-400), `color-scheme: dark`.
    - ~~Mise en page~~ : colonnes en `clamp(...)`, colonne des unités repliable (repliée d'office sous 1100 px), la carte suit son conteneur (`ResizeObserver`).
    - Constantes centralisées dans `data/ui.ts` (vitesses, centre et tuiles de carte, ton de l'appelant) et `UNIT_TYPE_LABEL`. Reste : couleurs de statut dupliquées entre `mapIcons` et `statuses`, apostrophes à unifier.
-10. **Performance.**
-    - `Cockpit` relit `now` 4 fois par seconde et re-rend tous ses enfants (la `datalist` de 313 options de la fiche est reconstruite à chaque tick) : composant `<Clock/>`, `memo` sur `FicheWindow`, `RadioLog`, `CallPanel`.
-    - `MapView` : `useGameStore()` sans sélecteur (re-rendu à chaque frappe de la fiche), `renderToStaticMarkup` appelé à chaque tick avant le test du cache d'icônes (`mapIcons.tsx`), `pathOptions` recréés à chaque rendu.
-    - `IncidentList` : lire `Math.floor(now / 60_000)` ; `IncidentDetail` : ne s'abonner qu'aux indicatifs, pas à tout `units`.
-    - Bundle de 691 kB : `react-dom/server` embarqué pour 4 glyphes (pré-rendre en constantes SVG), `React.lazy` sur `MapView`.
+10. ~~**Performance.**~~ Fait.
+    - ~~`Cockpit`~~ ne lit plus `now` : `<Clock/>` seul s'abonne ; `<Wait/>` dans `CallPanel` ; `memo` sur `FicheWindow` (et sa `datalist` de catégories, `CategoryOptions`) et `RadioLog`.
+    - ~~`MapView`~~ : sélecteurs ciblés, `pathOptions` constants ; `mapIcons.ts` ne construit le HTML d'une icône qu'en cas d'absence dans le cache.
+    - ~~`IncidentList`~~ lit la minute, ~~`IncidentDetail`~~ ne s'abonne qu'aux indicatifs (`useShallow`).
+    - ~~Bundle~~ : 691 kB → 376 kB + 160 kB chargés à la demande (`React.lazy` sur `MapView`) ; `react-dom/server` retiré, glyphes lucide en SVG statiques ; `callsign` échappé dans le HTML des `divIcon`.
+    - Reste : `MapView` se re-rend à chaque tick (les unités bougent) ; si la flotte grossit, un marqueur `memo` par unité.
 11. **Tests, CI et hygiène.**
     - Tests manquants : `core/tick.ts` (hors arrivée / retour déjà couverts), `core/scoring.ts`, `core/statusMachine.ts`, `lib/ban.ts`. Faits à l'étape 7 : `lib/route.ts` (`fetchRoute`), `store/gameStore.ts` (BAN, repli d'itinéraire, appelant en panne, pause), clôture, retour à la brigade.
     - CI : script `check` (typecheck + lint + test) et workflow GitHub Actions (`npm ci`, `check`, `build`) ; retirer `--passWithNoTests`.
     - `LICENSE` (ou `UNLICENSED` explicite), provenance du glossaire PDF et de `categories.json`, `.gitattributes` (`* text=auto eol=lf`).
     - Dépendances : `howler` / `@types/howler` et `@types/node` inutilisés (supprimer, ou livrer l'audio) ; `src/audio/` et `public/audio/` vides.
-    - Sécurité : CSP dans `index.html` (`connect-src` OSRM + BAN, `img-src` tuiles), favicon, échapper `callsign` injecté dans le HTML des `divIcon`.
+    - Sécurité : CSP dans `index.html` (`connect-src` OSRM + BAN, `img-src` tuiles), favicon.
     - Tuiles OSM : attribution avec lien vers `openstreetmap.org/copyright` ; politique d'usage limitée, prévoir un fournisseur à clé ou des tuiles auto-hébergées avant diffusion publique ; message quand les tuiles ne chargent pas (`tileerror`).
 12. **Fonctionnalités à étudier.**
     - Audio : sonnerie d'appel, bip de renfort / urgence radio, grésillement (`howler`, déverrouillage au premier clic).

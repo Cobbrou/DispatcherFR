@@ -9,12 +9,15 @@ import { useGameStore } from '../../store/gameStore';
 import type { Coordinates } from '../../types';
 import { brigadeIcon, incidentIcon, unitIcon } from './mapIcons';
 
+const ROUTE_CASING = { color: '#0f172a', weight: 7, opacity: 0.7 };
+const ROUTE_LINE = { color: '#fb923c', weight: 3.5, opacity: 0.95 };
+
 /** Tracé restant : liseré sombre + trait orange pour rester lisible sur le fond de carte. */
 function RoutePath({ path }: { path: Coordinates[] }) {
   return (
     <>
-      <Polyline positions={path} pathOptions={{ color: '#0f172a', weight: 7, opacity: 0.7 }} />
-      <Polyline positions={path} pathOptions={{ color: '#fb923c', weight: 3.5, opacity: 0.95 }} />
+      <Polyline positions={path} pathOptions={ROUTE_CASING} />
+      <Polyline positions={path} pathOptions={ROUTE_LINE} />
     </>
   );
 }
@@ -75,7 +78,11 @@ function PlaceOnClick({ incidentId }: { incidentId: string }) {
 }
 
 export function MapView() {
-  const { units, incidents, service, selectedIncidentId, selectedUnitId } = useGameStore();
+  const units = useGameStore((s) => s.units);
+  const incidents = useGameStore((s) => s.incidents);
+  const service = useGameStore((s) => s.service);
+  const selectedIncidentId = useGameStore((s) => s.selectedIncidentId);
+  const selectedUnitId = useGameStore((s) => s.selectedUnitId);
   const select = useGameStore((s) => s.selectIncident);
   const selectUnit = useGameStore((s) => s.selectUnit);
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { isDraftValid } from '../../core/callEngine';
 import { categories, categoryByLabel } from '../../data/categories';
 import { GRAVITY_META } from '../../data/statuses';
@@ -20,8 +20,19 @@ function Field({ label, className = '', children }: { label: string; className?:
   );
 }
 
+/** Les 300 catégories du glossaire : statiques, reconstruites seulement au premier rendu. */
+const CategoryOptions = memo(function CategoryOptions() {
+  return (
+    <datalist id="categories">
+      {categories.map((c) => (
+        <option key={c.label} value={c.label}>niveau {c.level}</option>
+      ))}
+    </datalist>
+  );
+});
+
 /** Fenêtre CAD : l'opérateur saisit lui-même toute la fiche. */
-export function FicheWindow() {
+export const FicheWindow = memo(function FicheWindow() {
   const active = useGameStore((s) => s.activeCall);
   const update = useGameStore((s) => s.updateDraft);
   const validate = useGameStore((s) => s.validateCall);
@@ -89,11 +100,7 @@ export function FicheWindow() {
             placeholder="Commencez à taper : vol, tapage, accident…"
             className={INPUT}
           />
-          <datalist id="categories">
-            {categories.map((c) => (
-              <option key={c.label} value={c.label}>niveau {c.level}</option>
-            ))}
-          </datalist>
+          <CategoryOptions />
           {category && (
             <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
               <GravityBadge gravity={category.level} />
@@ -132,4 +139,4 @@ export function FicheWindow() {
       </footer>
     </form>
   );
-}
+});

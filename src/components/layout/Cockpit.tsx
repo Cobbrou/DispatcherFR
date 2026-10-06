@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, memo, Suspense, useState } from 'react';
 import { effectiveTimeScale } from '../../core/flow';
 import { salleOf } from '../../data/radio';
 import { NARROW_PX, SPEEDS } from '../../data/ui';
@@ -9,16 +9,23 @@ import { CallPanel } from '../calls/CallPanel';
 import { FicheWindow } from '../incident/FicheWindow';
 import { IncidentDetail } from '../incident/IncidentDetail';
 import { IncidentList } from '../incident/IncidentList';
-import { MapView } from '../map/MapView';
 import { UnitList } from '../units/UnitList';
 import { RadioLog } from './RadioLog';
 import { ReportModal } from './ReportModal';
+
+// Leaflet et ses icônes ne se chargent qu'à l'ouverture du poste.
+const MapView = lazy(() => import('../map/MapView').then((m) => ({ default: m.MapView })));
+
+/** Seule à lire `now` (4 fois par seconde) : le reste du poste ne se re-rend pas à chaque tick. */
+const Clock = memo(function Clock() {
+  const now = useGameStore((s) => s.now);
+  return <span className="w-20 text-right">{formatClock(now)}</span>;
+});
 
 const COLUMN = 'clamp(260px,24vw,380px)';
 
 export function Cockpit() {
   const service = useGameStore((s) => s.service);
-  const now = useGameStore((s) => s.now);
   const paused = useGameStore((s) => s.paused);
   const timeScale = useGameStore((s) => s.timeScale);
   const clamped = useGameStore((s) => effectiveTimeScale(s) !== s.timeScale);
@@ -68,7 +75,7 @@ export function Cockpit() {
           >
             Unités
           </button>
-          <span className="w-20 text-right">{formatClock(now)}</span>
+          <Clock />
         </span>
       </header>
       {notices.map((n) => (
@@ -82,7 +89,9 @@ export function Cockpit() {
         <div className="flex min-h-0 flex-col">
           <div className="relative min-h-0 flex-1">
             <div className="absolute inset-0 isolate">
-              <MapView />
+              <Suspense fallback={<p className="p-3 text-sm text-slate-400">Chargement de la carte…</p>}>
+                <MapView />
+              </Suspense>
             </div>
             <FicheWindow />
           </div>

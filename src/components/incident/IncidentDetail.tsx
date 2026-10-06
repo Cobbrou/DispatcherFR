@@ -1,3 +1,4 @@
+import { useShallow } from 'zustand/react/shallow';
 import { CONCOURS } from '../../data/radio';
 import { INCIDENT_STATUS_LABEL, GRAVITY_META, OUTCOME_LABEL } from '../../data/statuses';
 import { formatClock } from '../../lib/format';
@@ -7,7 +8,10 @@ import { GravityBadge } from './GravityBadge';
 
 export function IncidentDetail() {
   const incident = useGameStore((s) => (s.selectedIncidentId ? s.incidents[s.selectedIncidentId] : undefined));
-  const units = useGameStore((s) => s.units);
+  // Seuls les indicatifs des unités engagées comptent : les positions, qui bougent à chaque tick, sont ignorées.
+  const callsigns = useGameStore(
+    useShallow((s) => (s.selectedIncidentId ? s.incidents[s.selectedIncidentId]?.assignedUnits ?? [] : []).map((id) => s.units[id]?.callsign ?? id)),
+  );
   const close = useGameStore((s) => s.closeIncident);
   const alertRescue = useGameStore((s) => s.alertRescue);
   const banDown = useGameStore((s) => s.offline.ban);
@@ -18,7 +22,7 @@ export function IncidentDetail() {
         ['Statut', INCIDENT_STATUS_LABEL[incident.status] + (incident.outcome ? ` · ${OUTCOME_LABEL[incident.outcome]}` : '')],
         ['Requérant', [incident.callerFirstName, incident.callerLastName].filter(Boolean).join(' ') || '—'],
         ['Téléphone', incident.callerPhone || '—'],
-        ['Unités engagées', incident.assignedUnits.map((id) => units[id]?.callsign ?? id).join(', ') || '—'],
+        ['Unités engagées', callsigns.join(', ') || '—'],
       ]
     : [];
 

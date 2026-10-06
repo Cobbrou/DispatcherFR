@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { formatClock } from '../../lib/format';
 import { useGameStore } from '../../store/gameStore';
 import { Panel } from './Panel';
 
 /** Transcription du fil radio ; le plus récent en bas. */
-export function RadioLog() {
+export const RadioLog = memo(function RadioLog() {
   const radio = useGameStore((s) => s.radio);
   const lastId = radio.at(-1)?.id; // la longueur est plafonnée : seul le dernier id change en continu
   const end = useRef<HTMLLIElement>(null);
@@ -29,4 +29,4 @@ export function RadioLog() {
       )}
     </Panel>
   );
-}
+});

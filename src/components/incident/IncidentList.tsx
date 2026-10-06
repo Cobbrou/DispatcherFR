@@ -8,7 +8,8 @@ import { GravityBadge } from './GravityBadge';
 export function IncidentList() {
   const incidents = useGameStore((s) => s.incidents);
   const service = useGameStore((s) => s.service);
-  const now = useGameStore((s) => s.now);
+  // Les durées s'affichent à la minute : inutile de se re-rendre à chaque tick.
+  const minute = useGameStore((s) => Math.floor(s.now / 60_000));
   const selectedId = useGameStore((s) => s.selectedIncidentId);
   const select = useGameStore((s) => s.selectIncident);
 
@@ -61,7 +62,7 @@ export function IncidentList() {
               <div className="mt-0.5 flex justify-between font-mono text-[11px] text-slate-400">
                 <span>{i.id}</span>
                 <span>
-                  {i.outcome ? OUTCOME_LABEL[i.outcome] : INCIDENT_STATUS_LABEL[i.status]} · {formatElapsed(i.createdTimestamp, now)}
+                  {i.outcome ? OUTCOME_LABEL[i.outcome] : INCIDENT_STATUS_LABEL[i.status]} · {formatElapsed(i.createdTimestamp, minute * 60_000)}
                 </span>
               </div>
             </button>
