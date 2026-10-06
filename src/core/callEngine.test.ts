@@ -28,17 +28,17 @@ describe('fiche saisie par l\'opérateur', () => {
     expect(isDraftValid(a.draft)).toBe(false);
     a = patchDraft(a, { address: '  ' });
     expect(isDraftValid(a.draft)).toBe(false);
-    a = patchDraft(a, { address: '12 rue Carnot, Melun' });
+    a = patchDraft(a, { address: '12 rue Pasteur, Louvres' });
     expect(isDraftValid(a.draft)).toBe(true);
     expect(isDraftValid(patchDraft(a, { category: 'inconnue' }).draft)).toBe(false);
   });
 
   it('construit une fiche PENDING uniquement avec la saisie, géocodée', () => {
-    const a = patchDraft(fresh(), { category: 'vol avec violences', address: ' 12 rue Carnot, Melun ', callerLastName: ' Durand ' });
+    const a = patchDraft(fresh(), { category: 'vol avec violences', address: ' 12 rue Pasteur, Louvres ', callerLastName: ' Durand ' });
     const inc = buildIncident(a.draft, 'FICH-2026-0047', 1000, 'GENDARMERIE');
     expect(inc).toMatchObject({
-      status: 'PENDING', gravity: 3, callerLastName: 'Durand', address: '12 rue Carnot, Melun',
-      zone: 'POLICE', assignedUnits: [], createdTimestamp: 1000,
+      status: 'PENDING', gravity: 3, callerLastName: 'Durand', address: '12 rue Pasteur, Louvres',
+      zone: 'GENDARMERIE', assignedUnits: [], createdTimestamp: 1000,
     });
     expect(inc.coordinates).not.toBeNull();
   });

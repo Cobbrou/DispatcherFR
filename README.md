@@ -10,9 +10,9 @@ Cahier des charges source : [`CONTEXT.md`](./CONTEXT.md).
 
 ## 1. Vision
 
-- **Rôle du joueur :** opérateur CIC (zone police, ZPN) ou CORG (zone gendarmerie, ZGN).
+- **Rôle du joueur :** opérateur CORG (gendarmerie) sur tout le Val-d'Oise (95). Le rôle CIC (police) reste prévu dans le code mais n'a plus de données.
 - **Inspirations :** *112 Operator*, *Sim Dispatcher*, logiciels opérationnels réels (SARI, Pégase, LUPIN) pour l'ergonomie : sombre, dense, orienté données et carte.
-- **Hyper-réalisme ciblé sur le français :** indicatifs (`PAM 1`, `BAC 75`, `PSIG MELUN 1`), sectorisation police/gendarmerie, qualifications d'infraction, formules radio (« Bien reçu », « Tenu », « De PAM 2 pour salle »). Aucun jargon américain (« copy that », « Dispatch 911 »).
+- **Hyper-réalisme ciblé sur le français :** indicatifs (`LOUVRES.101`, `PONTOISE BMO.101`), sectorisation par brigade, qualifications d'infraction, formules radio (« Bien reçu », « Tenu », « De PAM 2 pour salle »). Aucun jargon américain (« copy that », « Dispatch 911 »).
 
 ### Piliers
 
@@ -130,7 +130,7 @@ Les scripts sont déclarés dans `package.json`.
 2. ~~Prise d'appel libre, appelants générés, fiche saisie par l'opérateur.~~ Fait.
 3. ~~Carte, assignation, déplacement, machine à statuts.~~ Fait.
 4. ~~Ambiance radio & compte rendu, archive des fiches clôturés, demande de renforts ou de concours d'autres services (pompiers, samu, service des routes), ajout d'animations pour rendre l'interface plus vivante.~~ Fait.
-5. Passage en mode gendarmerie uniquement, se baser sur tout le 95 en zone gendarmerie, intégrer une patrouille pour chaque brigade de gendarmerie avec un numéro véhicule par véhicule (101,102,103) ([COMMUNE].[NUMERO VL]), ajouter sur la carte les icones des brigades.
+5. ~~Passage en mode gendarmerie uniquement, se baser sur tout le 95 en zone gendarmerie, intégrer une patrouille pour chaque brigade de gendarmerie avec un numéro véhicule par véhicule (101,102,103) ([COMMUNE].[NUMERO VL]), ajouter sur la carte les icones des brigades.~~ Fait : poste CORG, 183 communes du Val-d'Oise, 20 unités de gendarmerie (annuaire du service public), 38 patrouilles `LOUVRES.101`, `LOUVRES.102`…, icônes de brigade sur la carte. Le mode police reste dans le code, sans données.
 6. Ajout de la possibilité de parler à la radio en tant qu'opérateur, 
 
 Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` pointent le code au moment de la revue.
@@ -141,9 +141,9 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
    - Délai d'échec calculé depuis la création (`core/events.ts`) : si la dernière unité sur place repart alors qu'un renfort est en route, la fiche passe aussitôt en `FAILED`. Ne l'appliquer que tant que `firstArrivalAt === null`.
    - `onTimePct` (`core/scoring.ts`) ignore les fiches sans arrivée (échec ou retard) : pourcentage gonflé. Compter ces fiches comme délai manqué (gravité ≥ 2) et adapter le test.
    - Résultat BAN appliqué sans condition (`store/gameStore.ts`) : il écrase un placement manuel, fait « sauter » une unité déjà engagée et ne recalcule pas la zone. N'appliquer que si les coordonnées n'ont pas changé ; sortir `geocodeBan` du callback de `set`.
-   - BAN (`lib/ban.ts`) : `lat/lon` n'est qu'un biais, un homonyme hors département peut sortir (unité envoyée à des centaines de km) ; rejeter au-delà de ~30 km du centre, passer le centre selon la zone du poste (utile pour l'étape 5), vérifier `res.ok`.
-   - `lib/geocode.ts` : le premier nombre de l'adresse est pris pour le numéro ; un code postal (« rue Carnot 77000 Melun ») décale la fiche de ~170 km. Ne lire que `^\d{1,3}\b`.
-   - Fiche saisie hors zone du poste (ex. Dammarie en zone police) : la fiche disparaît de la liste et de la carte sans message, puis échoue. Afficher un avertissement de transfert ou une pastille « hors zone ». Ajouter aussi la garde `service` / `zone` dans `assignUnit` (le moteur doit refuser, pas seulement l'interface).
+   - BAN (`lib/ban.ts`) : ~~homonymes hors département, `res.ok`~~ corrigés à l'étape 5 (résultat retenu seulement si son code INSEE commence par 95). Reste : biais de position selon la zone du poste (centre du 95 en dur).
+   - ~~`lib/geocode.ts` : un code postal est pris pour le numéro de rue.~~ Corrigé à l'étape 5 (numéro en tête, 3 chiffres au plus).
+   - Fiche saisie hors zone du poste (sans objet tant que tout le 95 est en zone gendarmerie) : la fiche disparaît de la liste et de la carte sans message, puis échoue. Afficher un avertissement de transfert ou une pastille « hors zone ». Ajouter aussi la garde `service` / `zone` dans `assignUnit` (le moteur doit refuser, pas seulement l'interface).
    - OSRM (`lib/route.ts`) : `res.ok` non vérifié, durée absente → `NaN` (l'unité arrive instantanément), repli en ligne droite silencieux. Vérifier `Number.isFinite`, timeout plus court (2 s), message de journal « itinéraire estimé », cache des routes déjà calculées, URL configurable (`VITE_OSRM_URL`), espacer les requêtes (le serveur de démo limite à ~1 req/s).
    - Après l'intervention, l'unité reste à l'adresse de la fiche en `DISPO_ON_ZONE` (`core/tick.ts`) : prévoir un trajet de retour vers son secteur ou le poste, et un délai de départ du poste.
    - Instant d'arrivée imprécis à vitesse élevée : `firstArrivalAt` et `onSceneUntil` utilisent la fin du tick (`core/tick.ts`) ; calculer l'instant réel d'arrivée.

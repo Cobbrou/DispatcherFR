@@ -28,7 +28,7 @@ function describeFlight(rng: Rng, n: number): string {
 export function generateCall(rng: Rng, service: ServiceType): IncomingCall {
   const tpl = weighted(rng, templates);
   const person = weighted(rng, PERSONALITIES);
-  const street = pick(rng, streets.filter((s) => s.zone === service));
+  const street = pick(rng, streets);
   const number = int(rng, [1, 60]);
   const address = `${number} ${street.name}, ${street.commune}`;
   const landmark = pick(rng, landmarks);

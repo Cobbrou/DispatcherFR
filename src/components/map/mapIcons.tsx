@@ -1,4 +1,4 @@
-import { Bike, Car, Dog, Shield } from 'lucide-react';
+import { Bike, Car, Dog, Landmark, Shield } from 'lucide-react';
 import L from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type { GravityLevel, Unit, UnitStatus, UnitType } from '../../types';
@@ -39,7 +39,14 @@ export function unitIcon(u: Pick<Unit, 'callsign' | 'type' | 'status'>) {
     </div>
     <span class="mt-0.5 whitespace-nowrap rounded-full border border-white/20 bg-slate-950/90 px-2 font-mono text-[10px] font-semibold leading-4 text-white shadow">${u.callsign}</span>
   </div>`;
-  return cached(`u:${u.callsign}:${u.type}:${u.status}`, html, [96, 50], [48, 16]);
+  return cached(`u:${u.callsign}:${u.type}:${u.status}`, html, [150, 50], [75, 16]);
+}
+
+/** Brigade de gendarmerie : écusson bleu nuit, plus grand que les patrouilles pour rester repérable. */
+export function brigadeIcon() {
+  const glyph = renderToStaticMarkup(<Landmark size={15} color="#fff" strokeWidth={2.2} />);
+  const html = `<span class="grid size-7 place-items-center rounded-md border-2 border-white bg-blue-900 shadow-lg shadow-black/60 ring-2 ring-blue-500/50">${glyph}</span>`;
+  return cached('b', html, [28, 28], [14, 14]);
 }
 
 /** Épingle de localisation, couleur et numéro = gravité ; pulsation pour les urgences non engagées. */

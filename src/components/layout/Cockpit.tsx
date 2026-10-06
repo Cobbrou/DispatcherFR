@@ -24,7 +24,7 @@ export function Cockpit() {
       <header className="flex items-center justify-between border-b border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm">
         <span className="font-bold tracking-widest">DISPATCH-17</span>
         <span className="text-slate-400">
-          {service === 'POLICE' ? 'CIC – Police Nationale' : 'CORG – Gendarmerie Nationale'}
+          {service === 'POLICE' ? 'CIC – Police Nationale' : "CORG – Gendarmerie Nationale · Val-d'Oise (95)"}
         </span>
         <span className="flex items-center gap-2">
           <button onClick={togglePause} className="rounded bg-slate-800 px-2 py-0.5 text-xs hover:bg-slate-700">

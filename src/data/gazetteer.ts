@@ -1,4 +1,5 @@
 import type { ServiceType } from '../types';
+import { communes } from './communes';
 
 export interface Street {
   name: string;
@@ -8,24 +9,30 @@ export interface Street {
   lng: number;
 }
 
-// Coordonnées approximatives : base de départ du prototype, pas un référentiel d'adresses.
-export const streets: Street[] = [
-  // Zone police (CIC) – Melun
-  { name: 'rue Saint-Barthélemy', commune: 'Melun', zone: 'POLICE', lat: 48.5405, lng: 2.6602 },
-  { name: 'avenue Thiers', commune: 'Melun', zone: 'POLICE', lat: 48.5368, lng: 2.6571 },
-  { name: 'rue du Château', commune: 'Melun', zone: 'POLICE', lat: 48.5391, lng: 2.6644 },
-  { name: 'place Praslin', commune: 'Melun', zone: 'POLICE', lat: 48.5399, lng: 2.659 },
-  { name: 'rue Carnot', commune: 'Melun', zone: 'POLICE', lat: 48.538, lng: 2.656 },
-  { name: 'boulevard Gambetta', commune: 'Melun', zone: 'POLICE', lat: 48.5357, lng: 2.6532 },
-  { name: 'rue Paul Doumer', commune: 'Melun', zone: 'POLICE', lat: 48.5445, lng: 2.654 },
-  { name: 'avenue du Général Leclerc', commune: 'Melun', zone: 'POLICE', lat: 48.543, lng: 2.67 },
-  { name: 'rue Dajot', commune: 'Melun', zone: 'POLICE', lat: 48.5415, lng: 2.6615 },
-  { name: "boulevard de l'Almont", commune: 'Melun', zone: 'POLICE', lat: 48.5337, lng: 2.6692 },
-  // Zone gendarmerie (CORG)
-  { name: 'avenue de la Libération', commune: 'Dammarie-lès-Lys', zone: 'GENDARMERIE', lat: 48.5123, lng: 2.639 },
-  { name: 'rue de la République', commune: 'Dammarie-lès-Lys', zone: 'GENDARMERIE', lat: 48.5148, lng: 2.641 },
-  { name: 'rue du Pont', commune: 'Dammarie-lès-Lys', zone: 'GENDARMERIE', lat: 48.5095, lng: 2.6335 },
-  { name: 'rue des Écoles', commune: 'Boissise-le-Roi', zone: 'GENDARMERIE', lat: 48.5183, lng: 2.587 },
-  { name: 'route de Corbeil', commune: 'Boissise-le-Roi', zone: 'GENDARMERIE', lat: 48.5155, lng: 2.5905 },
-  { name: 'rue de la Mairie', commune: 'Seine-Port', zone: 'GENDARMERIE', lat: 48.5543, lng: 2.5733 },
+/** Noms de voies présents dans presque toutes les communes ; la BAN donne ensuite la position exacte. */
+const COMMON_STREETS = [
+  'rue de la Mairie',
+  "rue de l'Église",
+  'Grande Rue',
+  'rue du Général de Gaulle',
+  'avenue de la République',
+  'rue Jean Jaurès',
+  'rue Pasteur',
+  'rue de la Gare',
 ];
+
+/** Décalage stable (~±500 m) autour du centre de la commune, propre à chaque voie. */
+function offset(key: string): [number, number] {
+  let h = 2166136261;
+  for (const c of key) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  const unit = (n: number) => (((h >>> n) & 0xff) / 255 - 0.5) * 0.009;
+  return [unit(0), unit(8)];
+}
+
+// Coordonnées approximatives : tout le Val-d'Oise est en zone gendarmerie (CORG). Base de départ, pas un référentiel d'adresses.
+export const streets: Street[] = communes.flatMap((c) =>
+  COMMON_STREETS.map((name) => {
+    const [dLat, dLng] = offset(`${name}|${c.name}`);
+    return { name, commune: c.name, zone: 'GENDARMERIE' as const, lat: c.lat + dLat, lng: c.lng + dLng };
+  }),
+);

@@ -23,11 +23,11 @@ describe('generateCall', () => {
     expect(sigs.size).toBeGreaterThan(15);
   });
 
-  it('produit des appels cohérents dans la zone demandée', () => {
+  it("produit des appels cohérents, tous dans le Val-d'Oise", () => {
     for (let i = 0; i < 200; i++) {
-      const { truth, callerStressLevel, callerPhoneNumber } = generateCall(mulberry32(i), i % 2 ? 'POLICE' : 'GENDARMERIE');
+      const { truth, callerStressLevel, callerPhoneNumber } = generateCall(mulberry32(i), 'GENDARMERIE');
       expect(categoryByLabel.has(truth.category)).toBe(true);
-      expect(truth.zone).toBe(i % 2 ? 'POLICE' : 'GENDARMERIE');
+      expect(truth.zone).toBe('GENDARMERIE');
       expect(geocode(truth.address)?.zone).toBe(truth.zone);
       expect(callerStressLevel).toBeGreaterThanOrEqual(0);
       expect(callerStressLevel).toBeLessThan(100);
@@ -38,9 +38,17 @@ describe('generateCall', () => {
 });
 
 describe('geocode', () => {
-  it('retrouve une rue malgré accents et casse', () => {
-    expect(geocode('12 RUE SAINT BARTHELEMY melun')?.zone).toBe('POLICE');
-    expect(geocode("3 boulevard de l'Almont")?.zone).toBe('POLICE');
+  it('retrouve la commune malgré accents et casse', () => {
+    const g = geocode('12 RUE PASTEUR louvres');
+    expect(g?.zone).toBe('GENDARMERIE');
+    expect(g?.coordinates.lat).toBeCloseTo(49.04, 1);
+    expect(geocode("3 rue de la Mairie, L'Isle-Adam")?.coordinates.lng).toBeCloseTo(2.22, 1);
     expect(geocode('4 rue inconnue, Paris')).toBeNull();
+  });
+
+  it("ne prend pas le code postal pour un numéro de rue", () => {
+    const a = geocode('rue Pasteur 95380 Louvres')!.coordinates;
+    const b = geocode('rue Pasteur, Louvres')!.coordinates;
+    expect(a).toEqual(b);
   });
 });

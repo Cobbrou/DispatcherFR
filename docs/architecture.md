@@ -67,7 +67,7 @@ Le store appelle `core` ; il ne contient pas de règle métier. Commandes expos�
 - Une couche **unités** (icône par type, couleur par statut), une couche **incidents** (badge de gravité 1-5), une couche **secteurs** (polygones GeoJSON, zone police vs gendarmerie).
 - Le déplacement n'utilise pas de routage réel au MVP : interpolation linéaire sur coordonnées. Routage réel (OSRM) = amélioration ultérieure.
 - Les marqueurs lisent le store ; ils n'animent pas eux-mêmes la position (le moteur la calcule). Ils sont des pastilles HTML (`L.divIcon`) mises en cache.
-- Seules les unités du poste du joueur et les fiches de sa zone sont affichées. Les couches secteurs ne sont pas encore dessinées.
+- Seules les unités du poste du joueur et les fiches de sa zone sont affichées. Carte centrée sur le Val-d'Oise ; une icône par caserne (`data/brigades` : 20 unités de gendarmerie, BMO et peloton motorisé compris) et une patrouille par véhicule (`LOUVRES.101`, `LOUVRES.102`…), stationnée à sa brigade au départ. Les couches secteurs ne sont pas dessinées.
 - Une fiche sans coordonnées se place par un clic sur la carte (`placeIncident`).
 - Boucle de jeu : `App` appelle `tick` toutes les 250 ms (temps réel plafonné à 1 s) ; `dt simulé = dt réel × timeScale`.
 
@@ -93,7 +93,7 @@ Howler.js. Un module unique expose `play(soundId)`. Il s'abonne aux événements
 | Déplacement sur itinéraire OSRM (serveur de démo public, sans clé), vitesse par tronçon × 1,25 (2-tons) ; repli en ligne droite à 50 km/h hors-ligne. Adresse géocodée par la BAN (api-adresse.data.gouv.fr), repli gazetteer | Dépend d'internet ; serveurs publics sans garantie ; mêmes coefficients pour toutes les unités ; une unité engagée ne peut pas être réaffectée en route (gravité 5) ; pas de délai de départ depuis le poste | OSRM auto-hébergé, vitesse par type d'unité |
 | Aléas tirés par fiche (renfort, concours SAMU / pompiers / service des routes), deux au plus, probabilité par minute selon la gravité ; issue tirée au hasard à la fin (pacifié 55 %, interpellé 30 %, fausse alerte 15 %) | Pas de poursuite / refus d'obtempérer ; l'opérateur ne peut pas demander un concours de sa propre initiative ; la salle n'envoie pas de message radio libre | Poursuite et herse (DIV), issues liées à la catégorie, demande de concours proactive |
 | Appelant procédural (mots-clés) | Comprend mal les formulations inattendues ; réponses de qualité limitée | Implémentation LLM de `CallerEngine` |
-| Gazetteer de 16 rues | Géocodage limité à ces rues | API de géocodage (BAN) |
+| Gazetteer : 183 communes du 95 × 8 noms de voies courants, positions approchées (`data/communes`, `data/gazetteer`) ; tout le 95 est en zone gendarmerie | Les vraies rues viennent de la BAN après validation ; hors-ligne, la fiche est placée près du centre de la commune | Autocomplétion BAN |
 | Pas de backend | Pas de multi-joueur ni de persistance serveur | API + base si besoin |
 | Une seule ville de départ | Données géographiques réduites | Packs de secteurs |
 
