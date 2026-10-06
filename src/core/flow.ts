@@ -9,8 +9,8 @@ const MIN = 60_000;
 export const CALL_BASE_MIN = 2;
 /** Surcharge de l'intervalle par fiche ouverte. */
 const PER_OPEN = 0.15;
-/** Attente maximale d'un appel en file avant que l'appelant raccroche (minutes simulées). */
-export const CALL_ABANDON_MIN = 10;
+/** Attente maximale d'un appel en file avant que l'appelant raccroche (minutes simulées ; en file, le jeu tourne en ×1). */
+export const CALL_ABANDON_MIN = 3;
 
 /**
  * Délai avant le prochain appel : loi exponentielle (appels indépendants), plus long quand la salle est chargée.
@@ -20,6 +20,10 @@ export function nextCallDelayMs(rng: Rng, openIncidents: number, timeScale: numb
   const mean = CALL_BASE_MIN * (1 + PER_OPEN * openIncidents) * Math.sqrt(timeScale);
   return Math.max(0.5 * MIN, -Math.log(1 - rng()) * mean * MIN);
 }
+
+/** Vitesse réelle du jeu : ×1 tant qu'un appel attend ou qu'on est en ligne, pour que l'opérateur ne le subisse pas. */
+export const effectiveTimeScale = (s: Pick<GameState, 'callQueue' | 'activeCall' | 'timeScale'>) =>
+  s.callQueue.length > 0 || s.activeCall ? 1 : s.timeScale;
 
 /** Arrivée automatique des appels et abandon de ceux restés trop longtemps en file. */
 export function flowCalls<S extends GameState>(s: S, rng: Rng = Math.random): S {

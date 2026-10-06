@@ -28,18 +28,18 @@ function cached(key: string, html: string, size: [number, number], anchor: [numb
 }
 
 /** Pastille ronde (pictogramme du véhicule, couleur = statut) + indicatif. */
-export function unitIcon(u: Pick<Unit, 'callsign' | 'type' | 'status'>) {
+export function unitIcon(u: Pick<Unit, 'callsign' | 'type' | 'status'>, selected = false) {
   const color = STATUS_COLOR[u.status];
   const Glyph = UNIT_GLYPH[u.type] ?? Car;
   const glyph = renderToStaticMarkup(<Glyph size={16} color="#fff" strokeWidth={2.4} />);
   const pulse = u.status === 'EN_ROUTE' || u.status === 'URGENCE_RADIO' ? `<span class="absolute inset-0 animate-ping rounded-full" style="background:${color};opacity:.55"></span>` : '';
   const html = `<div class="flex flex-col items-center">
     <div class="relative grid size-8 place-items-center">${pulse}
-      <span class="relative grid size-8 place-items-center rounded-full border-2 border-white shadow-lg shadow-black/60" style="background:${color}">${glyph}</span>
+      <span class="relative grid size-8 place-items-center rounded-full border-2 ${selected ? 'scale-125 border-yellow-300 ring-4 ring-yellow-300/60' : 'border-white'} shadow-lg shadow-black/60" style="background:${color}">${glyph}</span>
     </div>
     <span class="mt-0.5 whitespace-nowrap rounded-full border border-white/20 bg-slate-950/90 px-2 font-mono text-[10px] font-semibold leading-4 text-white shadow">${u.callsign}</span>
   </div>`;
-  return cached(`u:${u.callsign}:${u.type}:${u.status}`, html, [150, 50], [75, 16]);
+  return cached(`u:${u.callsign}:${u.type}:${u.status}:${selected}`, html, [150, 50], [75, 16]);
 }
 
 /** Brigade de gendarmerie : écusson bleu nuit, plus grand que les patrouilles pour rester repérable. */

@@ -152,20 +152,20 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
    - ~~Reproductibilité.~~ Un seul tirage par fiche et par tick (`rollEvents`).
    - ~~`RadioLog` : défilement figé au plafond de 200 messages.~~ Dépend du dernier `id`.
 8. ~~**Flux d'appels et bilan.**~~ Fait.
-   - ~~Génération automatique des appels~~ `core/flow.ts` : `nextCallAt`, délai exponentiel selon les fiches ouvertes et `√timeScale`, RNG injectable ; bouton de test réservé à `import.meta.env.DEV` ; attente affichée par appel ; abandon après 10 min (message radio, compté 0 au bilan).
+   - ~~Génération automatique des appels~~ `core/flow.ts` : `nextCallAt`, délai exponentiel selon les fiches ouvertes et `√timeScale`, RNG injectable ; bouton de test réservé à `import.meta.env.DEV` ; attente affichée par appel ; abandon après 3 min (message radio, compté 0 au bilan).
    - ~~`CallTruth.requiredUnits`~~ copié sur la fiche : sous-engagement (−15 par unité manquante) / sur-engagement (−5, un aléa justifie une unité de plus) au bilan.
    - ~~Catégorie saisie comparée à `truth.category`~~ : −10 par niveau de gravité sous-évalué.
    - ~~Temps d'attente d'itinéraire~~ crédité au roulage (`routeElapsedMs` avance pendant le calcul).
-9. **Ergonomie de l'opérateur.**
-   - Raccourcis clavier (Espace = pause, 1/2/3 = vitesses, F2 = fiche, Ctrl+Entrée = valider, Échap = fermer), `aria-pressed` sur les vitesses, bannière « PAUSE ».
-   - Synchroniser sélection liste / carte / détail : `selectedUnitId` dans le store, `flyTo` sur la fiche sélectionnée, clic sur un marqueur d'unité, défilement de la ligne sélectionnée.
-   - `UnitList` : trier les unités disponibles par distance, afficher distance et ETA, raison de l'impossibilité d'engager en texte visible, libellés de types lisibles (`MOTOCYCLISTES`), pluriel (« 1 agents »), « calcul… » tant que la route n'est pas arrivée.
-   - Bandeau d'état dégradé quand OSRM ou la BAN sont hors-ligne (« tracé direct », « fiche non géolocalisée : cause »). Signaler les fiches « à placer » dans la liste.
-   - Fiche d'appel : bouton « Réduire » (elle masque toute la carte), `<form onSubmit>` (Entrée valide), `required`, raison affichée quand « Valider » est grisé, confirmation avant « Abandonner » / « Raccrocher », avertissement « catégorie absente du glossaire » seulement si aucune catégorie ne commence par la saisie.
-   - Accessibilité : `ReportModal` en `<dialog>` (rôle, Échap, focus, retour du focus), `role="log"` / `aria-live` sur le transcript d'appel et `RadioLog`, `aria-current` / `aria-pressed` sur la liste et les onglets, contraste des badges (blanc sur orange / sky / emerald < 4,5:1) et de `text-slate-500`, `color-scheme: dark`.
-   - Mise en page : colonnes `clamp(...)` et colonne de droite repliable sous ~1100 px ; la carte est écrasée à 1024 px.
-   - Constantes et libellés en dur à centraliser dans `src/data` (vitesses, salle CIC / CORG via `salleOf`, centre de carte, URL des tuiles, seuils de ton, couleurs de statut dupliquées entre `mapIcons` et `statuses`) ; apostrophes à unifier.
-   - Lorsqu'un appel est en attente, bloquer le temps en x1 pour ne pas que le timer aille trop vite.
+9. ~~**Ergonomie de l'opérateur.**~~ Fait, sauf les points restants ci-dessous.
+   - ~~Raccourcis~~ `lib/useShortcuts.ts` : Espace = pause, 1/2/3 = vitesses, F2 = décrocher l'appel suivant (ou revenir à la fiche), Ctrl+Entrée = valider, Échap = désélectionner (et fermer le bilan) ; `aria-pressed` sur les vitesses ; bandeau « PAUSE ».
+   - ~~Appel en attente : temps bloqué en ×1~~ (`effectiveTimeScale`, bandeau explicatif) ; l'abandon d'un appel en file passe à 3 min.
+   - ~~Sélection liste / carte / détail~~ : `selectedUnitId` et `selectUnit` dans le store, `flyTo` à chaque nouvelle sélection, clic sur un marqueur d'unité (surbrillance), défilement de la ligne sélectionnée.
+   - ~~`UnitList`~~ : libres triées par distance à la fiche, distance et ETA estimés, temps restant ou « calcul… » en route, raison visible quand on ne peut pas engager, libellés lisibles, pluriel. Reste : ETA par OSRM (aujourd'hui vol d'oiseau × 1,3 à 60 km/h).
+   - ~~Bandeaux d'état dégradé~~ (OSRM : tracé direct ; BAN injoignable), cause affichée sur la fiche, badge « À PLACER » dans la liste.
+   - ~~Fiche d'appel~~ : « Réduire », `<form onSubmit>`, `required`, raison affichée quand « Valider » est grisé, confirmation avant « Abandonner » / « Raccrocher », avertissement de catégorie seulement si aucune ne commence par la saisie.
+   - ~~Accessibilité~~ : `ReportModal` en `<dialog>`, `role="log"` sur le transcript et la radio, `aria-current` / `aria-pressed`, contrastes des badges et du texte secondaire (slate-400), `color-scheme: dark`.
+   - ~~Mise en page~~ : colonnes en `clamp(...)`, colonne des unités repliable (repliée d'office sous 1100 px), la carte suit son conteneur (`ResizeObserver`).
+   - Constantes centralisées dans `data/ui.ts` (vitesses, centre et tuiles de carte, ton de l'appelant) et `UNIT_TYPE_LABEL`. Reste : couleurs de statut dupliquées entre `mapIcons` et `statuses`, apostrophes à unifier.
 10. **Performance.**
     - `Cockpit` relit `now` 4 fois par seconde et re-rend tous ses enfants (la `datalist` de 313 options de la fiche est reconstruite à chaque tick) : composant `<Clock/>`, `memo` sur `FicheWindow`, `RadioLog`, `CallPanel`.
     - `MapView` : `useGameStore()` sans sélecteur (re-rendu à chaque frappe de la fiche), `renderToStaticMarkup` appelé à chaque tick avant le test du cache d'icônes (`mapIcons.tsx`), `pathOptions` recréés à chaque rendu.

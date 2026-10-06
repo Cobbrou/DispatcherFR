@@ -78,3 +78,10 @@ export async function fetchRoute(from: Coordinates, to: Coordinates): Promise<Ro
     return { ...straightRoute(from, to), estimated: true };
   }
 }
+
+/** Détour moyen d'une route par rapport au vol d'oiseau, et vitesse moyenne d'une patrouille engagée. */
+const ROAD_FACTOR = 1.3;
+const ESTIMATE_KMH = 60;
+
+/** Durée approximative d'un trajet, avant tout calcul d'itinéraire (aide au choix de l'unité). */
+export const estimateEtaMs = (distanceMeters: number) => (distanceMeters * ROAD_FACTOR) / (ESTIMATE_KMH / 3.6) * 1000;

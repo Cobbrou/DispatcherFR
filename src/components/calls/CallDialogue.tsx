@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { callerTone } from '../../data/ui';
 import { useGameStore } from '../../store/gameStore';
 import type { TranscriptLine } from '../../types';
 
@@ -8,9 +9,6 @@ const STYLE: Record<TranscriptLine['from'], string> = {
   SYSTEME: 'italic text-red-400',
 };
 const LABEL: Record<TranscriptLine['from'], string> = { APPELANT: 'Appelant', OPERATEUR: 'Vous', SYSTEME: '' };
-
-/** Ton de la voix : seul indice visible de l'état de l'appelant. */
-const tone = (stress: number) => (stress < 35 ? 'Calme' : stress < 70 ? 'Tendu' : 'Paniqué');
 
 export function CallDialogue() {
   const active = useGameStore((s) => s.activeCall);
@@ -40,20 +38,20 @@ export function CallDialogue() {
     <div className="flex h-full flex-col p-3 text-sm">
       <div className="mb-2 flex items-center justify-between font-mono text-xs text-slate-400">
         <span>{active.call.callerPhoneNumber}</span>
-        <span className={active.stress >= 70 ? 'text-red-400' : ''}>Ton : {tone(active.stress)}</span>
+        <span className={active.stress >= 70 ? 'text-red-400' : ''}>Ton : {callerTone(active.stress)}</span>
       </div>
-      <ul className="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
+      <ul role="log" aria-live="polite" aria-label="Conversation avec l'appelant" className="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
         {active.transcript.map((l, i) => (
           <li key={i} className={STYLE[l.from]}>
-            {LABEL[l.from] && <span className="font-mono text-[11px] uppercase text-slate-500">{LABEL[l.from]} : </span>}
+            {LABEL[l.from] && <span className="font-mono text-[11px] uppercase text-slate-400">{LABEL[l.from]} : </span>}
             {l.text}
           </li>
         ))}
-        {active.pending && <li className="text-slate-500">…</li>}
+        {active.pending && <li className="text-slate-400">…</li>}
         <div ref={endRef} />
       </ul>
       {ended ? (
-        <p className="mt-2 font-mono text-xs text-slate-500">Appel terminé. Complétez ou abandonnez la fiche.</p>
+        <p className="mt-2 font-mono text-xs text-slate-400">Appel terminé. Complétez ou abandonnez la fiche.</p>
       ) : (
         <form onSubmit={submit} className="mt-2 flex gap-2">
           <input
@@ -67,7 +65,7 @@ export function CallDialogue() {
           <button type="submit" disabled={active.pending || !text.trim()} className="rounded bg-sky-700 px-3 py-1.5 font-semibold text-white hover:bg-sky-600 disabled:opacity-40">
             Envoyer
           </button>
-          <button type="button" onClick={hangUp} className="rounded bg-slate-700 px-3 py-1.5 hover:bg-slate-600">
+          <button type="button" onClick={() => window.confirm("Raccrocher ? L'appelant ne pourra plus répondre.") && hangUp()} className="rounded bg-slate-700 px-3 py-1.5 hover:bg-slate-600">
             Raccrocher
           </button>
         </form>

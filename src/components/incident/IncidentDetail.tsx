@@ -10,6 +10,7 @@ export function IncidentDetail() {
   const units = useGameStore((s) => s.units);
   const close = useGameStore((s) => s.closeIncident);
   const alertRescue = useGameStore((s) => s.alertRescue);
+  const banDown = useGameStore((s) => s.offline.ban);
 
   const rows: [string, string][] = incident
     ? [
@@ -24,7 +25,7 @@ export function IncidentDetail() {
   return (
     <Panel title="Fiche d'intervention" right={<span>{incident?.id}</span>} className="h-1/2 border-b-0">
       {!incident ? (
-        <p className="p-3 text-sm text-slate-500">Aucune fiche sélectionnée.</p>
+        <p className="p-3 text-sm text-slate-400">Aucune fiche sélectionnée.</p>
       ) : (
         <div className="space-y-3 p-3 text-sm">
           <div>
@@ -34,12 +35,12 @@ export function IncidentDetail() {
             </div>
             <div className="mt-1 text-slate-300">
               {incident.address}
-              {incident.complement && <span className="text-slate-500"> · {incident.complement}</span>}
+              {incident.complement && <span className="text-slate-400"> · {incident.complement}</span>}
             </div>
-            <div className="font-mono text-xs text-slate-500">
+            <div className="font-mono text-xs text-slate-400">
               {incident.coordinates
                 ? `${incident.coordinates.lat.toFixed(4)}, ${incident.coordinates.lng.toFixed(4)}`
-                : 'Non géolocalisée'}
+                : `Non géolocalisée : ${banDown ? 'service d’adresses injoignable' : 'adresse introuvable'}, placez la fiche sur la carte`}
             </div>
             {incident.description && <p className="mt-2 text-slate-300">{incident.description}</p>}
           </div>
@@ -72,18 +73,18 @@ export function IncidentDetail() {
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs">
             {rows.map(([k, v]) => (
               <div key={k} className="contents">
-                <dt className="text-slate-500">{k}</dt>
+                <dt className="text-slate-400">{k}</dt>
                 <dd>{v}</dd>
               </div>
             ))}
           </dl>
 
           <div>
-            <h3 className="mb-1 font-mono text-xs uppercase tracking-wider text-slate-500">Journal</h3>
+            <h3 className="mb-1 font-mono text-xs uppercase tracking-wider text-slate-400">Journal</h3>
             <ol className="space-y-1 font-mono text-xs">
               {incident.logs.map((l, idx) => (
                 <li key={idx} className="flex gap-2">
-                  <span className="shrink-0 text-slate-500">{formatClock(l.timestamp)}</span>
+                  <span className="shrink-0 text-slate-400">{formatClock(l.timestamp)}</span>
                   <span className="shrink-0 text-sky-400">{l.author}</span>
                   <span className="text-slate-300">{l.message}</span>
                 </li>

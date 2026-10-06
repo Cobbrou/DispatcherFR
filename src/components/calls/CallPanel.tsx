@@ -22,7 +22,7 @@ export function CallPanel() {
         <CallDialogue />
       ) : (
         <>
-          {queue.length === 0 && <p className="p-3 text-sm text-slate-500">Aucun appel en attente.</p>}
+          {queue.length === 0 && <p className="p-3 text-sm text-slate-400">Aucun appel en attente.</p>}
           <ul>
             {queue.map((c) => (
               <li key={c.id} className="flex items-center gap-3 border-b border-slate-800 px-3 py-2">

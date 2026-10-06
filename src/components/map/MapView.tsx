@@ -1,16 +1,13 @@
 import 'leaflet/dist/leaflet.css';
-import { memo } from 'react';
-import { MapContainer, Marker, Polyline, TileLayer, Tooltip, useMapEvents } from 'react-leaflet';
+import { memo, useEffect, useRef } from 'react';
+import { MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet';
 import { brigades, type Brigade } from '../../data/brigades';
 import { UNIT_STATUS_META } from '../../data/statuses';
+import { MAP_CENTER, MAP_FOCUS_ZOOM, MAP_ZOOM, TILE_ATTRIBUTION, TILE_URL } from '../../data/ui';
 import { remainingPath } from '../../lib/route';
 import { useGameStore } from '../../store/gameStore';
 import type { Coordinates } from '../../types';
 import { brigadeIcon, incidentIcon, unitIcon } from './mapIcons';
-
-/** Val-d'Oise (95) entier. */
-const MAP_CENTER: [number, number] = [49.07, 2.17];
-const MAP_ZOOM = 10;
 
 /** Tracé restant : liseré sombre + trait orange pour rester lisible sur le fond de carte. */
 function RoutePath({ path }: { path: Coordinates[] }) {
@@ -35,13 +32,41 @@ const BrigadeMarkers = memo(function BrigadeMarkers() {
         <Marker key={site[0].id} position={site[0]} icon={brigadeIcon()} zIndexOffset={-500}>
           <Tooltip direction="top" offset={[0, -12]}>
             {site.map((b) => <div key={b.id}>{b.name}</div>)}
-            <div className="text-slate-500">{site[0].address}</div>
+            <div className="text-slate-400">{site[0].address}</div>
           </Tooltip>
         </Marker>
       ))}
     </>
   );
 });
+
+/** Recadre la carte à chaque nouvelle sélection (fiche ou unité), pas à chaque mouvement d'unité. */
+function FlyToSelection() {
+  const map = useMap();
+  const incidentId = useGameStore((s) => s.selectedIncidentId);
+  const unitId = useGameStore((s) => s.selectedUnitId);
+  const prev = useRef({ incidentId, unitId });
+  useEffect(() => {
+    const before = prev.current;
+    prev.current = { incidentId, unitId };
+    const s = useGameStore.getState();
+    // Une unité sélectionnée prime sur sa fiche ; la sélection initiale ne recadre pas.
+    const target = unitId !== before.unitId && unitId ? s.units[unitId]?.position : incidentId !== before.incidentId && incidentId ? s.incidents[incidentId]?.coordinates : null;
+    if (target) map.flyTo(target, Math.max(map.getZoom(), MAP_FOCUS_ZOOM), { duration: 0.6 });
+  }, [map, incidentId, unitId]);
+  return null;
+}
+
+/** Le conteneur change de taille (colonne repliée, bandeau d'état) sans que la fenêtre bouge : Leaflet doit le savoir. */
+function ResizeWatcher() {
+  const map = useMap();
+  useEffect(() => {
+    const ro = new ResizeObserver(() => map.invalidateSize());
+    ro.observe(map.getContainer());
+    return () => ro.disconnect();
+  }, [map]);
+  return null;
+}
 
 function PlaceOnClick({ incidentId }: { incidentId: string }) {
   const place = useGameStore((s) => s.placeIncident);
@@ -50,8 +75,9 @@ function PlaceOnClick({ incidentId }: { incidentId: string }) {
 }
 
 export function MapView() {
-  const { units, incidents, service, selectedIncidentId } = useGameStore();
+  const { units, incidents, service, selectedIncidentId, selectedUnitId } = useGameStore();
   const select = useGameStore((s) => s.selectIncident);
+  const selectUnit = useGameStore((s) => s.selectUnit);
 
   const open = Object.values(incidents).filter((i) => i.zone === service && i.status !== 'RESOLVED' && i.status !== 'FAILED');
   const mine = Object.values(units).filter((u) => u.service === service);
@@ -62,10 +88,12 @@ export function MapView() {
     <div className="relative h-full">
       <MapContainer center={MAP_CENTER} zoom={MAP_ZOOM} className="h-full w-full bg-slate-950">
         <TileLayer
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap"
+          url={TILE_URL}
+          attribution={TILE_ATTRIBUTION}
           className="dark-tiles"
         />
+        <FlyToSelection />
+        <ResizeWatcher />
         {toPlace && <PlaceOnClick incidentId={toPlace.id} />}
 
         {service === 'GENDARMERIE' && <BrigadeMarkers />}
@@ -91,7 +119,7 @@ export function MapView() {
         )}
 
         {mine.map((u) => (
-          <Marker key={u.id} position={u.position} icon={unitIcon(u)}>
+          <Marker key={u.id} position={u.position} icon={unitIcon(u, u.id === selectedUnitId)} zIndexOffset={u.id === selectedUnitId ? 1000 : 0} eventHandlers={{ click: () => selectUnit(u.id) }}>
             <Tooltip direction="top" offset={[0, -18]}>{u.callsign} · {UNIT_STATUS_META[u.status].label}</Tooltip>
           </Marker>
         ))}

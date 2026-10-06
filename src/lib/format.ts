@@ -16,3 +16,8 @@ export function formatWait(ms: number): string {
 export function formatElapsed(from: number, to: number): string {
   return `${Math.max(0, Math.round((to - from) / 60_000))} min`;
 }
+
+/** « 450 m » ou « 3,2 km ». */
+export function formatDistance(m: number): string {
+  return m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1).replace('.', ',')} km`;
+}

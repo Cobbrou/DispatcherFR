@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { buildReport } from '../../core/scoring';
 import { OUTCOME_LABEL } from '../../data/statuses';
 import { useGameStore } from '../../store/gameStore';
@@ -10,6 +11,12 @@ export function ReportModal({ onClose }: { onClose: () => void }) {
   const incidents = useGameStore((s) => s.incidents);
   const abandoned = useGameStore((s) => s.abandonedCalls);
   const r = buildReport(Object.values(incidents), abandoned);
+  const dialog = useRef<HTMLDialogElement>(null);
+  // <dialog> natif : rôle, focus piégé, Échap et retour du focus à l'ouverture gérés par le navigateur.
+  useEffect(() => {
+    const d = dialog.current;
+    if (d && !d.open) d.showModal();
+  }, []);
 
   const rows: [string, string][] = [
     ['Fiches closes', `${r.total - r.open} / ${r.total} (${r.open} en cours)`],
@@ -24,9 +31,15 @@ export function ReportModal({ onClose }: { onClose: () => void }) {
   ];
 
   return (
-    <div className="fixed inset-0 z-[2000] grid place-items-center bg-black/60" onClick={onClose}>
-      <div className="w-[440px] rounded border border-slate-600 bg-slate-900 shadow-xl" onClick={(e) => e.stopPropagation()}>
-        <header className="bg-slate-800 px-4 py-2 font-mono text-xs uppercase tracking-wider text-slate-400">Bilan de la journée</header>
+    <dialog
+      ref={dialog}
+      aria-labelledby="report-title"
+      onClose={onClose}
+      onClick={(e) => e.target === dialog.current && onClose()}
+      className="m-auto w-[440px] max-w-[95vw] rounded border border-slate-600 bg-slate-900 text-slate-100 shadow-xl backdrop:bg-black/60"
+    >
+      <div>
+        <header id="report-title" className="bg-slate-800 px-4 py-2 font-mono text-xs uppercase tracking-wider text-slate-400">Bilan de la journée</header>
         <div className="p-4">
           <div className="mb-4 text-center">
             <div className="font-mono text-4xl font-bold">{pct(r.satisfaction)}</div>
@@ -45,6 +58,6 @@ export function ReportModal({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} className="w-full rounded bg-slate-700 px-3 py-1.5 text-sm hover:bg-slate-600">Fermer</button>
         </footer>
       </div>
-    </div>
+    </dialog>
   );
 }

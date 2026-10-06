@@ -74,6 +74,45 @@ describe('assignUnit : itinéraire', () => {
   });
 });
 
+describe('sélection', () => {
+  it("sélectionner une unité engagée sélectionne aussi sa fiche ; sélectionner une fiche libère l'unité", () => {
+    const s = useGameStore.getState();
+    const unit = Object.values(s.units).find((u) => u.assignedIncidentId === 'FICH-2026-0046')!;
+    s.selectIncident('FICH-2026-0043');
+    s.selectUnit(unit.id);
+    expect(useGameStore.getState()).toMatchObject({ selectedUnitId: unit.id, selectedIncidentId: 'FICH-2026-0046' });
+    s.selectIncident('FICH-2026-0043');
+    expect(useGameStore.getState().selectedUnitId).toBeNull();
+  });
+});
+
+describe('services hors-ligne', () => {
+  it('signale une BAN injoignable, puis son retour', async () => {
+    vi.mocked(geocodeBan).mockRejectedValueOnce(new Error('BAN 503'));
+    fillCall();
+    useGameStore.getState().validateCall();
+    await flush();
+    expect(useGameStore.getState().offline.ban).toBe(true);
+    vi.mocked(geocodeBan).mockResolvedValueOnce(null); // adresse introuvable : le service répond
+    fillCall();
+    useGameStore.getState().validateCall();
+    await flush();
+    expect(useGameStore.getState().offline.ban).toBe(false);
+  });
+
+  it('signale un itinéraire estimé, puis son retour', async () => {
+    const ok = straightRoute({ lat: 49, lng: 2 }, { lat: 49.01, lng: 2.01 });
+    vi.mocked(fetchRoute).mockResolvedValueOnce({ ...ok, estimated: true }).mockResolvedValueOnce(ok);
+    const units = Object.values(useGameStore.getState().units).filter((u) => u.status === 'DISPO_POSTE');
+    useGameStore.getState().assignUnit(units[0].id, 'FICH-2026-0043');
+    await flush();
+    expect(useGameStore.getState().offline.route).toBe(true);
+    useGameStore.getState().assignUnit(units[1].id, 'FICH-2026-0043');
+    await flush();
+    expect(useGameStore.getState().offline.route).toBe(false);
+  });
+});
+
 describe('say', () => {
   it("rend la saisie si le moteur de l'appelant échoue", async () => {
     vi.spyOn(callerEngine, 'reply').mockRejectedValue(new Error('LLM indisponible'));
@@ -84,6 +123,16 @@ describe('say', () => {
 });
 
 describe('tick', () => {
+  it("avance en ×1 tant qu'un appel attend, à la vitesse choisie sinon", () => {
+    useGameStore.setState({ timeScale: 30 });
+    const t0 = useGameStore.getState().now;
+    useGameStore.getState().tick(1000); // 3 appels en file : ×1
+    expect(useGameStore.getState().now).toBe(t0 + 1000);
+    useGameStore.setState({ callQueue: [], nextCallAt: Infinity });
+    useGameStore.getState().tick(1000);
+    expect(useGameStore.getState().now).toBe(t0 + 1000 + 30_000);
+  });
+
   it('ne fait rien en pause', () => {
     useGameStore.setState({ paused: true });
     const now = useGameStore.getState().now;
