@@ -7,7 +7,9 @@ import { Panel } from './Panel';
 export function RadioLog() {
   const radio = useGameStore((s) => s.radio);
   const end = useRef<HTMLLIElement>(null);
-  useEffect(() => end.current?.scrollIntoView({ block: 'nearest' }), [radio.length]);
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: 'nearest' });
+  }, [radio.length]);
 
   return (
     <Panel title="Radio" right={<span>{radio.length} messages</span>} className="h-40 border-b-0 border-t">
