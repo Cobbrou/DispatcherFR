@@ -52,7 +52,7 @@ export function MapView() {
             <Marker
               key={i.id}
               position={i.coordinates}
-              icon={incidentIcon(i.gravity, i.id === selectedIncidentId, i.gravity >= 4 && i.status === 'PENDING')}
+              icon={incidentIcon(i.gravity, i.id === selectedIncidentId, i.pending !== null || (i.gravity >= 4 && i.status === 'PENDING'))}
               zIndexOffset={500}
               eventHandlers={{ click: () => select(i.id) }}
             >

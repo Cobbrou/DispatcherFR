@@ -101,5 +101,9 @@ export function buildIncident(draft: IncidentDraft, id: string, now: number, ser
       { timestamp: now, author: 'OPERATEUR_1', message: `Fiche validée : ${draft.category}` },
     ],
     createdTimestamp: now,
+    pending: null,
+    eventCount: 0,
+    firstArrivalAt: null,
+    neglected: false,
   };
 }

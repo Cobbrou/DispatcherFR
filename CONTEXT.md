@@ -139,7 +139,7 @@ Source de vérité : [`docs/data-model.md`](./docs/data-model.md) (copié dans `
 - Déplacement progressif simulé (interpolation de coordonnées de la position actuelle vers le lieu de l'incident).
 - Changement automatique des statuts : `EN_ROUTE` -> `SUR_LES_LIEUX` -> Temporisation d'intervention -> `DISPO_ON_ZONE`.
 
-### Étape 4 : Gestion des Aléas & Radio Ambiance
+### Étape 4 : Gestion des Aléas & Radio Ambiance (réalisée)
 - Moteur d'événements :
   - Probabilité d'escalade d'une intervention (demande de renforts d'un équipage).
   - Messages audio ou transcriptions radio réalistes ("De PAM 1 pour CIC, arrivés sur les lieux, situation calme").

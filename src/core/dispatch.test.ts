@@ -6,6 +6,9 @@ import { assignUnit, closeIncident, unassignUnit, type World } from './dispatch'
 import { canIncident, canUnit } from './statusMachine';
 import { tick } from './tick';
 
+// RNG fixe : aucun aléa, issue « pacifiée ».
+const step = (w: World, ms: number) => tick(w, ms, () => 0.5);
+
 const BASE = { lat: 48.54, lng: 2.65 };
 const SCENE = { lat: 48.5495, lng: 2.65 }; // ≈ 1 057 m au nord
 
@@ -19,13 +22,15 @@ const incident = (over: Partial<Incident> = {}): Incident => ({
   id: 'F1', category: 'tapage', gravity: 2, callerLastName: '', callerFirstName: '', callerPhone: '',
   address: 'x', complement: '', description: '',
   coordinates: SCENE, zone: 'POLICE', status: 'PENDING',
-  outcome: null, assignedUnits: [], logs: [], createdTimestamp: 0, ...over,
+  outcome: null, assignedUnits: [], logs: [], createdTimestamp: 0,
+  pending: null, eventCount: 0, firstArrivalAt: null, neglected: false, ...over,
 });
 
 const world = (inc = incident()): World => ({
   now: 0,
   units: { u1: unit('u1'), u2: unit('u2') },
   incidents: { F1: inc },
+  radio: [],
 });
 
 const MIN = 60_000;
@@ -92,36 +97,36 @@ describe('tick', () => {
   it('déplacement → sur les lieux → temporisation → disponible, fiche résolue', () => {
     let w = dispatched(world(), 'u1');
 
-    w = tick(w, 30_000); // 30 s : ≈ 417 m, pas encore arrivée
+    w = step(w, 30_000); // 30 s : ≈ 417 m, pas encore arrivée
     expect(w.units.u1.status).toBe('EN_ROUTE');
     expect(distanceM(w.units.u1.position, SCENE)).toBeLessThan(distanceM(BASE, SCENE));
     expect(w.units.u2.position).toEqual(BASE);
 
-    w = tick(w, 2 * MIN); // ≈ 1 057 m à 13,9 m/s : arrivée
+    w = step(w, 2 * MIN); // ≈ 1 057 m à 13,9 m/s : arrivée
     expect(w.units.u1).toMatchObject({ status: 'SUR_LES_LIEUX', position: SCENE });
     expect(w.incidents.F1.status).toBe('ON_SCENE');
     expect(w.units.u1.onSceneUntil).toBe(w.now + 10 * MIN); // gravité 2 → 10 min
 
-    w = tick(w, 9 * MIN);
+    w = step(w, 9 * MIN);
     expect(w.units.u1.status).toBe('SUR_LES_LIEUX');
 
-    w = tick(w, 2 * MIN);
+    w = step(w, 2 * MIN);
     expect(w.units.u1).toMatchObject({ status: 'DISPO_ON_ZONE', assignedIncidentId: null, onSceneUntil: null });
     expect(w.incidents.F1).toMatchObject({ status: 'RESOLVED', outcome: 'PACIFIE' });
   });
 
   it('la fiche reste ouverte tant qu\'une autre unité y est rattachée', () => {
     let w = dispatched(dispatched(world(), 'u1'), 'u2');
-    w = tick(w, 2 * MIN); // les deux arrivent au même instant
+    w = step(w, 2 * MIN); // les deux arrivent au même instant
     w = { ...w, units: { ...w.units, u1: { ...w.units.u1, onSceneUntil: w.now } } };
-    w = tick(w, 1000);
+    w = step(w, 1000);
     expect(w.units.u1.status).toBe('DISPO_ON_ZONE');
     expect(w.units.u2.status).toBe('SUR_LES_LIEUX');
     expect(w.incidents.F1.status).toBe('ON_SCENE');
   });
 
   it('attend son itinéraire avant de rouler', () => {
-    const w = tick(assignUnit(world(), 'u1', 'F1'), 10 * MIN);
+    const w = step(assignUnit(world(), 'u1', 'F1'), 10 * MIN);
     expect(w.units.u1).toMatchObject({ status: 'EN_ROUTE', position: BASE });
   });
 
@@ -137,6 +142,6 @@ describe('tick', () => {
   it('une fiche non placée n\'attire personne', () => {
     const w = { ...dispatched(world(), 'u1') };
     w.incidents = { F1: { ...w.incidents.F1, coordinates: null } };
-    expect(tick(w, 10 * MIN).units.u1.position).toEqual(BASE);
+    expect(step(w, 10 * MIN).units.u1.position).toEqual(BASE);
   });
 });

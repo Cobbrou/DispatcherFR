@@ -1,4 +1,5 @@
-import { INCIDENT_STATUS_LABEL, GRAVITY_META } from '../../data/statuses';
+import { CONCOURS } from '../../data/radio';
+import { INCIDENT_STATUS_LABEL, GRAVITY_META, OUTCOME_LABEL } from '../../data/statuses';
 import { formatClock } from '../../lib/format';
 import { useGameStore } from '../../store/gameStore';
 import { Panel } from '../layout/Panel';
@@ -8,11 +9,12 @@ export function IncidentDetail() {
   const incident = useGameStore((s) => (s.selectedIncidentId ? s.incidents[s.selectedIncidentId] : undefined));
   const units = useGameStore((s) => s.units);
   const close = useGameStore((s) => s.closeIncident);
+  const alertRescue = useGameStore((s) => s.alertRescue);
 
   const rows: [string, string][] = incident
     ? [
         ['Gravité', `${incident.gravity} – ${GRAVITY_META[incident.gravity].label}`],
-        ['Statut', INCIDENT_STATUS_LABEL[incident.status]],
+        ['Statut', INCIDENT_STATUS_LABEL[incident.status] + (incident.outcome ? ` · ${OUTCOME_LABEL[incident.outcome]}` : '')],
         ['Requérant', [incident.callerFirstName, incident.callerLastName].filter(Boolean).join(' ') || '—'],
         ['Téléphone', incident.callerPhone || '—'],
         ['Unités engagées', incident.assignedUnits.map((id) => units[id]?.callsign ?? id).join(', ') || '—'],
@@ -41,6 +43,25 @@ export function IncidentDetail() {
             </div>
             {incident.description && <p className="mt-2 text-slate-300">{incident.description}</p>}
           </div>
+
+          {incident.pending && (
+            <div className="rounded border border-red-500 bg-red-950/60 p-2 text-xs">
+              {incident.pending.kind === 'RENFORT' ? (
+                <p>
+                  <b>{incident.pending.by}</b> demande un renfort : engagez une unité supplémentaire.
+                </p>
+              ) : (
+                <>
+                  <p>
+                    <b>{incident.pending.by}</b> demande le concours {CONCOURS[incident.pending.service!].de}.
+                  </p>
+                  <button onClick={() => alertRescue(incident.id)} className="mt-1 rounded bg-red-600 px-2 py-1 font-semibold text-white hover:bg-red-500">
+                    Alerter {CONCOURS[incident.pending.service!].button}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
 
           {incident.status === 'PENDING' && (
             <button onClick={() => close(incident.id)} className="rounded bg-slate-700 px-2 py-1 text-xs hover:bg-slate-600">

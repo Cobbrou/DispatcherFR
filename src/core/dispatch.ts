@@ -1,10 +1,18 @@
+import { salleOf } from '../data/radio';
 import type { GameState, Incident, IncidentOutcome, Unit } from '../types';
 import { canIncident, canUnit } from './statusMachine';
 
 /** Partie de l'état que le moteur de dispatch lit et modifie. */
-export type World = Pick<GameState, 'now' | 'units' | 'incidents'>;
+export type World = Pick<GameState, 'now' | 'units' | 'incidents' | 'radio'>;
 
 const OPERATOR = 'OPERATEUR_1';
+const RADIO_KEPT = 200;
+
+/** Ajoute un message au fil radio (les plus anciens sont oubliés). */
+export function radio<W extends World>(w: W, from: string, to: string, text: string, urgent = false): W {
+  const id = String(Number(w.radio.at(-1)?.id ?? 0) + 1);
+  return { ...w, radio: [...w.radio, { id, timestamp: w.now, from, to, text, urgent }].slice(-RADIO_KEPT) };
+}
 
 export const setUnit = <W extends World>(w: W, u: Unit): W => ({ ...w, units: { ...w.units, [u.id]: u } });
 
@@ -36,7 +44,11 @@ export function assignUnit<W extends World>(w: W, unitId: string, incidentId: st
   const inc = w.incidents[incidentId];
   if (!u || !inc || !inc.coordinates || (inc.status !== 'PENDING' && inc.status !== 'DISPATCHED' && inc.status !== 'ON_SCENE')) return w;
   if (!canUnit(u.status, 'EN_ROUTE')) return w;
-  const next = setUnit(w, { ...u, status: 'EN_ROUTE', assignedIncidentId: incidentId, onSceneUntil: null, route: null, routeElapsedMs: 0 });
+  const salle = salleOf(inc.zone);
+  const support = inc.pending?.kind === 'RENFORT' ? `, en renfort de ${inc.pending.by}` : '';
+  let next = setUnit(w, { ...u, status: 'EN_ROUTE', assignedIncidentId: incidentId, onSceneUntil: null, route: null, routeElapsedMs: 0 });
+  next = radio(next, salle, u.callsign, `${u.callsign} de ${salle}, engagez sur ${inc.address}, ${inc.category}${support}.`);
+  next = radio(next, u.callsign, salle, `${u.callsign}, tenu, nous nous rendons sur place.`);
   return sync(
     patchIncident(next, incidentId, { assignedUnits: [...new Set([...inc.assignedUnits, unitId])] }, [OPERATOR, `${u.callsign} engagé`]),
     incidentId,
@@ -48,7 +60,11 @@ export function unassignUnit<W extends World>(w: W, unitId: string): W {
   const u = w.units[unitId];
   if (!u || u.status !== 'EN_ROUTE' || !u.assignedIncidentId) return w;
   const id = u.assignedIncidentId;
-  const next = setUnit(w, { ...u, status: 'DISPO_ON_ZONE', assignedIncidentId: null, route: null, routeElapsedMs: 0 });
+  const salle = salleOf(w.incidents[id].zone);
+  const next = radio(
+    setUnit(w, { ...u, status: 'DISPO_ON_ZONE', assignedIncidentId: null, route: null, routeElapsedMs: 0 }),
+    salle, u.callsign, `${u.callsign} de ${salle}, annulez l'engagement, reprenez votre secteur.`,
+  );
   return sync(
     patchIncident(next, id, { assignedUnits: w.incidents[id].assignedUnits.filter((x) => x !== unitId) }, [OPERATOR, `${u.callsign} désengagé`]),
     id,

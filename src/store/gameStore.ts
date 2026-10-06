@@ -11,6 +11,7 @@ import {
 } from '../core/callEngine';
 import { callerEngine } from '../core/callerEngine';
 import { assignUnit, closeIncident, unassignUnit } from '../core/dispatch';
+import { alertRescue } from '../core/events';
 import { tick } from '../core/tick';
 import { geocodeBan } from '../lib/ban';
 import { fetchRoute } from '../lib/route';
@@ -41,6 +42,8 @@ interface GameStore extends GameState {
   /** Place sur la carte une fiche dont l'adresse n'a pas été géolocalisée. */
   placeIncident: (id: string, coordinates: Coordinates) => void;
   closeIncident: (id: string) => void;
+  /** Alerte le SAMU / les pompiers demandés par l'équipage sur place. */
+  alertRescue: (id: string) => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -116,4 +119,5 @@ export const useGameStore = create<GameStore>((set, get) => ({
   placeIncident: (id, coordinates) =>
     set((s) => (s.incidents[id] ? { incidents: { ...s.incidents, [id]: { ...s.incidents[id], coordinates } } } : s)),
   closeIncident: (id) => set((s) => closeIncident(s, id, 'FAUSSE_ALERTE')),
+  alertRescue: (id) => set((s) => alertRescue(s, id)),
 }));

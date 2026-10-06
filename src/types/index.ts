@@ -88,6 +88,16 @@ export interface IncidentDetails {
   description: string;        // faits
 }
 
+export type ConcoursService = 'SAMU' | 'pompiers' | 'routes';
+
+/** Aléa en attente d'une réponse de l'opérateur : renfort à engager, secours à alerter. */
+export interface PendingEvent {
+  kind: 'RENFORT' | 'SECOURS';
+  at: number;                 // ms simulées
+  by: string;                 // indicatif de l'unité qui le demande
+  service?: ConcoursService;  // SECOURS uniquement : service dont le concours est demandé
+}
+
 export interface Incident extends IncidentDetails {
   id: string;                         // "FICH-2026-0042"
   coordinates: Coordinates | null;    // géocodage de `address`, null si introuvable (à placer sur la carte)
@@ -97,6 +107,10 @@ export interface Incident extends IncidentDetails {
   assignedUnits: string[];            // Unit IDs
   logs: IncidentLog[];
   createdTimestamp: number;           // ms simulées
+  pending: PendingEvent | null;       // AJOUT (étape 4) : aléa en attente de réponse
+  eventCount: number;                 // AJOUT : aléas déjà survenus sur cette fiche
+  firstArrivalAt: number | null;      // AJOUT : arrivée de la première unité (temps de réponse)
+  neglected: boolean;                 // AJOUT : secours non alertés à temps
 }
 
 /** Fiche en cours de saisie pendant l'appel. */

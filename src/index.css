@@ -5,3 +5,10 @@ body { @apply bg-slate-900 text-slate-100; }
 
 /* Thème sombre sur les tuiles OSM standard (sans clé) */
 .dark-tiles { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+
+/* Animations : apparition des lignes, glissement fluide des unités entre deux ticks. */
+@keyframes fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.fade-in { animation: fade-in 0.35s ease-out; }
+.unit-marker { transition: transform 0.25s linear; }
+.leaflet-zoom-anim .unit-marker { transition: transform 0.25s cubic-bezier(0, 0, 0.25, 1); }
+@media (prefers-reduced-motion: reduce) { .fade-in { animation: none; } .unit-marker { transition: none; } }

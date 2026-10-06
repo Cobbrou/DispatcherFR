@@ -44,7 +44,8 @@ const units: Unit[] = [
 
 type MockIncident = Partial<IncidentDetails> &
   Pick<IncidentDetails, 'category' | 'gravity' | 'address'> &
-  Pick<Incident, 'coordinates' | 'zone' | 'status' | 'assignedUnits'> & {
+  Pick<Incident, 'coordinates' | 'zone' | 'status' | 'assignedUnits'> &
+  Partial<Pick<Incident, 'firstArrivalAt'>> & {
     minAgo: number;
     logs: [number, string, string][];
   };
@@ -57,6 +58,10 @@ const inc = (n: number, p: MockIncident): Incident => {
     ...rest,
     id: `FICH-2026-${String(n).padStart(4, '0')}`,
     outcome: null,
+    pending: null,
+    eventCount: 0,
+    firstArrivalAt: p.firstArrivalAt ?? null,
+    neglected: false,
     createdTimestamp: at(minAgo),
     logs: logs.map(([m, author, message]) => ({ timestamp: at(m), author, message })),
   };
@@ -68,7 +73,7 @@ const incidents: Incident[] = [
     address: '12 rue Saint-Barthélemy, Melun', coordinates: { lat: 48.5405, lng: 2.6602 },
     callerLastName: 'Moreau', callerFirstName: 'Camille', callerPhone: '06 12 34 56 78',
     description: "Sac arraché, requérante frappée au visage. Auteur armé d'un couteau.",
-    assignedUnits: ['u1', 'u3'], minAgo: 9,
+    assignedUnits: ['u1', 'u3'], minAgo: 9, firstArrivalAt: at(3),
     logs: [
       [9, 'SYSTEME', 'Appel reçu'],
       [8, 'OPERATEUR_1', 'Fiche validée : vol avec violences'],

@@ -2,7 +2,7 @@
 
 Simulateur de salle opérationnelle (CAD – *Computer-Aided Dispatch*) pour la **Police Nationale (CIC)** et la **Gendarmerie Nationale (CORG)**. Le joueur prend les appels du 17, qualifie les faits, engage les patrouilles et gère les imprévus, avec le vocabulaire et les doctrines français.
 
-> Statut : **étapes 0 à 3 terminées** – socle, cockpit 3 volets, prise d'appel en texte libre (appelants générés au hasard), fenêtre CAD de fiche saisie à la main, catégories du glossaire officiel, carte sombre, engagement des unités et déplacement. Pas encore d'aléas ni d'ambiance radio (étape 4). Voir [Prochaines étapes](#prochaines-étapes).
+> Statut : **étapes 0 à 4 terminées** – socle, cockpit 3 volets, prise d'appel en texte libre (appelants générés au hasard), fenêtre CAD de fiche saisie à la main, catégories du glossaire officiel, carte sombre, engagement des unités et déplacement, aléas (renforts, concours SAMU / pompiers / service des routes), fil radio, archive des fiches et bilan de journée. Voir [Prochaines étapes](#prochaines-étapes).
 
 Cahier des charges source : [`CONTEXT.md`](./CONTEXT.md).
 
@@ -129,6 +129,8 @@ Les scripts sont déclarés dans `package.json`.
 1. ~~Cockpit 3 volets (données factices).~~ Fait.
 2. ~~Prise d'appel libre, appelants générés, fiche saisie par l'opérateur.~~ Fait.
 3. ~~Carte, assignation, déplacement, machine à statuts.~~ Fait.
-4. Aléas, ambiance radio, bilan de journée.
+4. ~~Ambiance radio & compte rendu, archive des fiches clôturés, demande de renforts ou de concours d'autres services (pompiers, samu, service des routes), ajout d'animations pour rendre l'interface plus vivante.~~ Fait.
+5. Passage en mode gendarmerie uniquement, se baser sur tout le 95 en zone gendarmerie, intégrer une patrouille pour chaque brigade de gendarmerie avec un numéro véhicule par véhicule (101,102,103) ([COMMUNE].[NUMERO VL]), ajouter sur la carte les icones des brigades.
+6. 
 
 Détail : [`docs/architecture.md`](./docs/architecture.md#9-plan-de-développement).

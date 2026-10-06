@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { formatClock } from '../../lib/format';
 import { CallPanel } from '../calls/CallPanel';
@@ -6,6 +7,8 @@ import { IncidentDetail } from '../incident/IncidentDetail';
 import { IncidentList } from '../incident/IncidentList';
 import { MapView } from '../map/MapView';
 import { UnitList } from '../units/UnitList';
+import { RadioLog } from './RadioLog';
+import { ReportModal } from './ReportModal';
 
 export function Cockpit() {
   const service = useGameStore((s) => s.service);
@@ -14,6 +17,7 @@ export function Cockpit() {
   const timeScale = useGameStore((s) => s.timeScale);
   const togglePause = useGameStore((s) => s.togglePause);
   const setTimeScale = useGameStore((s) => s.setTimeScale);
+  const [report, setReport] = useState(false);
 
   return (
     <div className="flex h-full flex-col">
@@ -35,6 +39,7 @@ export function Cockpit() {
               ×{k}
             </button>
           ))}
+          <button onClick={() => setReport(true)} className="rounded bg-slate-800 px-2 py-0.5 text-xs hover:bg-slate-700">Bilan</button>
           <span className="w-20 text-right">{formatClock(now)}</span>
         </span>
       </header>
@@ -43,17 +48,21 @@ export function Cockpit() {
           <CallPanel />
           <IncidentList />
         </div>
-        <div className="relative min-h-0">
-          <div className="absolute inset-0 isolate">
-            <MapView />
+        <div className="flex min-h-0 flex-col">
+          <div className="relative min-h-0 flex-1">
+            <div className="absolute inset-0 isolate">
+              <MapView />
+            </div>
+            <FicheWindow />
           </div>
-          <FicheWindow />
+          <RadioLog />
         </div>
         <div className="flex min-h-0 flex-col border-l border-slate-700">
           <UnitList />
           <IncidentDetail />
         </div>
       </main>
+      {report && <ReportModal onClose={() => setReport(false)} />}
     </div>
   );
 }

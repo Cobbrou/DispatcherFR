@@ -38,11 +38,11 @@ Transverses : `audio/` (écoute les événements du store, joue les sons), `lib/
 | `movement` | Pas de module séparé au MVP : `lib/geo` (Haversine, `moveToward`) et `tick` (vitesse unique 50 km/h, ligne droite). Coefficient route et vitesse par type = évolution |
 | `dispatch` | `assignUnit` (unité disponible, fiche ouverte et géolocalisée), `unassignUnit` (unité en route), `closeIncident` (fiche en attente). Le statut d'une fiche ouverte est déduit des unités rattachées (`sync`) |
 | `statusMachine` | Tables des transitions autorisées (`canUnit`, `canIncident`) ; `dispatch` refuse les transitions illégales |
-| `events` | Aléas : renfort, besoin SAMU/pompiers, refus d'obtempérer, fausse alerte. Tirage pondéré, graine injectable (tests reproductibles) |
+| `events` | Aléas sur les fiches où une unité est sur place : renfort, concours SAMU / pompiers / service des routes ; tirage de l'issue ; expiration des demandes sans réponse et des fiches laissées trop longtemps sans unité (`FAILED`). RNG injectable (tests reproductibles) |
 | `scenarioGenerator` | Tire un appel aléatoire (`CallTruth` : faits, adresse, identité, personnalité) pour une zone donnée ; RNG injectable |
 | `callerEngine` | Interface `CallerEngine` + implémentation procédurale : détecte les sujets de la saisie libre (mots-clés), répond d'après `CallTruth` avec variantes aléatoires, gère stress, répétitions, raccroché |
 | `callEngine` | État d'un appel (transcript, stress), brouillon de fiche saisi par l'opérateur, validation (catégorie du glossaire + gravité + adresse), construction de l'`Incident` |
-| `scoring` | Temps de réponse, taux de résolution, satisfaction ; bilan de fin de journée |
+| `scoring` | Temps de réponse, délais cibles tenus, issues, satisfaction ; bilan de la journée (bouton « Bilan »), recalculé depuis les fiches |
 
 Ordre d'un tick : générer appels → avancer unités → transitions de statut → aléas → journaliser → score.
 
@@ -91,7 +91,7 @@ Howler.js. Un module unique expose `play(soundId)`. Il s'abonne aux événements
 | Choix | Limite | Évolution |
 | :--- | :--- | :--- |
 | Déplacement sur itinéraire OSRM (serveur de démo public, sans clé), vitesse par tronçon × 1,25 (2-tons) ; repli en ligne droite à 50 km/h hors-ligne. Adresse géocodée par la BAN (api-adresse.data.gouv.fr), repli gazetteer | Dépend d'internet ; serveurs publics sans garantie ; mêmes coefficients pour toutes les unités ; une unité engagée ne peut pas être réaffectée en route (gravité 5) ; pas de délai de départ depuis le poste | OSRM auto-hébergé, vitesse par type d'unité |
-| Fiche résolue (`PACIFIE`) dès que les unités ont fini | Pas d'aléa, pas d'échec par dépassement de délai | Étape 4 : `events`, `FAILED` |
+| Aléas tirés par fiche (renfort, concours SAMU / pompiers / service des routes), deux au plus, probabilité par minute selon la gravité ; issue tirée au hasard à la fin (pacifié 55 %, interpellé 30 %, fausse alerte 15 %) | Pas de poursuite / refus d'obtempérer ; l'opérateur ne peut pas demander un concours de sa propre initiative ; la salle n'envoie pas de message radio libre | Poursuite et herse (DIV), issues liées à la catégorie, demande de concours proactive |
 | Appelant procédural (mots-clés) | Comprend mal les formulations inattendues ; réponses de qualité limitée | Implémentation LLM de `CallerEngine` |
 | Gazetteer de 16 rues | Géocodage limité à ces rues | API de géocodage (BAN) |
 | Pas de backend | Pas de multi-joueur ni de persistance serveur | API + base si besoin |

@@ -23,7 +23,7 @@ const UNIT_GLYPH: Partial<Record<UnitType, typeof Car>> = {
 const cache = new Map<string, L.DivIcon>();
 function cached(key: string, html: string, size: [number, number], anchor: [number, number]) {
   let i = cache.get(key);
-  if (!i) cache.set(key, (i = L.divIcon({ className: '', html, iconSize: size, iconAnchor: anchor })));
+  if (!i) cache.set(key, (i = L.divIcon({ className: key.startsWith('u:') ? 'unit-marker' : '', html, iconSize: size, iconAnchor: anchor })));
   return i;
 }
 

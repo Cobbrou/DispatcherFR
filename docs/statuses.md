@@ -23,7 +23,9 @@ Trois référentiels : statuts d'**intervention** (fiche), statuts d'**unité**,
 
 ### Transitions
 
-Le jeu déduit le statut d'une fiche ouverte des unités qui lui sont rattachées : une unité sur les lieux → `ON_SCENE` ; sinon une unité en route → `DISPATCHED` ; sinon `PENDING`. La fiche passe à `RESOLVED` (issue `PACIFIE`) quand la dernière unité a fini sa temporisation. Temporisation sur place : 5, 10, 15, 20, 30 min simulées pour les gravités 1 à 5.
+Le jeu déduit le statut d'une fiche ouverte des unités qui lui sont rattachées : une unité sur les lieux → `ON_SCENE` ; sinon une unité en route → `DISPATCHED` ; sinon `PENDING`. La fiche passe à `RESOLVED` (issue `PACIFIE`) quand la dernière unité a fini sa temporisation. Temporisation sur place : 5, 10, 15, 20, 30 min simulées pour les gravités 1 à 5. L'issue (`PACIFIE`, `INTERPELLE`, `FAUSSE_ALERTE`) est tirée au hasard quand la dernière unité libère la fiche.
+
+**Aléas (étape 4).** Une unité sur place peut demander un **renfort** ou le **concours** du SAMU, des pompiers ou du service des routes (`Incident.pending`). Tant que la demande est en attente, l'équipage reste sur place. Renfort : levé par l'arrivée d'une autre unité, sinon échec (`FAILED`, `FUITE`) après 10 min. Concours : levé par le bouton « Alerter » de la fiche, sinon l'équipage appelle lui-même après 5 min (fiche marquée `neglected`, pénalisée au bilan). Une fiche sans unité sur place après le « délai d'échec » du tableau de la gravité passe aussi en `FAILED` (`FUITE`).
 
 ```
 PENDING ──assign──▶ DISPATCHED ──arrive──▶ ON_SCENE ──close──▶ RESOLVED

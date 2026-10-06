@@ -1,4 +1,4 @@
-import type { GravityLevel, IncidentStatus, UnitStatus } from '../types';
+import type { GravityLevel, IncidentOutcome, IncidentStatus, UnitStatus } from '../types';
 
 export const UNIT_STATUS_META: Record<UnitStatus, { code: string; label: string; badge: string }> = {
   DISPO_ON_ZONE: { code: '10-0', label: 'Dispo secteur', badge: 'bg-emerald-600 text-white' },
@@ -25,3 +25,14 @@ export const GRAVITY_META: Record<GravityLevel, { label: string; badge: string }
   2: { label: 'Différé', badge: 'bg-sky-500 text-white' },
   1: { label: 'Info', badge: 'bg-slate-500 text-white' },
 };
+
+export const OUTCOME_LABEL: Record<IncidentOutcome, string> = {
+  INTERPELLE: 'Individu interpellé',
+  PACIFIE: 'Situation pacifiée',
+  FAUSSE_ALERTE: 'Fausse alerte',
+  FUITE: 'Auteurs en fuite',
+};
+
+/** Délai cible d'arrivée sur les lieux et délai d'échec (minutes simulées), par gravité. Voir docs/statuses.md §3. */
+export const RESPONSE_TARGET_MIN: Record<GravityLevel, number | null> = { 5: 5, 4: 10, 3: 20, 2: 60, 1: null };
+export const FAIL_AFTER_MIN: Record<GravityLevel, number | null> = { 5: 15, 4: 30, 3: 60, 2: 180, 1: null };
