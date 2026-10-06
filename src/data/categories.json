@@ -1,0 +1,1567 @@
+[
+ {
+  "label": "absence irrégulière désertion",
+  "level": 3,
+  "definition": "Militaire ou fonctionnaire n'ayant pas regagné son lieu d'emploi conformément au règlement"
+ },
+ {
+  "label": "accident aéronef",
+  "level": 4,
+  "definition": "Accident impliquant un appareil aéronautique (montgolfières, avion, hélicoptère, planeur, ULM, parapentes, deltaplane)"
+ },
+ {
+  "label": "accident aéronef mortel",
+  "level": 5,
+  "definition": "Accident mortel impliquant un appareil aéronautique (montgolfières, avion, hélicoptère, planeur, ULM, parapentes, deltaplane)"
+ },
+ {
+  "label": "accident autorité",
+  "level": 5,
+  "definition": "Accident d'une personnalité d'influence locale, départementale, régionale ou nationale"
+ },
+ {
+  "label": "accident autre",
+  "level": 3,
+  "definition": "Accident ou aucune autre catégorie n'est présentée dans l'outil pour caractériser la sollicitation"
+ },
+ {
+  "label": "accident autre mortel",
+  "level": 5,
+  "definition": "Accident mortel où aucune autre catégorie n'est présentée pour caractériser l'intervention"
+ },
+ {
+  "label": "accident bateau fleuve",
+  "level": 4,
+  "definition": "Accident d'une embarcation (bateau, barque, radeau, …) sur un fleuve, une rivière, un cours d'eau"
+ },
+ {
+  "label": "accident bateau mer",
+  "level": 4,
+  "definition": "Accident sur une embarcation flottante (bateau, voilier, scooter des mers radeau, …) en milieu marin ( comprend le secours en mer et l 'assistance effectuée par des unités de GD et BN – il y a lieu dans le champ complément d'indiquer la nature exacte de l'intervention )"
+ },
+ {
+  "label": "accident chasse",
+  "level": 3,
+  "definition": "Accident survenu au cours d'une partie de chasse"
+ },
+ {
+  "label": "accident chasse mortel",
+  "level": 4,
+  "definition": "Accident mortel lors de la pratique de la chasse (dommages collatéraux inclus)"
+ },
+ {
+  "label": "accident circulation corporel",
+  "level": 3,
+  "definition": "Accident corporel de la circulation routière (notion de blessé)"
+ },
+ {
+  "label": "accident circulation matériel",
+  "level": 2,
+  "definition": "Accident matériel de la circulation routière (pas de notion de blessé)"
+ },
+ {
+  "label": "accident circulation mortel",
+  "level": 4,
+  "definition": "Accident mortel de la circulation routière"
+ },
+ {
+  "label": "accident domestique",
+  "level": 2,
+  "definition": "Accident de la vie courante (chute, brûlure, électrocution, etc) à l'intérieur et hors du domicile"
+ },
+ {
+  "label": "accident domestique mortel",
+  "level": 4,
+  "definition": "Accident mortel de la vie courante (chute, brûlure, électrocution) à l'intérieur et hors du domicile"
+ },
+ {
+  "label": "accident matières dangereuses",
+  "level": 5,
+  "definition": "Accident impliquant un transport de marchandise dangereuse (matière, objet, solution, mélange, préparation ou déchet présentant un risque pour l'homme ou l'environnement)"
+ },
+ {
+  "label": "accident montagne mortel",
+  "level": 5,
+  "definition": "Accident mortel survenu en milieu montagneux"
+ },
+ {
+  "label": "accident plongée",
+  "level": 4,
+  "definition": "Accident au cours d'une activité d'immersion ou de séjour sous l'eau"
+ },
+ {
+  "label": "accident plongée mortel",
+  "level": 5,
+  "definition": "Accident mortel au cours d'une activité d'immersion ou de séjour sous l'eau"
+ },
+ {
+  "label": "accident secours en montagne",
+  "level": 3,
+  "definition": "Tout accident ou mission de secours effectué en milieu montagneux"
+ },
+ {
+  "label": "accident spéléo",
+  "level": 4,
+  "definition": "Accident au cours d'une activité d'exploration des cavités souterraines, tectoniques, volcaniques, glaciaires et anthropiques"
+ },
+ {
+  "label": "accident spéléo mortel",
+  "level": 5,
+  "definition": "Accident mortel au cours d'une activité d'exploration des cavités souterraines, tectoniques, volcaniques, glaciaires et anthropiques"
+ },
+ {
+  "label": "accident sport loisir",
+  "level": 2,
+  "definition": "Accident survenu lors de la pratique d'une activité sportive ou de loisirs (entraînement et compétition)"
+ },
+ {
+  "label": "accident sport loisirs mortel",
+  "level": 4,
+  "definition": "Mort survenue lors de la pratique d'une activité sportive libre, en club (entraînement et compétition)"
+ },
+ {
+  "label": "accident transport public",
+  "level": 5,
+  "definition": "Tout accident impliquant un moyen de locomotion transportant des personnes ou des marchandises, sans notion de bilan"
+ },
+ {
+  "label": "accident transport public mortel",
+  "level": 5,
+  "definition": "Accident mortel impliquant un moyen de locomotion transportant des personnes ou des marchandises."
+ },
+ {
+  "label": "accident travail",
+  "level": 3,
+  "definition": "Accident survenu lors d'une activité professionnelle"
+ },
+ {
+  "label": "accident travail mortel",
+  "level": 5,
+  "definition": "Accident professionnel ayant occasionné la mort d'une ou plusieurs personnes"
+ },
+ {
+  "label": "affrontement entre bandes VU",
+  "level": 4,
+  "definition": "Affrontements graves entre groupes structurés ou de circonstance survenant dans les lieux de résidence ou en dehors (transports, collèges, lycées, centre commerciaux…) liés à l’appartenance à un quartier ou une cité pour défendre un territoire ou la main mise sur l’économie souterraine locale"
+ },
+ {
+  "label": "agression",
+  "level": 3,
+  "definition": "Attaque non provoquée, injustifiée et brutale contre une tierce personne"
+ },
+ {
+  "label": "agression autorité",
+  "level": 5,
+  "definition": "Personne d'influence locale, départementale, régionale ou nationale subissant le comportement ou l'opposition avec force et hostilité d'une tierce personne"
+ },
+ {
+  "label": "agression sexuelle",
+  "level": 3,
+  "definition": "Atteinte sexuelle autre que le viol commise avec violence, contrainte, menace ou surprise (acte physique)"
+ },
+ {
+  "label": "alarme déclenchement",
+  "level": 2,
+  "definition": "Intervention liée au signalement d'un déclenchement d'alarme"
+ },
+ {
+  "label": "alerte à la bombe",
+  "level": 5,
+  "definition": "Signalement d'un objet explosif pouvant nuire aux biens et/ou à la vie d'autrui"
+ },
+ {
+  "label": "alerte enlèvement",
+  "level": 5,
+  "definition": "Sollicitation de toute nature que ce soit répondant au déclenchement d'une alerte enlèvement"
+ },
+ {
+  "label": "altercation incivilités",
+  "level": 2,
+  "definition": "Comportement qui ne respecte pas une partie ou l'ensemble des règles de vie en communauté telles que le respect d'autrui, la politesse ou la courtoisie"
+ },
+ {
+  "label": "animaux abandon – blessé – cadavre",
+  "level": 2,
+  "definition": "Signalement d'un animal abandonné, blessé ou d'un cadavre d'animal"
+ },
+ {
+  "label": "animaux dangereux",
+  "level": 4,
+  "definition": "Signalement d'un chien de 1ère ou 2éme catégorie ou d'un animal reconnu agressif errant ou ayant commis une attaque sur une personne"
+ },
+ {
+  "label": "animaux divagation",
+  "level": 2,
+  "definition": "Signalement d'un animal en divagation sur la voie publique"
+ },
+ {
+  "label": "animaux sauvages",
+  "level": 2,
+  "definition": "Signalement d'un animal sauvage sur la voie publique occasionnant un trouble à la circulation ou aux riverains"
+ },
+ {
+  "label": "antisémitisme",
+  "level": 4,
+  "definition": "Comportement ou attitude hostile et proposant des mesures discriminatoires à l'encontre de la communauté juive"
+ },
+ {
+  "label": "appels anonymes intempestifs",
+  "level": 1,
+  "definition": "Appel non identifiable et où aucun son n'est émis"
+ },
+ {
+  "label": "appels de service gendarmerie",
+  "level": 1,
+  "definition": "Appel émis par un gendarme pour une demande de renseignement ou une communication d'information (demande identification, transfert d'appel,etc)"
+ },
+ {
+  "label": "appels malveillants",
+  "level": 2,
+  "definition": "Appel insultant ou menaçant ayant pour but ou pour effet une dégradation des conditions de vie ou de travail (sonneries intempestives, anxiété, Peur,...)"
+ },
+ {
+  "label": "attentat",
+  "level": 5,
+  "definition": "Acte de violence de nature à mettre en péril les institutions de la République ou l'intégrité du territoire national"
+ },
+ {
+  "label": "attentat autorité",
+  "level": 5,
+  "definition": "Action dans le but de nuire aux biens ou à la vie de la personne de part sa représentation."
+ },
+ {
+  "label": "attentat tuerie planifiée",
+  "level": 5,
+  "definition": "Les tueries planifiées se singularisent par la détermination de leurs auteurs à faire le plus grand nombre de victimes en un temps"
+ },
+ {
+  "label": "attroupement trouble",
+  "level": 4,
+  "definition": "Réduit"
+ },
+ {
+  "label": "blocage site",
+  "level": 4,
+  "definition": "Action visant à bloquer ou immobiliser des sites industriels et infrastructures"
+ },
+ {
+  "label": "bracelet anti rapprochement BAR",
+  "level": 3,
+  "definition": "Dispositif judiciaire bracelet anti rapprochement (localisation par plateforme Allianz) après levée de doute"
+ },
+ {
+  "label": "braconnage",
+  "level": 2,
+  "definition": "Action de chasser ou de pêcher illégalement"
+ },
+ {
+  "label": "cambriolage autorité",
+  "level": 5,
+  "definition": "Vol par effraction d'une habitation ou d'un local appartenant ou utilisé par une personnalité d'influence locale, départementale, régionale ou nationale"
+ },
+ {
+  "label": "cambriolage autre",
+  "level": 3,
+  "definition": "Vol par effraction dans un local non considéré comme habitation, commerce, société ou édifice public."
+ },
+ {
+  "label": "cambriolage commerce",
+  "level": 3,
+  "definition": "Vol par effraction dans un commerce"
+ },
+ {
+  "label": "cambriolage édifice public",
+  "level": 3,
+  "definition": "Vol par effraction dans un bâtiment destiné au public, à usage administratif (salle des fêtes, école, mairie, etc)"
+ },
+ {
+  "label": "cambriolage résidence",
+  "level": 3,
+  "definition": "Vol par effraction dans une résidence principale ou secondaire ainsi que les Annexes"
+ },
+ {
+  "label": "cambriolage société",
+  "level": 3,
+  "definition": "Vol par effraction dans une société, entreprise"
+ },
+ {
+  "label": "car jacking",
+  "level": 4,
+  "definition": "Vol d'un véhicule avec menace ou violence sur le conducteur du véhicule"
+ },
+ {
+  "label": "catastrophe autre",
+  "level": 5,
+  "definition": "Effets dommageables d'un phénomène brutal, durable ou intense liés aux activités humaines"
+ },
+ {
+  "label": "catastrophe naturelle",
+  "level": 5,
+  "definition": "Effet dommageables d'un phénomène brutal durable ou intense d'origine naturelle ( climatiques, sismiques ou astronomiques)"
+ },
+ {
+  "label": "cimetière (dégradation, …)",
+  "level": 3,
+  "definition": "Dégradation dans un cimetière (fleurs arrachées, tombe dégradée, etc)"
+ },
+ {
+  "label": "cimetière (délit dans …)",
+  "level": 3,
+  "definition": "Toutes infractions pénales commises dans un cimetière (vol, vol par effraction, etc)"
+ },
+ {
+  "label": "cimetière (profanations)",
+  "level": 5,
+  "definition": "Acte de vandalisme sur tout objet situé dans un cimetière"
+ },
+ {
+  "label": "colis suspect",
+  "level": 4,
+  "definition": "Signalement d'un objet suspect, présentant un éventuel danger en raison de son apparence ou de sa localisation"
+ },
+ {
+  "label": "concours divers",
+  "level": 2,
+  "definition": "Intervention où le concours de la gendarmerie est sollicitée par de particuliers ou d'autres services (vérifications, prise de contact, etc)."
+ },
+ {
+  "label": "concours GN PN",
+  "level": 2,
+  "definition": "Intervention où la gendarmerie est sollicitée par la police nationale et réciproquement"
+ },
+ {
+  "label": "conduite à contresens",
+  "level": 3,
+  "definition": "Conduite d'un moyen de transport en sens inverse"
+ },
+ {
+  "label": "conduite dangereuse",
+  "level": 3,
+  "definition": "Conduite d'un moyen de transport mettant en danger les usagers de la route."
+ },
+ {
+  "label": "conduite en état alcoolique / stupéfiants",
+  "level": 3,
+  "definition": "Conduite d’un moyen de transport en état alcoolique ou sous l’emprise de stupéfiants."
+ },
+ {
+  "label": "CORAT",
+  "level": 4,
+  "definition": "Suivi des moyens gendarmerie engagés ou mis en réserve dans le cadre du dispositif CORAT."
+ },
+ {
+  "label": "convoi escorte sensible",
+  "level": 4,
+  "definition": "Service coordonné et programmé dans le cadre des escortes ITER"
+ },
+ {
+  "label": "déclenchement LAPI",
+  "level": 3,
+  "definition": "Sollicitation du Département Fichier de recherches de la DAAJ/SCRCGN pour un déclenchement LAPI"
+ },
+ {
+  "label": "découverte arme",
+  "level": 3,
+  "definition": "Découverte d'une arme quelle que soit sa classification"
+ },
+ {
+  "label": "découverte cadavre",
+  "level": 3,
+  "definition": "Intervention sur le signalement d'une personne décédée."
+ },
+ {
+  "label": "découverte cadavre autorité",
+  "level": 5,
+  "definition": "Intervention sur le signalement d'une personnalité d'influence locale, départementale, régionale ou nationale décédée quelque soit l'origine de la mort"
+ },
+ {
+  "label": "découverte coffre fort",
+  "level": 3,
+  "definition": "Découverte d'un coffre fort"
+ },
+ {
+  "label": "découverte engin explosif",
+  "level": 5,
+  "definition": "Signalement de découverte de munitions, engins explosifs et autres moyens pyrotechniques"
+ },
+ {
+  "label": "découverte objet divers",
+  "level": 3,
+  "definition": "Découverte de tout autre objet (hors arme et coffre fort)"
+ },
+ {
+  "label": "découverte personne majeure",
+  "level": 3,
+  "definition": "Découverte d'une personne signalée ou se signalant perdue"
+ },
+ {
+  "label": "découverte personne mineure",
+  "level": 4,
+  "definition": "Découverte d'un ou plusieurs mineurs signalés recherchés ou non"
+ },
+ {
+  "label": "découverte stupéfiants",
+  "level": 3,
+  "definition": "Découverte de produits stupéfiants"
+ },
+ {
+  "label": "découverte véhicule volé",
+  "level": 3,
+  "definition": "Découverte d'un véhicule signalé volé ou présentant des caractéristiques d'un véhicule volé"
+ },
+ {
+  "label": "dégradations",
+  "level": 2,
+  "definition": "Dégradation, destruction ou détérioration légère commise par n'importe quel moyen sur un bien appartenant à autrui"
+ },
+ {
+  "label": "dégradations graves",
+  "level": 3,
+  "definition": "Dégradation, destruction ou détérioration commise par n'importe quel moyen sur un bien appartenant à autrui, caractérisée délictuelle, en fonction du lien de l'auteur ou de la victime, de la nature du bien ou du lieu de la commission des faits"
+ },
+ {
+  "label": "dégradations lieu de culte",
+  "level": 4,
+  "definition": "Dégradation d'un édifice dans lequel se réunissent les pratiquants d'une religion pour prier ou célébrer un culte (église, chapelle, temple, crypte, mosquée, synagogue, etc)"
+ },
+ {
+  "label": "dégradation mobilier urbain VU",
+  "level": 4,
+  "definition": "Dégradation de mobiliers urbains notamment les cabines téléphoniques, panneaux d’affichage, abris bus, signalisation routière…"
+ },
+ {
+  "label": "délit de fuite accident corporel",
+  "level": 3,
+  "definition": "Conducteur d'un véhicule prenant la fuite après avoir été impliqué dans un accident corporel de la circulation routière"
+ },
+ {
+  "label": "délit de fuite accident matériel",
+  "level": 2,
+  "definition": "Conducteur d'un véhicule prenant la fuite après avoir été impliqué dans un accident matériel de la circulation routière"
+ },
+ {
+  "label": "délit de fuite accident mortel",
+  "level": 5,
+  "definition": "Accident mortel de la circulation provoqué par une ou des personnes qui ont pris la fuite."
+ },
+ {
+  "label": "demande renseignement",
+  "level": 1,
+  "definition": "Particulier ou autre service formulant une demande de renseignement ou communiquant une information à la gendarmerie"
+ },
+ {
+  "label": "déminage",
+  "level": 5,
+  "definition": "Action de neutralisation, d'enlèvement ou de destruction de munitions, mines et engins explosifs."
+ },
+ {
+  "label": "Dépannage – Panne désertion ( Voir absence",
+  "level": 2,
+  "definition": "Intervention sur un dépannage ou le signalement d'une panne de véhicule désertion"
+ },
+ {
+  "label": "irrégulière ) détournement aéronef",
+  "level": 5,
+  "definition": "Fait de s'emparer ou de prendre le contrôle par violence ou menace de violence d'un appareil capable de s'élever ou de circuler dans les airs"
+ },
+ {
+  "label": "détournement navire",
+  "level": 5,
+  "definition": "Fait de s'emparer ou de prendre le contrôle par violence ou menace de violence d'un bâtiment destiné à la navigation en mer"
+ },
+ {
+  "label": "détournement véhicule",
+  "level": 4,
+  "definition": "Fait de s'emparer ou de prendre le contrôle par violence ou menace de violence d'un véhicule"
+ },
+ {
+  "label": "différend violences intra familiales",
+  "level": 3,
+  "definition": "Actes de violences (et différend) exercés au sein de la sphère familiale"
+ },
+ {
+  "label": "différend violences intra familiales mortelles",
+  "level": 5,
+  "definition": "Violences intra familiales ayant occasionné la mort d'un des protagonistes"
+ },
+ {
+  "label": "différend violences conjugales",
+  "level": 3,
+  "definition": "Acte de violences et différend exercés entre conjoint ou ex conjoint"
+ },
+ {
+  "label": "différend violences conjugales mortelles",
+  "level": 5,
+  "definition": "Violences entre conjoints ou ex conjoints ayant entraîné la mort d’un des protagonistes."
+ },
+ {
+  "label": "disparition inquiétante",
+  "level": 3,
+  "definition": "Signalement d'une absence inhabituelle et prolongée à caractère inquiétant d'une personne majeure"
+ },
+ {
+  "label": "disparition inquiétante autorité",
+  "level": 5,
+  "definition": "Signalement d'une absence inhabituelle et prolongée d'une personne d'influence locale, départementale, régionale ou nationale."
+ },
+ {
+  "label": "disparition inquiétante mineur",
+  "level": 4,
+  "definition": "Signalement d'une absence inhabituelle et prolongée d'un mineur."
+ },
+ {
+  "label": "éboulement avalanche",
+  "level": 4,
+  "definition": "Désolidarisation soudaine et brutale d'une structure naturelle (falaise, roches) ou artificielle avec la chute de matériaux. Détachement et glissement d'une masse neigeuse sur un versant de montagne."
+ },
+ {
+  "label": "enlèvement",
+  "level": 5,
+  "definition": "Soustraction soudaine et violente d'une personne contre sa volonté. (kidnapping, rapt)"
+ },
+ {
+  "label": "enlèvement autorité",
+  "level": 5,
+  "definition": "Action de s'emparer d'une personne d'influence locale, départementale, régionale ou nationale, contre sa volonté et par la force dans l'intention d'obtenir un rançon ou un tout autre avantage"
+ },
+ {
+  "label": "épidémie",
+  "level": 5,
+  "definition": "Développement ou propagation rapide d'une maladie contagieuse le plus souvent d'origine infectieuse, sur de nombreux sujets"
+ },
+ {
+  "label": "épizootie",
+  "level": 5,
+  "definition": "Maladie qui frappe simultanément un grand nombre d'animaux de la même espèce ou d'espèces différentes (ex:botulisme, anémie infectieuse des équidés, fièvre aphteuse, etc...)"
+ },
+ {
+  "label": "épreuve sportive",
+  "level": 3,
+  "definition": "Manifestation sportive médiatisée (rallye, course, marathon, etc)"
+ },
+ {
+  "label": "escorte – transfèrement",
+  "level": 3,
+  "definition": "Service d'escorte ou de transfèrement judiciaire. Escroquerie : Usage d’un faux nom ou d’une fausse qualité, soit par l’abus d’une qualité vraie, soit par l’emploi de manœuvres frauduleuses, de tromper une"
+ },
+ {
+  "label": "escroquerie – filouterie – grivèlerie",
+  "level": 3,
+  "definition": "personne physique ou morale et de la déterminer ainsi, à son préjudice ou au préjudice d’un tiers, à remettre des fonds, des valeurs ou un bien quelconque, à fournir un service ou à consentir un acte opérant obligation ou décharge y compris par internet, carte bancaire …. Filouterie :logements, carburants, taxis, ..."
+ },
+ {
+  "label": "établissement scolaire (violences)",
+  "level": 4,
+  "definition": "Grivèlerie : hôtels, restaurants, bars, . Tous types de violences aux abords comme à l'intérieur d'un établissement scolaire."
+ },
+ {
+  "label": "évasion",
+  "level": 5,
+  "definition": "Personne en fuite soit lors d'une mesure de garde à vue, soit depuis un centre de détention ou d'un palais de justice, soit lors de son transfèrement"
+ },
+ {
+  "label": "exercice",
+  "level": 2,
+  "definition": "formation, exercice, simulation d'une intervention en situation réelle"
+ },
+ {
+  "label": "exhibitionniste",
+  "level": 3,
+  "definition": "Montrer avec impudeur son corps ou une partie de son corps"
+ },
+ {
+  "label": "explosion",
+  "level": 5,
+  "definition": "Détonation ou déflagration ayant provoqué des dégâts importants, pouvant ou non exposé à une médiatisation."
+ },
+ {
+  "label": "fausse monnaie",
+  "level": 3,
+  "definition": "Signalement de fausse monnaie"
+ },
+ {
+  "label": "FERROVIAIRE accident matériel",
+  "level": 4,
+  "definition": "Accident matériel impliquant un moyen ferroviaire ou incident sur le réseau ferré, collision avec un autre train ou autre collision, déraillement"
+ },
+ {
+  "label": "FERROVIAIRE accident mortel/corporel",
+  "level": 5,
+  "definition": "Accident de personne, suicide ou collision à un passage à niveau ou collision avec un autre train ou déraillement"
+ },
+ {
+  "label": "FERROVIAIRE – colis suspect/bagage délaissé",
+  "level": 3,
+  "definition": "Signalement d'un objet/bagage suspect, présentant un éventuel danger en raison de son apparence ou de sa localisation."
+ },
+ {
+  "label": "FERROVIAIRE – dégradation- caillassage-jet de projectiles",
+  "level": 3,
+  "definition": "Toute action sur un moyen de transport ou emprise SNCF sans volonté de nuire au trafic"
+ },
+ {
+  "label": "FERROVIAIRE infraction comportement voyageur",
+  "level": 2,
+  "definition": "toute intervention pour un trouble ou commission d’infraction dans une gare ou dans un train, que le mis en cause soit voyageur ou non"
+ },
+ {
+  "label": "FERROVIAIRE sabotage/malveillance /obstacle",
+  "level": 4,
+  "definition": "toute action sur des infrastructures ferroviaires (voie ferrée, caténaire, poste de commande, aiguillage, etc..) avec volonté de nuire au transport ferroviaire"
+ },
+ {
+  "label": "forcené",
+  "level": 5,
+  "definition": "Personne furieuse, pleine de rage pouvant se retrancher dans un lieu"
+ },
+ {
+  "label": "free party rave party teknival",
+  "level": 5,
+  "definition": "Rassemblement en plein air légal ou illégal autour de la musique électronique"
+ },
+ {
+  "label": "frontière incident",
+  "level": 3,
+  "definition": "Incident à la frontière"
+ },
+ {
+  "label": "frontière incident autorité",
+  "level": 5,
+  "definition": "Incident à la frontière avec une autorité."
+ },
+ {
+  "label": "fugue",
+  "level": 3,
+  "definition": "Fuite d'une personne majeure ou mineure d'un domicile ou d'un lieu."
+ },
+ {
+  "label": "fuite gaz",
+  "level": 3,
+  "definition": "Signalement d'une odeur ou d'un dégagement d'un produit sous forme Gazeux."
+ },
+ {
+  "label": "fuite gaz importante",
+  "level": 4,
+  "definition": "signalement ou constatation d'un fort dégagement de gaz (l'évacuation avec ou sans la mise en place d'un périmètre de sécurité présentant un risque accru d'explosion susceptible d'être médiatiser)"
+ },
+ {
+  "label": "GAE – Accident aéronef militaire",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Détournement aéronef militaire",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Accident travail mortel",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Accident transport matériel sensible",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Intrusion sur site",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Découverte objet suspect – NEDEX",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Survol illicite",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Accident routier mortel",
+  "level": 4,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Manifestation – blocage site",
+  "level": 4,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Posé non autorisé d’aéronef sur aérodrome militaire",
+  "level": 4,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Découverte de cadavre",
+  "level": 4,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Atteinte aux aéronefs militaires",
+  "level": 4,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Utilisation laser sur équipage aéronef",
+  "level": 3,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Accident routier corporel",
+  "level": 3,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Accident du travail",
+  "level": 3,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Incendie sur site défense",
+  "level": 3,
+  "definition": ""
+ },
+ {
+  "label": "GAE – Incident aérien",
+  "level": 2,
+  "definition": "concerne aéronef militaire"
+ },
+ {
+  "label": "GAE – Concours divers",
+  "level": 2,
+  "definition": "Sur base"
+ },
+ {
+  "label": "GAE – Nuisances aéronautiques",
+  "level": 2,
+  "definition": "par aéronef militaire"
+ },
+ {
+  "label": "GAE – Accident routier matériel",
+  "level": 2,
+  "definition": "Sur base"
+ },
+ {
+  "label": "GAE – exercice Basex",
+  "level": 1,
+  "definition": "Sur base"
+ },
+ {
+  "label": "GAE – exercice autre que Basex",
+  "level": 1,
+  "definition": "Sur base"
+ },
+ {
+  "label": "GMAR - accident mortel en mer",
+  "level": 5,
+  "definition": "Accident mortel impliquant un navire (commerce, pêche, plaisance, VNM, engins flottants) - Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR - concours divers GMAR",
+  "level": 3,
+  "definition": "Intervention ou concours de la gendarmerie maritime a profit de divers services étatiques (capitainerie, CROSS, …) Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR - concours GMAR - Marine Nationale",
+  "level": 3,
+  "definition": "Intervention ou concours de la gendarmerie maritime a profit de la marine nationale (protection des installations, des personnes et des biens) Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – Intrusion site sensible de la MN",
+  "level": 5,
+  "definition": "Fait de s’introduire sur un site sensible de la Marine Nationale Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR - police de la navigation",
+  "level": 3,
+  "definition": "Intervention dans le cadre de la police de navigation. Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR - police des pêches",
+  "level": 3,
+  "definition": "Intervention dans le domaine de la pêche maritime en mer et à terre. Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – pollution maritime",
+  "level": 5,
+  "definition": "Présence en mer ou sur le littoral de produits chimiques ou pétroliers. Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – assistance maritime",
+  "level": 3,
+  "definition": "Aide utile apportée à un navire en danger de se perdre ouvrant droit ou non à une rémunération (remorquage, voie d'eau, incendie à bord). Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – brigandage maritime",
+  "level": 5,
+  "definition": "Acte illicite de violence ou de déprédation (vol, pillage) commis contre un navire ou contre des personnes dans les eaux territoriales. Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – échouement",
+  "level": 5,
+  "definition": "Fait pour un navire de s'échouer par accident qui ne peut être dégagé que par un remorqueur ou un autre navire. Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – naufrage",
+  "level": 4,
+  "definition": "Perte totale ou partielle d'un navire en mer ou près d'une côte Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – sauvetage des épaves Maritimes",
+  "level": 3,
+  "definition": "Mise en sûreté des épaves maritimes (engins flottants ou de navires). Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – Secours aux personnes en Mer",
+  "level": 4,
+  "definition": "Secours et mise en sécurité des personnes en détresse. Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "GMAR – abordage",
+  "level": 4,
+  "definition": "Abordage de navire - Ne concerne que la Gendarmerie maritime"
+ },
+ {
+  "label": "GMAR - aéronef en mer",
+  "level": 5,
+  "definition": "crash d'avion civil ou militaire en mer - Ne concerne que la Gendarmerie maritime -"
+ },
+ {
+  "label": "grève",
+  "level": 4,
+  "definition": "Cessation collective et concertée du travail en vue d'appuyer des revendications professionnelles dont l'employeur a connaissance."
+ },
+ {
+  "label": "grippe aviaire",
+  "level": 5,
+  "definition": "Différentes formes du virus de la grippe qui infecte les oiseaux sauvages et domestiques. La maladie est également connue sous le nom de peste aviaire."
+ },
+ {
+  "label": "GTA – accident aéronef corporel",
+  "level": 4,
+  "definition": "Accident corporel provoqué par un aéronef"
+ },
+ {
+  "label": "GTA – accident aéronef matériel",
+  "level": 3,
+  "definition": "Accident matériel provoqué par un aéronef"
+ },
+ {
+  "label": "GTA – accident aéronef mortel",
+  "level": 5,
+  "definition": "Accident mortel provoqué par un aéronef"
+ },
+ {
+  "label": "GTA – Accident routier corporel ZCP",
+  "level": 3,
+  "definition": "Accident corporel de la circulation routière en Zone Côté Piste"
+ },
+ {
+  "label": "GTA – Accident routier matériel ZCP",
+  "level": 2,
+  "definition": "Accident matériel de la circulation routière en Zone Côté Piste"
+ },
+ {
+  "label": "GTA – Accident routier mortel ZCP",
+  "level": 4,
+  "definition": "Accident mortel de la circulation routière en Zone Côté Piste"
+ },
+ {
+  "label": "GTA – Accident travail",
+  "level": 3,
+  "definition": "Accident corporel et matériel survenus lors d'une activité professionnelle"
+ },
+ {
+  "label": "GTA – Accident travail mortel",
+  "level": 5,
+  "definition": "Accident mortel survenu lors d'une activité professionnelle"
+ },
+ {
+  "label": "GTA – Colis suspect sur aéroport",
+  "level": 4,
+  "definition": "Présence d'un colis suspect ou d'un bagage abandonné en Zone Côté Piste ou en Zone Côté Ville"
+ },
+ {
+  "label": "GTA – Concours divers GTA",
+  "level": 2,
+  "definition": "Tout événement impliquant une action urgente dans le domaine aéronautique, la sûreté, l'ordre public ou la santé publique"
+ },
+ {
+  "label": "GTA – Concours Police",
+  "level": 2,
+  "definition": "Intervention pour laquelle la GTA est sollicitée par la police nationale"
+ },
+ {
+  "label": "GTA – Déroutement",
+  "level": 2,
+  "definition": "Tout déroutement d'aéronef civil pour une cause médicale, météorologique ou dans les cas de passagers indisciplinés."
+ },
+ {
+  "label": "GTA – Détournement aéronef",
+  "level": 5,
+  "definition": ""
+ },
+ {
+  "label": "GTA – Escorte en ZCP",
+  "level": 2,
+  "definition": "Escorte en Zone Côté Piste d'un EVASAN, d'un véhicule SDIS ou d'un détachement gendarmerie dans le cadre d'un transfèrement"
+ },
+ {
+  "label": "GTA – Incident aérien",
+  "level": 2,
+  "definition": "Tout incident d'aviation civile"
+ },
+ {
+  "label": "GTA – Intervention sur un PARIF",
+  "level": 3,
+  "definition": "Toute intervention sur un Poste d'Accès Routier d'inspection Filtrage"
+ },
+ {
+  "label": "GTA – Intervention sur un PIF",
+  "level": 3,
+  "definition": "Toute intervention sur un Poste d'Inspection Filtrage"
+ },
+ {
+  "label": "GTA – Intrusion dans CRNA",
+  "level": 5,
+  "definition": "Toute pénétration, ou suspicion, dans un Centre en Route de la Navigation Aérienne"
+ },
+ {
+  "label": "GTA – Survol illicite",
+  "level": 5,
+  "definition": "Suspicion de survol par aéronef non identifié et mesure POLAIR"
+ },
+ {
+  "label": "GTA – Intrusion en PCZSAR",
+  "level": 4,
+  "definition": "Toute pénétration, ou suspicion, en Partie Critique Zone Sûreté Accès Réglementé"
+ },
+ {
+  "label": "GTA – Intrusion en ZCP",
+  "level": 3,
+  "definition": "Toute pénétration, ou suspicion, en Zone Côté Piste"
+ },
+ {
+  "label": "GTA – Nuisances aéronautiques",
+  "level": 2,
+  "definition": "Intervention urgente dans le cadre de nuisance sonores par un aéronef, non-respect des trajectoires, déversement de carburant ou pollution en Zone Côté Piste"
+ },
+ {
+  "label": "GTA – Police aéronautique",
+  "level": 3,
+  "definition": "Toute intervention pour laquelle des infractions aéronautiques sont relevées."
+ },
+ {
+  "label": "GTA – Protection aéronef militaire",
+  "level": 2,
+  "definition": "Protection d'un aéronef militaire en Zone Coté Piste"
+ },
+ {
+  "label": "GTA – Réconciliation bagage",
+  "level": 3,
+  "definition": "Réconciliation entre chaque bagage et chaque passager"
+ },
+ {
+  "label": "GTA – Utilisation malveillante de laser",
+  "level": 3,
+  "definition": "Toute illumination d'un aéronef par tir laser"
+ },
+ {
+  "label": "GTA – Visite autorité",
+  "level": 2,
+  "definition": "Toute visite d'autorité civile ou militaire entraînant un service GTA en Zone Côté Piste."
+ },
+ {
+  "label": "home-jacking",
+  "level": 4,
+  "definition": "Vol d'un véhicule qui se déroule dans l'enceinte d'une habitation."
+ },
+ {
+  "label": "homicide",
+  "level": 5,
+  "definition": "Plus largement le meurtre et l'assassinat d'une ou plusieurs personnes, lorsque les premiers éléments fournis ne laissent pas subsister de doute sur l'implication d'un auteur potentiel."
+ },
+ {
+  "label": "homicide autorité",
+  "level": 5,
+  "definition": "Meurtre ou assassinat d'une personnalité d'influence locale, départementale, régionale ou nationale."
+ },
+ {
+  "label": "hospitalisation d'office – HDT",
+  "level": 3,
+  "definition": "Intervention qui résulte d'une hospitalisation d'office ou à la demande d'un Tiers"
+ },
+ {
+  "label": "incendie autre mineur",
+  "level": 2,
+  "definition": "Incendie de faible importance occasionnant peu de dégâts (champs, broussailles, poubelles, etc)."
+ },
+ {
+  "label": "incendie de local",
+  "level": 3,
+  "definition": "Incendie se produisant dans un local collectif, privé ou professionnel (habitation, garage, remise, atelier, etc)"
+ },
+ {
+  "label": "incendie forêt",
+  "level": 3,
+  "definition": "Incendie sur une grande étendue de terrain couverte d'arbres"
+ },
+ {
+  "label": "incendie mortel",
+  "level": 4,
+  "definition": "Incendie entraînant la mort une ou plusieurs personnes"
+ },
+ {
+  "label": "incendie poubelle VU",
+  "level": 4,
+  "definition": "Feux de poubelles, de conteners sur voie publique, dans ou à proximité des locaux dédiés des parties communes d’immeubles, quelle que soit l’origine du sinistre"
+ },
+ {
+  "label": "incendie véhicule",
+  "level": 3,
+  "definition": "Incendie d'un moyen de locomotion"
+ },
+ {
+  "label": "incident convoi exceptionnel",
+  "level": 4,
+  "definition": "Événement qui survient sur un convoi exceptionnel au cours de son transport et qui peut perturber le déroulement normal"
+ },
+ {
+  "label": "incident tribunal justice",
+  "level": 3,
+  "definition": "Événement ou trouble qui survient dans un palais de justice ou lors d'une décision de justice"
+ },
+ {
+  "label": "infanticide",
+  "level": 5,
+  "definition": "Homicide sur un nouveau né. Meurtre commis par l'un des parents sur ses propres enfants"
+ },
+ {
+  "label": "infraction au code de la route",
+  "level": 3,
+  "definition": "Intervention liée au code de la route (stationnement, etc)"
+ },
+ {
+  "label": "inondation",
+  "level": 3,
+  "definition": "Faible débordement d'eau provenant d'une rivière, du réseau d'assainissement, ou suite à des précipitations submergeant une partie des terrains voisins, les infrastructures et les habitations (dégâts légers)"
+ },
+ {
+  "label": "inondation crues",
+  "level": 4,
+  "definition": "Débordement d'eau provenant d'une rivière, du réseau d'assainissement , qui submerge une partie des terrains voisins, les infrastructures et les habitations (dégâts légers)"
+ },
+ {
+  "label": "inondations crues importantes",
+  "level": 5,
+  "definition": "Débordement conséquent d'eau provenant d'une rivière, du réseau d'assainissement, qui submerge une partie des terrains voisins, les infrastructures et les habitations nécessitant de multiples intervenants (secours, évacuations, relogement, dégâts importants)"
+ },
+ {
+  "label": "intempérie",
+  "level": 3,
+  "definition": "Phénomène météorologique provoquant des difficultés sur une zone (naufragés de la route, coupure électrique, route bloquée, …)"
+ },
+ {
+  "label": "intempérie importante",
+  "level": 5,
+  "definition": "Phénomène météorologique provoquant des difficultés importantes sur une zone (naufragés de la route, coupure électrique, route bloquée, …) Suivi des interpellations programmées d’objectif(s) par la Gendarmerie : jalonnement"
+ },
+ {
+  "label": "interpellation GN",
+  "level": 3,
+  "definition": "des informations de contexte, sans mention d’élément d’ordre judiciaire dans le FPC et le CRO (UPVA – identité du MEC – perquisition – suites judiciaires…)"
+ },
+ {
+  "label": "intoxication",
+  "level": 3,
+  "definition": "Ensemble de troubles du fonctionnement de l'organisme dus à l'absorption (inhalation, ingestion) d'une substance étrangère"
+ },
+ {
+  "label": "intoxication alimentaire hospitalier",
+  "level": 3,
+  "definition": "Ensemble de troubles du fonctionnement de l'organisme dus à l'absorption (inhalation, ingestion) d'une substance étrangère en milieu médical"
+ },
+ {
+  "label": "intoxication alimentaire scolaire",
+  "level": 5,
+  "definition": "Ensemble de troubles du fonctionnement de l'organisme dus à l'absorption (inhalation, ingestion) d'une substance étrangère au sein d'un établissement scolaire ou affectant un groupe d'élèves"
+ },
+ {
+  "label": "intoxication mortelle",
+  "level": 5,
+  "definition": "Ensemble de troubles du fonctionnement de l'organisme dus à l'absorption (inhalation, ingestion) d'une substance étrangère occasionnant la mort"
+ },
+ {
+  "label": "ivresse publique et manifeste",
+  "level": 4,
+  "definition": "Cette infraction ne sanctionne pas un niveau d'alcool, mais un état alcoolique qui représente un risque pour d'autres personnes ou pour la personne ivre elle-même, et qui crée un trouble à l'ordre public sur la voie publique"
+ },
+ {
+  "label": "jet de projectiles",
+  "level": 4,
+  "definition": "Véhicule gendarmerie ou d'un particulier visé par un jet de pierre ou tout autres objets ayant pour conséquence de dégrader ou de détruire le véhicule et / ou occasionner un accident ou l'arrêt du véhicule"
+ },
+ {
+  "label": "jeux d’argent – paris clandestin",
+  "level": 3,
+  "definition": "Jeux d’argent, bingo, kikiri, paris, etc"
+ },
+ {
+  "label": "jeux dangereux",
+  "level": 5,
+  "definition": "Phénomène rencontré principalement dans le milieu scolaire qui se démocratise lors de rassemblement de jeunes : jeu de défi (« t'es pas cap »), de non-oxygénation (jeu du foulard) et d'agression (mise à tabac d'un jeune) souvent médiatisé"
+ },
+ {
+  "label": "Justice – recherche – non respect d'une décision",
+  "level": 5,
+  "definition": "Personne n'ayant pas regagné le centre de détention à l'issue d'une autorisation de sortie. Personne sous contrôle judiciaire ou détenteur d'un bracelet électronique qui ne s'est pas manifesté auprès des services de la justice"
+ },
+ {
+  "label": "lieu de culte clandestin",
+  "level": 3,
+  "definition": "Signalement d'un endroit où se réunissent des pratiquants d'une religion pour prier et célébrer un culte en toute illégalité"
+ },
+ {
+  "label": "manifestation",
+  "level": 4,
+  "definition": "Rassemblement prémédité de personnes sur la voie publique, dont les participants expriment par leur réunion et leur attitude, une volonté commune"
+ },
+ {
+  "label": "menaces",
+  "level": 2,
+  "definition": "Parole ou comportement par lesquels on indique à quelqu'un l'intention de lui nuire"
+ },
+ {
+  "label": "menaces à autorité",
+  "level": 4,
+  "definition": "Parole ou geste marquant une hostilité envers une personne d'influence locale, départementale, régionale ou nationale"
+ },
+ {
+  "label": "menaces de mort",
+  "level": 3,
+  "definition": "Parole, comportement par lesquels on indique à quelqu'un qu'on a l'intention de le tuer"
+ },
+ {
+  "label": "mort suspecte",
+  "level": 4,
+  "definition": "Intervention sur le signalement d'une personne décédée dont le caractère suspect ressort notamment des circonstances ou de la qualité (autorité / mineur) de la personne décédée"
+ },
+ {
+  "label": "non représentation",
+  "level": 2,
+  "definition": "Problème lié à la garde d'enfant au sein de la sphère familiale"
+ },
+ {
+  "label": "noyade",
+  "level": 4,
+  "definition": "Personne décédée des suites d'une insuffisance respiratoire résultant d'une submersion ou d'une immersion en milieu aquatique"
+ },
+ {
+  "label": "nucléaire centrale alerte à la bombe",
+  "level": 5,
+  "definition": "Signalement d'un objet explosif autour ou à l'intérieur d'une centrale nucléaire"
+ },
+ {
+  "label": "nucléaire centrale intrusion",
+  "level": 5,
+  "definition": "Intrusion d'une ou de plusieurs personnes dans le périmètre ou à l'intérieur d'une centrale nucléaire ou aux infrastructures liées au nucléaire perturbation(manifestation, dysfonctionnement sur des machines etc..) autour ou à"
+ },
+ {
+  "label": "nucléaire incident centrale transport civil, militaire",
+  "level": 4,
+  "definition": "l'intérieur d'une centrale nucléaire ou infrastructures liées au nucléaire. Tout fait ou événement qui peut entraîner des complications lors de l'acheminement des matières et équipements liés au domaine nucléaire d'origine civil ou militaire (sur le trajet, sur le véhicule transportant des matières signalées nucléaires ou sur le chargement)"
+ },
+ {
+  "label": "obstacle route",
+  "level": 2,
+  "definition": "Signalement d'un objet entravant la circulation d'une route (branche tombée, câble au sol, roue au milieu de la chaussée, etc)"
+ },
+ {
+  "label": "occupation illégale d'un lieu",
+  "level": 3,
+  "definition": "Installation ou occupation d'un lieu public ou privé sans avoir reçu l'accord préalable de l'autorité administrative ou du propriétaire"
+ },
+ {
+  "label": "orpaillage",
+  "level": 3,
+  "definition": "Exploitation artisanale et illégale d'or OUTRAGE : Parole, geste, menace de nature à porter atteinte au respect du à un dépositaire de l'autorité ou de la force publique dans l'exercice de ses fonctions et qui"
+ },
+ {
+  "label": "outrage rébellion",
+  "level": 4,
+  "definition": "constitue une infraction. REBELLION : Infraction commise contre l'autorité publique et consistant en une attaque ou en une résistance avec violence ou voies de fait envers certains fonctionnaires agissant pour l'exécution des lois, des ordres ou ordonnances de l'autorité publique, des mandats de justice ou pour l'exécution d'une décision de"
+ },
+ {
+  "label": "ouverture de porte",
+  "level": 2,
+  "definition": "justice. Concours demandé pour l'ouverture d'une porte ou d'une fenêtre dans le cadre d'une mission de secours ou de recherche de personne"
+ },
+ {
+  "label": "ovni PAN",
+  "level": 4,
+  "definition": "Signalement d'un objet volant non identifié ou un phénomène aérospatial non identifié."
+ },
+ {
+  "label": "personne dangereuse",
+  "level": 3,
+  "definition": "Personne présentant un comportement dangereux envers autrui ou elle-même"
+ },
+ {
+  "label": "personne dépressive suicidaire",
+  "level": 3,
+  "definition": "Personne présentant un état dépressif ou suicidaire"
+ },
+ {
+  "label": "personne excitée",
+  "level": 3,
+  "definition": "Personne présentant un état de sur-excitation, impossible à raisonner"
+ },
+ {
+  "label": "personne grave danger (dispositif TGD)",
+  "level": 3,
+  "definition": "Dispositif judiciaire d’appel d’urgence (localisation par plateforme Allianz) après levée de doute"
+ },
+ {
+  "label": "personne suspecte rôdeur",
+  "level": 2,
+  "definition": "Signalement d'une personne qui éveille des soupçons au vue de son comportement et de son attitude"
+ },
+ {
+  "label": "piéton sur autoroute, route, voie express",
+  "level": 2,
+  "definition": "Personne marchant ou se trouvant sur un axe routier"
+ },
+ {
+  "label": "piratair",
+  "level": 5,
+  "definition": "En cas de piraterie dans l’espace aérien français ou si cela concerne, en tous lieux, un appareil d’une compagnie française ou de ressortissants français. Ce plan est déclenché par le 1er ministre, qui peut prendre 2 types de mesures: normales ou exceptionnelle"
+ },
+ {
+  "label": "plan NRBC",
+  "level": 5,
+  "definition": "Événement où le plan NRBC (Nucléaires, Radiologiques, Biologiques, Chimiques) est déclenché soit au niveau départemental, zonal ou national lié à une pratique « non conventionnelle » des combats armés, à l'utilisation d'armes avec des capacités de contamination (terrorisme) ou à un accident ou une catastrophe (transport de matière dangereuse)"
+ },
+ {
+  "label": "plan ORSEC",
+  "level": 5,
+  "definition": "Événement où le plan ORSEC (Organisation de la Réponse de Sécurité Civile) est mis en œuvre en cas de catastrophe. Décision relevant du préfet de zone de défense et de sécurité, préfet de département, préfet maritime et le maire"
+ },
+ {
+  "label": "police de l'air – infractions aériennes",
+  "level": 4,
+  "definition": "Toutes infractions relevant du code de l'aviation civile ( règle de circulation des aéronefs, législation des aérodromes, réglementation du transport aérien et des personnels navigants)"
+ },
+ {
+  "label": "pollution",
+  "level": 3,
+  "definition": "Légère pollution par des substances (naturelles, chimiques), des déchets (ménagers ou industriels) ou des nuisances diverses ayant un faible impact sur l'environnement, sur une faible surface"
+ },
+ {
+  "label": "pollution importante",
+  "level": 4,
+  "definition": "Dégradation importante de l'environnement par des substances (naturelles chimiques ou radioactives), des déchets (ménagers ou industriels) ou des nuisances diverses"
+ },
+ {
+  "label": "prise d'otage",
+  "level": 5,
+  "definition": "Rétention de personnes contre leur volonté afin de revendiquer quelque chose"
+ },
+ {
+  "label": "prison centre de détention incident",
+  "level": 4,
+  "definition": "Perturbation ou difficulté rencontrée à l'intérieur comme aux abords d'un établissement pénitencier"
+ },
+ {
+  "label": "prison centre de détention mutinerie",
+  "level": 5,
+  "definition": "Action de rébellion collective, révolte exercée par les détenus"
+ },
+ {
+  "label": "prostitution racolage",
+  "level": 3,
+  "definition": "Présence de prostituée sur la voie publique qui racole"
+ },
+ {
+  "label": "racisme",
+  "level": 4,
+  "definition": "Injures, diffamation, discrimination à caractère xénophobe"
+ },
+ {
+  "label": "recherche malfaiteur",
+  "level": 4,
+  "definition": "Recherche d'une ou plusieurs personnes venant de commettre un crime ou un délit grave"
+ },
+ {
+  "label": "recherche mineur",
+  "level": 3,
+  "definition": "Actions menées pour découvrir un mineur"
+ },
+ {
+  "label": "recherche personne",
+  "level": 4,
+  "definition": "Opérations entreprises pour découvrir une personne majeure"
+ },
+ {
+  "label": "refus d’obtempérer",
+  "level": 4,
+  "definition": "Fait, pour tout conducteur, d’omettre d’obtempérer à une sommation de s’arrêter d’un fonctionnaire ou d’un agent identifié"
+ },
+ {
+  "label": "remise découverte ESI",
+  "level": 3,
+  "definition": "Remise d'une personne signalée comme « étranger en situation irrégulière»"
+ },
+ {
+  "label": "retard inquiétant",
+  "level": 3,
+  "definition": "Personne n'étant pas signalée en danger mais qui présente un retard suite à l'heure ou au délai fixé"
+ },
+ {
+  "label": "rixe bagarre",
+  "level": 3,
+  "definition": "Querelle violente généralement publique accompagnée de menaces et de coups"
+ },
+ {
+  "label": "rodéos motorisés",
+  "level": 3,
+  "definition": "Course bruyante et agitée d'autos, de motos"
+ },
+ {
+  "label": "sabotage",
+  "level": 5,
+  "definition": "Destruction ou endommagement d'un service ou d'un équipement dans le but de le rendre inopérant, commis avec ou sans violence"
+ },
+ {
+  "label": "samar",
+  "level": 5,
+  "definition": "Événement où le plan SAMAR est déclenché pour la recherche maritime et la localisation précise de navire"
+ },
+ {
+  "label": "sater",
+  "level": 5,
+  "definition": "Événement où le plan SATER (Sauvetage Aéro-Terrestre) est déclenché pour la recherche terrestre et la localisation précise d'aéronefs civils ou militaires en détresse et de ses occupants"
+ },
+ {
+  "label": "sdf",
+  "level": 2,
+  "definition": "Intervention pour une personne identifiée comme étant sans domicile fixe (ne concerne pas les gens du voyage)"
+ },
+ {
+  "label": "secours à personne blessée – inconsciente – malaise",
+  "level": 3,
+  "definition": "Toutes interventions liées au secours d'une personne blessée, inconsciente ou faisant un malaise"
+ },
+ {
+  "label": "séquestration",
+  "level": 4,
+  "definition": "Fait de retenir une personne contre son gré, le privant illégalement de sa liberté"
+ },
+ {
+  "label": "séquestration autorité",
+  "level": 5,
+  "definition": "Fait de retenir enfermée une personnalité d'influence locale, départementale, régionale ou nationale contre son gré, en usant de violence, ruse ou menace le privant illégalement de sa liberté"
+ },
+ {
+  "label": "site sensible blocage",
+  "level": 5,
+  "definition": "Action visant à bloquer ou immobiliser des sites industriels et infrastructures stratégiques susceptible d'être exposée à une médiatisation"
+ },
+ {
+  "label": "site sensible incident",
+  "level": 5,
+  "definition": "Perturbation sur des sites industriels et infrastructures stratégiques susceptible 'être exposée à une médiatisation"
+ },
+ {
+  "label": "site sensible intrusion",
+  "level": 5,
+  "definition": "Intrusion d'une ou de plusieurs personnes dans le périmètre ou à l'intérieur d'un site industriel ou infrastructure stratégique"
+ },
+ {
+  "label": "site sensible survol",
+  "level": 5,
+  "definition": "Détection d'un objet volant au-dessus d'un site industriel ou infrastructure stratégique susceptible d'être exposé à une médiatisation"
+ },
+ {
+  "label": "squat squatteur",
+  "level": 3,
+  "definition": "Occupation d'un logement vide sans droit ni titre"
+ },
+ {
+  "label": "stupéfiants trafic",
+  "level": 4,
+  "definition": "Organisation d'un groupe ayant pour objet une activité illicite lié aux stupéfiants"
+ },
+ {
+  "label": "synthèse affaire",
+  "level": 5,
+  "definition": "Catégorie employée uniquement pour la FPC dite « support » d'une affaire. L'emploi de cette catégorie est concomitant à la création d'une affaire suite à une problématique sensible au niveau départemental, régional ou national."
+ },
+ {
+  "label": "tags",
+  "level": 3,
+  "definition": "Graffiti tracé ou peint, caractérisé par un graphisme proche de l'écriture et constituant un signe de reconnaissance."
+ },
+ {
+  "label": "tapage",
+  "level": 2,
+  "definition": "Nuisance sonore occasionnant une gêne pour le voisinage."
+ },
+ {
+  "label": "tir d'arme",
+  "level": 4,
+  "definition": "Intervention suite à la détonation d'une arme à feu"
+ },
+ {
+  "label": "tremblement de terre",
+  "level": 5,
+  "definition": "Phénomène résultant d'une secousse de la couche terrestre"
+ },
+ {
+  "label": "usage arme gendarmerie",
+  "level": 5,
+  "definition": "Toute intervention où les militaires de l'arme font usage de leur arme de dotation collective ou individuelle"
+ },
+ {
+  "label": "véhicule suspect",
+  "level": 2,
+  "definition": "Signalement d'un véhicule qui éveille des soupçons."
+ },
+ {
+  "label": "vente sauvette",
+  "level": 2,
+  "definition": "Ventes qui sont faites sans autorisation sur le domaine public."
+ },
+ {
+  "label": "viol",
+  "level": 4,
+  "definition": "Acte de pénétration sexuelle de quelque nature qu'il soit, commis sur la personne d'autrui par violence, contrainte, menace ou surprise."
+ },
+ {
+  "label": "viol mineur",
+  "level": 5,
+  "definition": "Acte de pénétration sexuelle de quelque nature qu'il soit, commis sur la personne d'autrui par violence, contrainte, menace ou surprise sur un mineur de moins de 15 ans."
+ },
+ {
+  "label": "violation domicile intrusion",
+  "level": 3,
+  "definition": "Introduction ou maintien dans le domicile d'autrui à l'aide de manœuvres, menaces, voies de fait ou contrainte."
+ },
+ {
+  "label": "violences ou voies de faits avec armes",
+  "level": 4,
+  "definition": "Violences physique ou psychologique légères à l'aide d'une arme occasionnant une atteinte."
+ },
+ {
+  "label": "violences sport",
+  "level": 3,
+  "definition": "Violences exercées lors d'une manifestation sportive officielle (coups échangés entre adversaires)"
+ },
+ {
+  "label": "violences sport grave",
+  "level": 4,
+  "definition": "Violences graves sur une ou plusieurs personnes au cours d'une manifestation sportive."
+ },
+ {
+  "label": "violences sport mortelles",
+  "level": 5,
+  "definition": "Violences ayant occasionné la mort d'une ou plusieurs personnes au cours d'une manifestation sportive."
+ },
+ {
+  "label": "violences urbaines VU",
+  "level": 4,
+  "definition": "Phénomène de violences collectives traduisant un intérêt pour des actes anticonstitutionnels."
+ },
+ {
+  "label": "violences voies de fait",
+  "level": 3,
+  "definition": "Violence quelconque envers une personne ne constituant ni une blessure ni un coup (physiquement)"
+ },
+ {
+  "label": "visite d'autorité",
+  "level": 3,
+  "definition": "Déplacement d'une personnalité d'influence locale, départementale, régionale ou nationale."
+ },
+ {
+  "label": "visite sensible autorité",
+  "level": 4,
+  "definition": "Déplacement d'une personnalité d'influence locale, départementale, régionale ou nationale pouvant craindre à un accueil hostile ou susceptible d'entraîner une médiatisation."
+ },
+ {
+  "label": "voisinage",
+  "level": 2,
+  "definition": "Intervention liée à des querelles de voisinage."
+ },
+ {
+  "label": "vol",
+  "level": 3,
+  "definition": "Soustraction frauduleuse d'un bien appartenant à autrui."
+ },
+ {
+  "label": "vol à l'arraché",
+  "level": 3,
+  "definition": "Vol exercé brutalement pour la saisie du bien."
+ },
+ {
+  "label": "vol à l'étalage",
+  "level": 3,
+  "definition": "Vol commis sur des marchandises exposées à la vente."
+ },
+ {
+  "label": "vol à la roulotte",
+  "level": 3,
+  "definition": "Soustraction frauduleuse d'un bien appartenant à autrui."
+ },
+ {
+  "label": "vol à main armée VAMA",
+  "level": 4,
+  "definition": "Vol à main armée commis sur un personne dans une habitation, un commerce ou sur la voie publique."
+ },
+ {
+  "label": "vol arme",
+  "level": 3,
+  "definition": "Vol d'arme quelle que soit sa classification."
+ },
+ {
+  "label": "vol au préjudice autorité",
+  "level": 4,
+  "definition": "Vol commis à l'encontre d'une personnalité d'influence locale, départementale, régionale ou nationale."
+ },
+ {
+  "label": "vol avec violences",
+  "level": 3,
+  "definition": "Vol commis avec des coups ou blessures contre des personnes."
+ },
+ {
+  "label": "vol carburant",
+  "level": 3,
+  "definition": "Vol de carburant (fioul, essence, gazoil, …)"
+ },
+ {
+  "label": "vol de DAB ou dans DAB",
+  "level": 4,
+  "definition": "Vol sur les distributeurs de billets. (arrachage, piégeage)"
+ },
+ {
+  "label": "vol fret",
+  "level": 3,
+  "definition": "Vol portant sur le chargement d'un avion, d'un navire ou d'un camion."
+ },
+ {
+  "label": "vol métaux",
+  "level": 3,
+  "definition": "Vol de tous types de métaux (batterie, acier, cuivre, aluminium, zinc, inox,Etc)."
+ },
+ {
+  "label": "vol par ruse",
+  "level": 3,
+  "definition": "Vol par un moyen dont l'auteur se sert pour tromper sa victime."
+ },
+ {
+  "label": "vol véhicule",
+  "level": 3,
+  "definition": "Vol d'un moyen de locomotion (immatriculé ou non)."
+ }
+]
