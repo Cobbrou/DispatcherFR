@@ -1,5 +1,5 @@
 import 'leaflet/dist/leaflet.css';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet';
 import { brigades, type Brigade } from '../../data/brigades';
 import { UNIT_STATUS_META } from '../../data/statuses';
@@ -83,6 +83,7 @@ export function MapView() {
   const service = useGameStore((s) => s.service);
   const selectedIncidentId = useGameStore((s) => s.selectedIncidentId);
   const selectedUnitId = useGameStore((s) => s.selectedUnitId);
+  const [tilesDown, setTilesDown] = useState(false);
   const select = useGameStore((s) => s.selectIncident);
   const selectUnit = useGameStore((s) => s.selectUnit);
 
@@ -98,6 +99,7 @@ export function MapView() {
           url={TILE_URL}
           attribution={TILE_ATTRIBUTION}
           className="dark-tiles"
+          eventHandlers={{ tileerror: () => setTilesDown(true), tileload: () => setTilesDown(false) }}
         />
         <FlyToSelection />
         <ResizeWatcher />
@@ -131,6 +133,12 @@ export function MapView() {
           </Marker>
         ))}
       </MapContainer>
+
+      {tilesDown && (
+        <div role="status" className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2 rounded bg-orange-700 px-3 py-1.5 font-mono text-xs font-semibold text-white shadow">
+          Fond de carte indisponible : les fiches et les unités restent exactes
+        </div>
+      )}
 
       {toPlace && (
         <div className="absolute left-1/2 top-3 z-[1000] -translate-x-1/2 rounded bg-yellow-400 px-3 py-1.5 font-mono text-xs font-semibold text-yellow-950 shadow">

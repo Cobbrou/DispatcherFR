@@ -110,9 +110,10 @@ Les scripts sont déclarés dans `package.json`.
 | `npm run build` | Typecheck + build de production |
 | `npm run preview` | Sert le build localement |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | Vitest, exécution unique (`--passWithNoTests` tant qu'il n'y a aucun test) |
+| `npm test` | Vitest, exécution unique |
 | `npm run test:watch` | Vitest en continu |
 | `npm run lint` | ESLint |
+| `npm run check` | Typecheck + lint + tests (ce que lance la CI) |
 
 ---
 
@@ -172,13 +173,13 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
     - ~~`IncidentList`~~ lit la minute, ~~`IncidentDetail`~~ ne s'abonne qu'aux indicatifs (`useShallow`).
     - ~~Bundle~~ : 691 kB → 376 kB + 160 kB chargés à la demande (`React.lazy` sur `MapView`) ; `react-dom/server` retiré, glyphes lucide en SVG statiques ; `callsign` échappé dans le HTML des `divIcon`.
     - Reste : `MapView` se re-rend à chaque tick (les unités bougent) ; si la flotte grossit, un marqueur `memo` par unité.
-11. **Tests, CI et hygiène.**
-    - Tests manquants : `core/tick.ts` (hors arrivée / retour déjà couverts), `core/scoring.ts`, `core/statusMachine.ts`, `lib/ban.ts`. Faits à l'étape 7 : `lib/route.ts` (`fetchRoute`), `store/gameStore.ts` (BAN, repli d'itinéraire, appelant en panne, pause), clôture, retour à la brigade.
-    - CI : script `check` (typecheck + lint + test) et workflow GitHub Actions (`npm ci`, `check`, `build`) ; retirer `--passWithNoTests`.
-    - `LICENSE` (ou `UNLICENSED` explicite), provenance du glossaire PDF et de `categories.json`, `.gitattributes` (`* text=auto eol=lf`).
-    - Dépendances : `howler` / `@types/howler` et `@types/node` inutilisés (supprimer, ou livrer l'audio) ; `src/audio/` et `public/audio/` vides.
-    - Sécurité : CSP dans `index.html` (`connect-src` OSRM + BAN, `img-src` tuiles), favicon.
-    - Tuiles OSM : attribution avec lien vers `openstreetmap.org/copyright` ; politique d'usage limitée, prévoir un fournisseur à clé ou des tuiles auto-hébergées avant diffusion publique ; message quand les tuiles ne chargent pas (`tileerror`).
+11. ~~**Tests, CI et hygiène.**~~ Fait, sauf les points restants ci-dessous.
+    - ~~Tests~~ ajoutés : `core/tick.ts`, `core/scoring.ts`, `core/statusMachine.ts`, `lib/ban.ts` (128 tests au total).
+    - ~~CI~~ : script `check`, workflow `.github/workflows/ci.yml` (`npm ci`, `check`, `build`), `--passWithNoTests` retiré.
+    - ~~Hygiène~~ : `"license": "UNLICENSED"` dans `package.json` (pas de fichier `LICENSE` tant que le projet n'est pas diffusé), `.gitattributes` (`* text=auto eol=lf`), `howler`, `@types/howler`, `@types/node` et les dossiers `audio/` vides retirés (à réinstaller avec l'audio, étape 12), favicon.
+    - ~~Sécurité~~ : CSP injectée dans le build seulement (`vite.config.ts`, le serveur de dev a besoin de scripts en ligne) ; `connect-src` = BAN + origine d'OSRM (`VITE_OSRM_URL`), `img-src` = tuiles OSM. **Non vérifiée dans un navigateur** : ouvrir `npm run preview` et regarder la console.
+    - ~~Tuiles OSM~~ : message « Fond de carte indisponible » sur `tileerror`. Reste : politique d'usage des tuiles OSM limitée, prévoir un fournisseur à clé ou des tuiles auto-hébergées avant diffusion publique.
+    - Reste : provenance et droits de rediffusion du glossaire PDF et de `categories.json` à confirmer avant toute diffusion publique.
 12. **Fonctionnalités à étudier.**
     - Audio : sonnerie d'appel, bip de renfort / urgence radio, grésillement (`howler`, déverrouillage au premier clic).
     - Sauvegarde / reprise de la journée (`persist` de Zustand, `partialize` sans `route`), bouton « Nouvelle journée ».
