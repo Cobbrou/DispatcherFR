@@ -22,7 +22,6 @@ export const STATUS_COLOR: Record<UnitStatus, string> = {
   SUR_LES_LIEUX: '#ef4444',
   EN_TRANSPORT: '#8b5cf6',
   INDISPONIBLE: '#64748b',
-  URGENCE_RADIO: '#b91c1c',
 };
 
 const GRAVITY_COLOR: Record<GravityLevel, string> = { 5: '#dc2626', 4: '#f97316', 3: '#facc15', 2: '#0ea5e9', 1: '#64748b' };
@@ -43,7 +42,7 @@ function cached(key: string, html: () => string, size: [number, number], anchor:
 export function unitIcon(u: Pick<Unit, 'callsign' | 'type' | 'status'>, selected = false) {
   const html = () => {
     const color = STATUS_COLOR[u.status];
-    const pulse = u.status === 'EN_ROUTE' || u.status === 'URGENCE_RADIO' ? `<span class="absolute inset-0 animate-ping rounded-full" style="background:${color};opacity:.55"></span>` : '';
+    const pulse = u.status === 'EN_ROUTE' ? `<span class="absolute inset-0 animate-ping rounded-full" style="background:${color};opacity:.55"></span>` : '';
     return `<div class="flex flex-col items-center">
       <div class="relative grid size-8 place-items-center">${pulse}
         <span class="relative grid size-8 place-items-center rounded-full border-2 ${selected ? 'scale-125 border-yellow-300 ring-4 ring-yellow-300/60' : 'border-white'} shadow-lg shadow-black/60" style="background:${color}">${glyph(UNIT_GLYPH[u.type] ?? 'car', 16, 2.4)}</span>

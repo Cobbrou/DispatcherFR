@@ -17,7 +17,7 @@ const communeKeys = communes
 
 /**
  * Propositions d'adresse pour ce que l'opérateur a déjà tapé : « 12 pasteur lou » → « 12 rue Pasteur, Louvres ».
- * ponytail: ne connaît que des voies courantes par commune ; brancher api-adresse.data.gouv.fr (autocomplétion) pour les vraies rues.
+ * Hors ligne uniquement : les vraies rues viennent de la BAN (`suggestBan`), qui passe avant.
  */
 export function suggestAddresses(input: string, max = 8): string[] {
   const m = input.trim().match(/^(\d+\s*(?:bis|ter)?\s+)?(.*)$/i);

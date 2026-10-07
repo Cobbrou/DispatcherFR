@@ -6,9 +6,7 @@ export const UNIT_STATUS_META: Record<UnitStatus, { code: string; label: string;
   EN_ROUTE: { code: '10-2', label: 'En route', badge: 'bg-orange-700 text-white' },
   SUR_LES_LIEUX: { code: '10-3', label: 'Sur les lieux', badge: 'bg-red-600 text-white' },
   EN_TRANSPORT: { code: '10-4', label: 'En transport', badge: 'bg-violet-600 text-white' },
-  INDISPONIBLE: { code: '10-5', label: 'Indisponible', badge: 'bg-slate-600 text-slate-100' },
-  URGENCE_RADIO: { code: 'URG', label: 'Urgence radio', badge: 'bg-red-700 text-white animate-pulse' },
-};
+  INDISPONIBLE: { code: '10-5', label: 'Indisponible', badge: 'bg-slate-600 text-slate-100' },};
 
 export const UNIT_TYPE_LABEL: Record<UnitType, string> = {
   PAM: 'Police municipale', BAC: 'BAC', BST: 'BST', MOTOCYCLISTES: 'Motocyclistes', CANINE: 'Cynophile', OPJ: 'OPJ', BRI: 'BRI',

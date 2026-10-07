@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { IncidentStatus, UnitStatus } from '../types';
 import { canIncident, canUnit } from './statusMachine';
 
-const UNIT_STATUSES: UnitStatus[] = ['DISPO_ON_ZONE', 'DISPO_POSTE', 'EN_ROUTE', 'SUR_LES_LIEUX', 'EN_TRANSPORT', 'INDISPONIBLE', 'URGENCE_RADIO'];
+const UNIT_STATUSES: UnitStatus[] = ['DISPO_ON_ZONE', 'DISPO_POSTE', 'EN_ROUTE', 'SUR_LES_LIEUX', 'EN_TRANSPORT', 'INDISPONIBLE'];
 const INCIDENT_STATUSES: IncidentStatus[] = ['PENDING', 'DISPATCHED', 'ON_SCENE', 'RESOLVED', 'FAILED'];
 
 describe('machine à états', () => {
@@ -14,8 +14,11 @@ describe('machine à états', () => {
     expect(canUnit('INDISPONIBLE', 'EN_ROUTE')).toBe(false);
   });
 
-  it("l'urgence radio est accessible de partout sauf d'elle-même", () => {
-    for (const s of UNIT_STATUSES) expect(canUnit(s, 'URGENCE_RADIO')).toBe(s !== 'URGENCE_RADIO');
+  it("seule une unité libre peut passer indisponible, et elle ne reprend qu'en service", () => {
+    for (const s of UNIT_STATUSES) expect(canUnit(s, 'INDISPONIBLE')).toBe(s === 'DISPO_ON_ZONE' || s === 'DISPO_POSTE');
+    expect(canUnit('INDISPONIBLE', 'DISPO_POSTE')).toBe(true);
+    expect(canUnit('INDISPONIBLE', 'DISPO_ON_ZONE')).toBe(true);
+    expect(canUnit('INDISPONIBLE', 'EN_ROUTE')).toBe(false);
   });
 
   it('aucune unité ne reste dans son statut', () => {

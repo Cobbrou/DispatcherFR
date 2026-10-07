@@ -45,7 +45,8 @@ PENDING ──assign──▶ DISPATCHED ──arrive──▶ ON_SCENE ──cl
 | `SUR_LES_LIEUX` | `10-3` | Sur place | Non | Rouge |
 | `EN_TRANSPORT` | `10-4` | Transport d'individu | Non | Violet |
 | `INDISPONIBLE` | `10-5` | Fin de service, repas, rédaction | Non | Gris |
-| `URGENCE_RADIO` | — | Agent en danger, alarme générale | Non (déclenche renforts automatiques) | Rouge clignotant |
+
+`URGENCE_RADIO` (agent en danger, alarme générale) a été retiré : jamais produit, il doublait la demande de renfort. À reprendre avec la mécanique de poursuite / refus d'obtempérer.
 
 ### Transitions autorisées
 
@@ -57,10 +58,8 @@ PENDING ──assign──▶ DISPATCHED ──arrive──▶ ON_SCENE ──cl
 | `SUR_LES_LIEUX` | `EN_TRANSPORT` | Interpellation avec transport |
 | `SUR_LES_LIEUX` | `DISPO_ON_ZONE` | Fin de temporisation d'intervention |
 | `EN_TRANSPORT` | `DISPO_POSTE` | Arrivée au poste / à l'hôpital |
-| `DISPO_*` | `INDISPONIBLE` | Pause, fin de service |
-| `INDISPONIBLE` | `DISPO_POSTE` | Reprise de service |
-| tout statut | `URGENCE_RADIO` | Événement « agent en danger » |
-| `URGENCE_RADIO` | `SUR_LES_LIEUX` / `DISPO_ON_ZONE` | Levée de l'alerte par l'opérateur |
+| `DISPO_*` | `INDISPONIBLE` | Bouton « Indispo » : pause, fin de service (l'unité s'arrête sur place) |
+| `INDISPONIBLE` | `DISPO_POSTE` / `DISPO_ON_ZONE` | Bouton « Reprendre » : au poste si elle y est, sinon elle regagne sa brigade |
 
 Toute autre transition est rejetée par `core/statusMachine`.
 

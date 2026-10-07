@@ -3,7 +3,7 @@ import { distanceM, moveToward } from '../lib/geo';
 import { brigadeById } from '../data/brigades';
 import { buildRoute, positionAt, remainingPath, routeDurationMs, straightRoute } from '../lib/route';
 import type { Incident, Unit } from '../types';
-import { assignUnit, closeIncident, releaseUnit, unassignUnit, type World } from './dispatch';
+import { assignUnit, closeIncident, releaseUnit, setAvailability, unassignUnit, type World } from './dispatch';
 import { canIncident, canUnit } from './statusMachine';
 import { tick } from './tick';
 
@@ -101,6 +101,34 @@ describe('engagement', () => {
   it("refuse une unité d'un autre service que la zone de la fiche", () => {
     const w = world(incident({ zone: 'GENDARMERIE' }));
     expect(assignUnit(w, 'u1', 'F1')).toBe(w);
+  });
+});
+
+describe('disponibilité', () => {
+  const home = brigadeById.get('bta-95351')!;
+  const far = { lat: home.lat + 0.02, lng: home.lng };
+
+  it('une unité libre passe indisponible, immobile, et ne peut plus être engagée', () => {
+    const returning = releaseUnit({ ...unit('u1', 'SUR_LES_LIEUX'), sectorId: home.id, position: far });
+    const w = setAvailability({ now: 0, units: { u1: returning }, incidents: { F1: incident() }, radio: [] }, 'u1', false);
+    expect(w.units.u1).toMatchObject({ status: 'INDISPONIBLE', route: null, position: far });
+    expect(w.radio).toHaveLength(2);
+    expect(step(w, 30 * MIN).units.u1).toMatchObject({ status: 'INDISPONIBLE', position: far });
+    expect(assignUnit(w, 'u1', 'F1')).toBe(w);
+  });
+
+  it('refuse une unité engagée ; la remise en service ne vise que les indisponibles', () => {
+    const engaged = assignUnit(world(), 'u1', 'F1');
+    expect(setAvailability(engaged, 'u1', false)).toBe(engaged);
+    const free = world();
+    expect(setAvailability(free, 'u1', true)).toBe(free);
+  });
+
+  it("la remise en service ramène l'unité à sa brigade", () => {
+    const off = { ...unit('u1', 'INDISPONIBLE'), sectorId: home.id, position: far };
+    const w = setAvailability({ now: 0, units: { u1: off }, incidents: {}, radio: [] }, 'u1', true);
+    expect(w.units.u1).toMatchObject({ status: 'DISPO_ON_ZONE', assignedIncidentId: null });
+    expect(w.units.u1.route).not.toBeNull();
   });
 });
 

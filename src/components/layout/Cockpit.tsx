@@ -2,8 +2,10 @@ import { lazy, memo, Suspense, useState } from 'react';
 import { effectiveTimeScale } from '../../core/flow';
 import { salleOf } from '../../data/radio';
 import { NARROW_PX, SPEEDS } from '../../data/ui';
+import { isMuted, setMuted } from '../../lib/audio';
 import { formatClock } from '../../lib/format';
 import { useShortcuts } from '../../lib/useShortcuts';
+import { useSounds } from '../../lib/useSounds';
 import { useGameStore } from '../../store/gameStore';
 import { CallPanel } from '../calls/CallPanel';
 import { FicheWindow } from '../incident/FicheWindow';
@@ -35,7 +37,9 @@ export function Cockpit() {
   const [report, setReport] = useState(false);
   // Sous ~1100 px la colonne des unités démarre repliée (la carte serait écrasée).
   const [unitsOpen, setUnitsOpen] = useState(() => window.innerWidth >= NARROW_PX);
+  const [sound, setSound] = useState(() => !isMuted());
   useShortcuts();
+  useSounds();
 
   const notices = [
     paused && { text: 'PAUSE : le temps est arrêté (Espace pour reprendre)', style: 'bg-yellow-400 text-yellow-950' },
@@ -66,6 +70,17 @@ export function Cockpit() {
               ×{k}
             </button>
           ))}
+          <button
+            onClick={() => {
+              setMuted(sound);
+              setSound(!sound);
+            }}
+            aria-pressed={sound}
+            title="Sonnerie, radio et alertes"
+            className={`rounded px-2 py-0.5 text-xs ${sound ? 'bg-sky-700' : 'bg-slate-800 hover:bg-slate-700'}`}
+          >
+            Son
+          </button>
           <button onClick={() => setReport(true)} className="rounded bg-slate-800 px-2 py-0.5 text-xs hover:bg-slate-700">Bilan</button>
           <button
             onClick={() => setUnitsOpen((o) => !o)}

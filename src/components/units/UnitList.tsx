@@ -27,6 +27,7 @@ export function UnitList() {
   const assign = useGameStore((s) => s.assignUnit);
   const unassign = useGameStore((s) => s.unassignUnit);
   const selectUnit = useGameStore((s) => s.selectUnit);
+  const setAvailability = useGameStore((s) => s.setAvailability);
 
   const open = !!selected && selected.status !== 'RESOLVED' && selected.status !== 'FAILED';
   const target = open ? selected.coordinates : null;
@@ -70,6 +71,15 @@ export function UnitList() {
                     className="rounded bg-sky-700 px-2 py-0.5 text-xs font-semibold hover:bg-sky-600 disabled:bg-slate-700 disabled:text-slate-400"
                   >
                     Engager
+                  </button>
+                )}
+                {(u.status === 'INDISPONIBLE' || canUnit(u.status, 'INDISPONIBLE')) && (
+                  <button
+                    onClick={() => setAvailability(u.id, u.status === 'INDISPONIBLE')}
+                    title={u.status === 'INDISPONIBLE' ? 'Remettre en service' : 'Relève, repas, rédaction : l’unité ne peut plus être engagée'}
+                    className="rounded bg-slate-700 px-2 py-0.5 text-xs hover:bg-slate-600"
+                  >
+                    {u.status === 'INDISPONIBLE' ? 'Reprendre' : 'Indispo'}
                   </button>
                 )}
                 {u.status === 'EN_ROUTE' && (

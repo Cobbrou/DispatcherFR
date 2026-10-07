@@ -87,6 +87,23 @@ export function unassignUnit<W extends World>(w: W, unitId: string): W {
   );
 }
 
+/**
+ * Met une unité libre hors service (relève, repas, PV) ou la remet en service : elle regagne alors sa brigade.
+ * Sans effet si le statut ne le permet pas.
+ */
+export function setAvailability<W extends World>(w: W, unitId: string, available: boolean): W {
+  const u = w.units[unitId];
+  if (!u || (available ? u.status !== 'INDISPONIBLE' : !canUnit(u.status, 'INDISPONIBLE'))) return w;
+  const salle = salleOf(u.service);
+  const [order, ack] = available
+    ? ['reprenez le service', 'reprise du service, nous regagnons notre secteur']
+    : ['passez indisponible', 'bien reçu, nous passons indisponibles'];
+  let next = radio(w, salle, u.callsign, `${u.callsign} de ${salle}, ${order}.`);
+  next = radio(next, u.callsign, salle, `${u.callsign}, ${ack}.`);
+  // Hors service, l'unité s'arrête là où elle est (le retour à la brigade reprend à la remise en service).
+  return setUnit(next, available ? releaseUnit(u) : { ...u, status: 'INDISPONIBLE', route: null, routeElapsedMs: 0 });
+}
+
 /** Clôture une fiche de gravité 1 (simple renseignement) sans engager d'unité. Au-delà, il faut intervenir. */
 export function closeIncident<W extends World>(w: W, id: string, outcome: IncidentOutcome): W {
   const inc = w.incidents[id];

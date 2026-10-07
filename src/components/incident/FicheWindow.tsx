@@ -3,6 +3,7 @@ import { isDraftValid } from '../../core/callEngine';
 import { categories, categoryByLabel } from '../../data/categories';
 import { GRAVITY_META } from '../../data/statuses';
 import { suggestAddresses } from '../../lib/geocode';
+import { useBanSuggestions } from '../../lib/useBanSuggestions';
 import { FICHE_FOCUS_ID } from '../../lib/useShortcuts';
 import { useGameStore } from '../../store/gameStore';
 import { GravityBadge } from './GravityBadge';
@@ -10,6 +11,12 @@ import { GravityBadge } from './GravityBadge';
 const INPUT = 'w-full rounded border border-slate-600 bg-slate-950 px-2 py-1.5 text-sm outline-none focus:border-sky-400';
 
 const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+/** Adresses de la BAN d'abord (vraies rues et numéros), puis celles du gazetteer local ; doublons écartés, huit au plus. */
+const mergeSuggestions = (ban: string[], local: string[]) => {
+  const seen = new Set<string>();
+  return [...ban, ...local].filter((a) => !seen.has(plain(a)) && seen.add(plain(a))).slice(0, 8);
+};
 
 function Field({ label, className = '', children }: { label: string; className?: string; children: React.ReactNode }) {
   return (
@@ -39,6 +46,7 @@ export const FicheWindow = memo(function FicheWindow() {
   const discard = useGameStore((s) => s.discardCall);
   // Réduite, la fiche laisse voir la carte (placer une fiche, suivre les unités) sans abandonner la saisie.
   const [reduced, setReduced] = useState(false);
+  const ban = useBanSuggestions(active?.draft.address ?? '');
   if (!active) return null;
 
   const d = active.draft;
@@ -118,7 +126,7 @@ export const FicheWindow = memo(function FicheWindow() {
         <Field label="Adresse *">
           <input required list="addresses" value={d.address} onChange={(e) => update({ address: e.target.value })} placeholder="N°, rue, commune" autoComplete="off" className={INPUT} />
           <datalist id="addresses">
-            {suggestAddresses(d.address).map((a) => <option key={a} value={a} />)}
+            {mergeSuggestions(ban, suggestAddresses(d.address)).map((a) => <option key={a} value={a} />)}
           </datalist>
         </Field>
         <Field label="Complément (étage, repère)"><input value={d.complement} onChange={(e) => update({ complement: e.target.value })} className={INPUT} /></Field>

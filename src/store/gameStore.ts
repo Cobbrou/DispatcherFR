@@ -10,7 +10,7 @@ import {
   startCall,
 } from '../core/callEngine';
 import { callerEngine } from '../core/callerEngine';
-import { assignUnit, closeIncident, radio, unassignUnit } from '../core/dispatch';
+import { assignUnit, closeIncident, radio, setAvailability, unassignUnit } from '../core/dispatch';
 import { alertRescue } from '../core/events';
 import { effectiveTimeScale, flowCalls } from '../core/flow';
 import { tick } from '../core/tick';
@@ -46,6 +46,8 @@ interface GameStore extends GameState {
   setTimeScale: (scale: number) => void;
   assignUnit: (unitId: string, incidentId: string) => void;
   unassignUnit: (unitId: string) => void;
+  /** Met une unité libre hors service, ou la remet en service. */
+  setAvailability: (unitId: string, available: boolean) => void;
   /** Place sur la carte une fiche dont l'adresse n'a pas été géolocalisée. */
   placeIncident: (id: string, coordinates: Coordinates) => void;
   closeIncident: (id: string) => void;
@@ -139,6 +141,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
   },
   unassignUnit: (unitId) => set((s) => unassignUnit(s, unitId)),
+  setAvailability: (unitId, available) => set((s) => setAvailability(s, unitId, available)),
   placeIncident: (id, coordinates) =>
     set((s) => (s.incidents[id] ? { incidents: { ...s.incidents, [id]: { ...s.incidents[id], coordinates } } } : s)),
   closeIncident: (id) => set((s) => closeIncident(s, id, 'FAUSSE_ALERTE')),

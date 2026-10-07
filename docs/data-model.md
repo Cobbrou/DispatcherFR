@@ -26,8 +26,7 @@ export type UnitStatus =
   | 'EN_ROUTE'        // 10-2
   | 'SUR_LES_LIEUX'   // 10-3
   | 'EN_TRANSPORT'    // 10-4
-  | 'INDISPONIBLE'    // 10-5
-  | 'URGENCE_RADIO';  // AJOUT : présent en §2.3 du cahier des charges, absent de l'union §5
+  | 'INDISPONIBLE';   // 10-5
 
 export interface Unit {
   id: string;
@@ -209,7 +208,6 @@ Implémentation actuelle : procédurale locale (mots-clés + tirages aléatoires
 
 | Changement | Raison |
 | :--- | :--- |
-| `URGENCE_RADIO` dans `UnitStatus` | Incohérence du cahier des charges : statut décrit en §2.3, absent du type §5 |
 | `Category` | Les catégories viennent du glossaire officiel (313 lignes, niveau 1 à 5). Le niveau devient la gravité proposée |
 | `Incident.title` / `code` supprimés → `category` | Le libellé de catégorie du glossaire remplace titre et code interne |
 | `IncidentDetails` | Tout ce que l'opérateur saisit (requérant, lieu, faits, victimes, auteurs, armes…) ; séparé de l'état piloté par le moteur |

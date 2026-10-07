@@ -19,8 +19,7 @@ export type UnitStatus =
   | 'EN_ROUTE'        // 10-2
   | 'SUR_LES_LIEUX'   // 10-3
   | 'EN_TRANSPORT'    // 10-4
-  | 'INDISPONIBLE'    // 10-5
-  | 'URGENCE_RADIO';  // AJOUT : présent en §2.3 du cahier des charges, absent de l'union §5
+  | 'INDISPONIBLE';   // 10-5
 
 /** Itinéraire routier : tracé et temps de roulage cumulé (ms simulées) pour atteindre chaque point. */
 export interface Route {

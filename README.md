@@ -138,7 +138,7 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
 
 7. ~~**Correctifs du moteur (priorité haute).**~~ Fait, sauf les points restants ci-dessous.
    - ~~Clôture sans intervention de n'importe quelle gravité.~~ Réservée à la gravité 1 (`closeIncident`, bouton masqué au-delà).
-   - ~~`FM 1` et `CYNO 1` figées.~~ Plus d'objet depuis l'étape 5 (unités de police retirées). Les statuts `EN_TRANSPORT` / `INDISPONIBLE` restent à produire (étape 12).
+   - ~~`FM 1` et `CYNO 1` figées.~~ Plus d'objet depuis l'étape 5 (unités de police retirées). `INDISPONIBLE` est produit depuis l'étape 12 ; `EN_TRANSPORT` reste à produire.
    - ~~Délai d'échec appliqué avec un renfort en route.~~ Il ne joue plus dès qu'une unité est arrivée (`firstArrivalAt`).
    - ~~`onTimePct` gonflé.~~ Une fiche échouée sans arrivée compte comme délai manqué.
    - ~~Résultat BAN appliqué sans condition.~~ Ignoré si la fiche a été placée à la main ou si une unité est déjà engagée ; appel sorti du callback de `set`.
@@ -180,11 +180,11 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
     - ~~Sécurité~~ : CSP injectée dans le build seulement (`vite.config.ts`, le serveur de dev a besoin de scripts en ligne) ; `connect-src` = BAN + origine d'OSRM (`VITE_OSRM_URL`), `img-src` = tuiles OSM. **Non vérifiée dans un navigateur** : ouvrir `npm run preview` et regarder la console.
     - ~~Tuiles OSM~~ : message « Fond de carte indisponible » sur `tileerror`. Reste : politique d'usage des tuiles OSM limitée, prévoir un fournisseur à clé ou des tuiles auto-hébergées avant diffusion publique.
     - Reste : provenance et droits de rediffusion du glossaire PDF et de `categories.json` à confirmer avant toute diffusion publique.
-12. **Fonctionnalités à étudier.**
-    - Audio : sonnerie d'appel, bip de renfort / urgence radio, grésillement (`howler`, déverrouillage au premier clic).
+12. **Fonctionnalités à étudier.** Fait en partie ; restent les deux premiers points et le début du troisième.
+    - ~~Audio~~ `lib/audio.ts` : sonnerie, triple bip (message radio urgent), grésillement, synthétisés par Web Audio (aucun fichier, pas de `howler`), déverrouillés au premier clic / à la première touche ; bouton « Son ». Reste : sonnerie répétée tant qu'un appel attend ; non écouté dans un navigateur.
     - Sauvegarde / reprise de la journée (`persist` de Zustand, `partialize` sans `route`), bouton « Nouvelle journée ».
-    - Poursuite / refus d'obtempérer (herse), demande de concours à l'initiative de l'opérateur, suggestions d'adresse via la BAN (le gazetteer ne couvre que 16 rues).
-    - Statuts jamais produits (`URGENCE_RADIO`, `INDISPONIBLE`, `DISPO_POSTE`) : implémenter ou retirer.
+    - Poursuite / refus d'obtempérer (herse), demande de concours à l'initiative de l'opérateur. ~~Suggestions d'adresse via la BAN~~ `suggestBan` + `useBanSuggestions` (300 ms, BAN d'abord, gazetteer en repli) ; non essayé dans un navigateur.
+    - ~~Statuts jamais produits~~ `INDISPONIBLE` implémenté (boutons « Indispo » / « Reprendre », `setAvailability`) ; `URGENCE_RADIO` retiré (doublait le renfort, à reprendre avec la poursuite) ; `DISPO_POSTE` l'était déjà. `EN_TRANSPORT` reste à produire.
 13. **Documentation à réaligner sur le code.**
     - Tuiles : code = OSM + filtre CSS, docs = CartoDB (`README` §2, `docs/architecture.md` §5, `CONTEXT.md` §4).
     - Déplacement : `README` §1, `docs/architecture.md` §3 (ligne `movement`) et §5 décrivent la ligne droite ; le code suit OSRM avec repli à 50 km/h.
