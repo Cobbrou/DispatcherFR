@@ -21,7 +21,7 @@ export function CallPanel() {
     <Panel
       title={active ? 'Appel en cours' : 'Ligne 17'}
       right={<span>{queue.length} en attente</span>}
-      className={`shrink-0 ${active ? 'h-[70%]' : 'h-2/5'}`}
+      className="flex-1"
     >
       {active ? (
         <CallDialogue />

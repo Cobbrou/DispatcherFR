@@ -27,7 +27,7 @@ export function IncidentDetail() {
     : [];
 
   return (
-    <Panel title="Fiche d'intervention" right={<span>{incident?.id}</span>} className="h-1/2 border-b-0">
+    <Panel title="Fiche d'intervention" right={<span>{incident?.id}</span>} className="flex-1 border-b-0">
       {!incident ? (
         <p className="p-3 text-sm text-slate-400">Aucune fiche sélectionnée.</p>
       ) : (

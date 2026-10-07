@@ -192,5 +192,10 @@ Issues de la revue du projet (moteur, interface, hygiène). Les `fichier:ligne` 
     - `docs/data-model.md` : manquent `Route`, `Unit.route`, `routeElapsedMs`, `ConcoursService`, `PendingEvent`, `Incident.pending` / `firstArrivalAt` / `neglected`.
     - `README` §1 et `CONTEXT.md` §3.2 disent la gravité « modifiable », `docs/data-model.md` et `docs/statuses.md` « non modifiable » (le code suit ces derniers) ; `CONTEXT.md` §3.1 cite des champs de fiche supprimés (blessés, armes, signalement, moyens à engager).
     - `README` §4 : phrase `--passWithNoTests` périmée (51 tests).
+14. ~~**Interface configurable.**~~ Fait, sauf les points restants ci-dessous.
+    - Menu « Disposition » (`LayoutMenu`) : afficher ou masquer appels, main courante, unités, fiche sélectionnée, radio ; « Réinitialiser ». La carte reste toujours là.
+    - `Splitter` : colonnes et hauteurs (radio, appels / main courante, unités / fiche) se redimensionnent à la souris, au doigt ou aux flèches.
+    - `store/layoutStore.ts` : disposition mémorisée dans le navigateur (`localStorage`, clé `dispatch17-layout`).
+    - Reste : panneaux non déplaçables (pas d'échange de colonnes ni de fenêtres flottantes) ; bornes calculées au rendu ; non essayé dans un navigateur (glisser, tactile, clavier).
 
 Détail : [`docs/architecture.md`](./docs/architecture.md#9-plan-de-développement).

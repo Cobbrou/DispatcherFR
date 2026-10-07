@@ -47,7 +47,7 @@ export function UnitList() {
   const hint = !open ? 'Sélectionnez une fiche ouverte pour engager des unités.' : !target ? 'Fiche non géolocalisée : placez-la sur la carte pour engager des unités.' : null;
 
   return (
-    <Panel title="Unités" right={<span>{rows.length}</span>} className="h-1/2">
+    <Panel title="Unités" right={<span>{rows.length}</span>} className="flex-1">
       {hint && <p className="border-b border-slate-800 px-3 py-2 text-xs text-slate-400">{hint}</p>}
       <ul>
         {rows.map((u) => {

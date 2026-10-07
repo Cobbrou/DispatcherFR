@@ -13,7 +13,7 @@ export const RadioLog = memo(function RadioLog() {
   }, [lastId]);
 
   return (
-    <Panel title="Radio" right={<span>{radio.length} messages</span>} className="h-40 border-b-0 border-t">
+    <Panel title="Radio" right={<span>{radio.length} messages</span>} className="flex-1 border-b-0">
       {radio.length === 0 ? (
         <p className="p-3 text-sm text-slate-400">Silence radio.</p>
       ) : (
